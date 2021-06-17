@@ -6,21 +6,21 @@ import userIcon from './../../assets/userIcon.png'
 
 let Users = (props) => {
     if (props.users.length === 0) {
-    // let headers = {'f1044d61-6ff5-426d-9719-a80a9bdbb47b': value}
-    // axios.post("https://social-network.samuraijs.com/api/1.0", {headers: headers});
-    axios.get("https://social-network.samuraijs.com/api/1.0/users").then(response => {
-        debugger;
-        props.setUsers(response.data.items)
-    });
-}
+        // let headers = {'f1044d61-6ff5-426d-9719-a80a9bdbb47b': value}
+        // axios.post("https://social-network.samuraijs.com/api/1.0", {headers: headers});
+        axios.get("https://social-network.samuraijs.com/api/1.0/users").then(response => {
+            debugger;
+            props.setUsers(response.data.items)
+        });
+    }
 
     return <div> {
         props.users.map(u =>
             <div key={u.id}>
                 <span>
                     <div>
-                        <img className={p.userimg} src={u.photos.small 
-                        != null ? u.photos.small: userIcon} />
+                        <img className={p.userimg} src={u.photos.small
+                            != null ? u.photos.small : userIcon} />
                     </div>
                     <div>
                         {u.followed
