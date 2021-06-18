@@ -6,3 +6,8 @@
 .activePage{
     font-weight: bold;
 }
+
+.pages {
+    cursor: default;
+    padding:2px;
+}
