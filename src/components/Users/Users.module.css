@@ -2,3 +2,7 @@
     width: 100px;
     height: inherit;
 }
+
+.activePage{
+    font-weight: bold;
+}
