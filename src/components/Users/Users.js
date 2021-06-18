@@ -9,41 +9,41 @@ let Users = (props) => {
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
-        return <div>
-            <div>
-                {pages.map(el => {
-                    return <span className={props.currentPage === el && p.activePage, p.pages}
-                        onClick={(e) => { props.onPageChanged(el) }}>{el}</span>
-                })}
-            </div>
-            {
-                props.users.map(u =>
-                    <div key={u.id}>
+    return <div>
+        <div>
+            {pages.map(el => {
+                return <span className={p.pages}><span className={props.currentPage === el && p.activePage}
+                    onClick={(e) => { props.onPageChanged(el) }}>{el}</span></span>
+            })}
+        </div>
+        {
+            props.users.map(u =>
+                <div key={u.id}>
+                    <div>
                         <div>
-                            <div>
-                                <img className={p.userimg} src={u.photos.small
-                                    != null ? u.photos.small : userIcon} />
-                            </div>
-                            <div>
-                                {u.followed
-                                    ? <button onClick={() => { props.unfollow(u.id) }}>Follow</button>
-                                    : <button onClick={() => { props.follow(u.id) }}>Unfollow</button>}
-                            </div>
+                            <img className={p.userimg} src={u.photos.small
+                                != null ? u.photos.small : userIcon} />
                         </div>
                         <div>
-                            <div>
-                                <div>{u.name}</div>
-                                <div>{u.status}</div>
-                            </div>
-                            <div>
-                                <div>{"u.location.country"}</div>
-                                <div>{"u.location.city"}</div>
-                            </div>
+                            {u.followed
+                                ? <button onClick={() => { props.unfollow(u.id) }}>Follow</button>
+                                : <button onClick={() => { props.follow(u.id) }}>Unfollow</button>}
                         </div>
                     </div>
-                )
-            }
-        </div>
+                    <div>
+                        <div>
+                            <div>{u.name}</div>
+                            <div>{u.status}</div>
+                        </div>
+                        <div>
+                            <div>{"u.location.country"}</div>
+                            <div>{"u.location.city"}</div>
+                        </div>
+                    </div>
+                </div>
+            )
+        }
+    </div>
 }
 
 export default Users;
