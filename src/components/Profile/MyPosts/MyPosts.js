@@ -6,7 +6,7 @@ const MyPosts = (props) => {
 
   let postElements =
     props.profilePage.postData.map(posts =>
-       <Post message={posts.message} likesCount={posts.likesCount} />)
+       <Post message={posts.message} likesCount={posts.likesCount}/>)
 
   let newPostEl = React.createRef();
   

@@ -24,7 +24,7 @@ let Users = (props) => {
                         <div>
                             <NavLink to={'/profile/' + u.id}>
                                 <img className={p.userimg} src={u.photos.small
-                                    != null ? u.photos.small : userIcon} />
+                                    != null ? u.photos.small : userIcon} alt=""/>
                             </NavLink>
                         </div>
                         <div>

@@ -4,7 +4,7 @@ const Post = (props) => {
   return (
     <div className={p.item}>
       <div>
-        <img src="https://image.flaticon.com/icons/png/512/168/168724.png" />
+        <img src="https://image.flaticon.com/icons/png/512/168/168724.png" alt="" />
         {props.message}
       </div>
       <div>
