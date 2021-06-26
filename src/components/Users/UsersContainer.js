@@ -1,30 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { follow, setUsers, unfollow, setCurrentPage, setTotalUsersCount, toggleIsFetching } from '../../redux/users-reducer';
+import { follow, unfollow, getUsers } from '../../redux/users-reducer';
 import Users from './Users';
 import Preloader from '../common/Preloader/Preloader';
-import { userAPI } from '../../api/api';
-import { toggleFollowingProgress } from './../../redux/users-reducer';
 
 class UsersContainer extends React.Component {
 
     componentDidMount = () => {
-        this.props.toggleIsFetching(true);
-
-        userAPI.getUsers(this.props.currentPage, this.props.pageSize).then(data => {
-            this.props.toggleIsFetching(false);
-            this.props.setUsers(data.items)
-            this.props.setTotalUsersCount(data.totalCount)
-        });
+        this.props.getUsers(this.props.currentPage, this.props.pageSize);
     }
     onPageChanged = (pageNumber) => {
-        this.props.toggleIsFetching(true);
-        this.props.setCurrentPage(pageNumber)
-        userAPI.getUsers(pageNumber, this.props.pageSize)
-            .then(data => {
-                this.props.toggleIsFetching(false);
-                this.props.setUsers(data.items)
-            });
+        this.props.getUsers(pageNumber, this.props.pageSize);
     }
     render() {
         return <>
@@ -37,7 +23,6 @@ class UsersContainer extends React.Component {
                 unfollow={this.props.unfollow}
                 follow={this.props.follow}
                 onPageChanged={this.onPageChanged}
-                toggleFollowingProgress={this.props.toggleFollowingProgress}
                 followingInProgress={this.props.followingInProgress}
             />
         </>
@@ -57,9 +42,5 @@ let mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
     follow,
     unfollow,
-    setUsers,
-    setCurrentPage,
-    setTotalUsersCount,
-    toggleIsFetching,
-    toggleFollowingProgress
+    getUsers
 })(UsersContainer);
