@@ -20,7 +20,7 @@ const Dialogs = (props) => {
         let body = e.target.value;
         props.updateNewMessage(body)
     }
-    if (!props.isAuth) return <Redirect to={"/login"} />
+   
     return <div className={p.dialogs}>
         <div className={p.dialogsItems}>
             {dialogElements}
