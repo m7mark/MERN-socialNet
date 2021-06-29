@@ -24,12 +24,25 @@ export const userAPI = {
             .then(response => response.data);
     },
     getUserProfile(id) {
-        return instance.get(`profile/${id}`)
-            .then(response => response.data);
+        console.warn('Obsolete methode, please profile Api object')
+        return profileAPI.getUserProfile(id);
     },
     authUserData() {
         return instance.get(`auth/me`)
             .then(response => response.data);
     }
 
+}
+
+export const profileAPI = {
+    getUserProfile(id) {
+        return instance.get(`profile/${id}`)
+            .then(response => response.data);
+    },
+    getStatus(id) {
+        return instance.get(`profile/status/${id}`)
+    },
+    updateStatus(status) {
+        return instance.put(`profile/status`, { status })
+    }
 }
