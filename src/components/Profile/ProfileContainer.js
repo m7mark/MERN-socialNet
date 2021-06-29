@@ -8,9 +8,9 @@ import { compose } from 'redux';
 class ProfileContainer extends React.Component {
   componentDidMount() {
     let userId = this.props.match.params.userId;
-    if (!userId) { userId = 17643; }
-    this.props.getUserProfile(userId)
-    setTimeout (() => {this.props.getStatus(userId)}, 500)  
+    if (!userId) { userId = 17643; };
+    this.props.getUserProfile(userId);
+    this.props.getStatus(userId);
   }
   render() {
     return <Profile {...this.props}

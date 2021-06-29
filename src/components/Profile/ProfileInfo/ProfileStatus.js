@@ -3,7 +3,7 @@ import p from './ProfileInfo.module.css'
 
 class ProfileStatus extends React.Component {
     state = {
-        status: this.props.status,
+        status: '',
         editMode: false
     }
     handleFocus = (event) => {
@@ -23,22 +23,29 @@ class ProfileStatus extends React.Component {
     onStatusChange = (e) => {
         this.setState({ status: e.target.value })
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (prevProps.status !== this.props.status) {
+            this.setState({
+                status: this.props.status
+            })
+        }
+    }
     render() {
         return (
             <div className={p.description}>
                 {!this.state.editMode &&
                     <div>
                         <span onDoubleClick={this.activateEditMode}>
-                            {this.props.status}
+                            {this.props.status || 'Please enter status...'}
                         </span>
                     </div>}
                 {this.state.editMode &&
                     <div>
                         <span onBlur={this.deactivateEditMode}>
                             <input
-                                value={this.state.status || '---------'}
-                                autoFocus={true}
                                 onChange={this.onStatusChange}
+                                value={this.state.status}
+                                autoFocus={true}
                                 onFocus={this.handleFocus}>
                             </input>
                         </span>
