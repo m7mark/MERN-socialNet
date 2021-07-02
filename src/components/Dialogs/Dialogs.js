@@ -1,7 +1,9 @@
 import p from './Dialogs.module.css';
 import Message from './Message/Message';
 import DialogItem from './DialogItem/DialogItem';
-import { Formik, Field, Form } from 'formik';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import MyTextInput from './../common/FormsControl/MyForms';
 
 const Dialogs = (props) => {
     let dialogElements =
@@ -34,10 +36,15 @@ const AddMessageForm = ({ postNewMesageBody }) => {
             initialValues={{
                 newMessageBodyText: ''
             }}
+            validationSchema={Yup.object({
+                newMessageBodyText: Yup.string()
+                    .max(100, 'Must be 100 characters or less')
+                    .required('Required')
+            })}
             onSubmit={submit}
         >
             <Form>
-                <Field
+                <MyTextInput
                     id="newMessageBodyText"
                     name="newMessageBodyText"
                     placeholder="Enter your message"

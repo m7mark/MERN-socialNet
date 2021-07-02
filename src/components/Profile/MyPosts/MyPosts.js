@@ -1,7 +1,9 @@
 import React from 'react';
 import p from './MyPosts.module.css';
 import Post from './Post/Post';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import MyTextInput from '../../common/FormsControl/MyForms';
 
 const MyPosts = (props) => {
 
@@ -33,12 +35,19 @@ const AddPostForm = ({ addNewPostBody }) => {
   return (
     <Formik
       initialValues={{ newPostBodyText: "" }}
+      validationSchema={Yup.object({
+        newPostBodyText: Yup.string()
+          .max(15, 'Must be 15 characters or less')
+          .required('Required')
+      })}
       onSubmit={submit}
     >
       <Form>
-        <Field
+        <MyTextInput
           id="newPostBodyText"
           name="newPostBodyText"
+          type="text"
+          placeholder="Post message"
         />
         <br />
         <button type="submit">Add Post</button>
