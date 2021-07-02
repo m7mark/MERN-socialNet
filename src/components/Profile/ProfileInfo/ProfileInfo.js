@@ -14,6 +14,10 @@ const ProfileInfo = (props) => {
       <div>< ProfileStatus status={props.status} updateStatus={props.updateStatus}/></div>
       <div className={p.description}>
         <div><img src={props.profile.photos.large} alt="" ></img></div>
+
+        {(props.profile.photos.large) && <span>"yes pic"</span>}
+        {(props.profile.photos.large === null) && <span>"no pic"</span>}
+
         <div>{props.profile.aboutMe}</div>
         <div>{props.profile.fullName}</div>
         <div>{props.profile.lookingForAJobDescription}</div>
