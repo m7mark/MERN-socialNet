@@ -13,19 +13,19 @@ const Dialogs = (props) => {
     return <div className={p.dialogs}>
         <div className={p.dialogsItems}>
             {dialogElements}
-        </div>
-        <div className={p.messages}>
-            <div>{messagesElements}</div>
             <div>
                 <AddMessageForm postNewMesageBody={props.postNewMesageBody} />
             </div>
+        </div>
+        <div className={p.messages}>
+            <div>{messagesElements}</div>
         </div>
     </div>
 }
 export default Dialogs;
 
 const AddMessageForm = ({ postNewMesageBody }) => {
-    const submit = (values, {resetForm}) => {
+    const submit = (values, { resetForm }) => {
         postNewMesageBody(values.newMessageBodyText)
         resetForm({})
     }
