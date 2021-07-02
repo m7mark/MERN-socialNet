@@ -1,6 +1,7 @@
 import p from './Dialogs.module.css';
 import Message from './Message/Message';
 import DialogItem from './DialogItem/DialogItem';
+import { Formik, Field, Form } from 'formik';
 
 const Dialogs = (props) => {
     let dialogElements =
@@ -9,17 +10,6 @@ const Dialogs = (props) => {
     let messagesElements =
         props.dialogsPage.messagesData.map(m => <Message text={m.message} />);
 
-    let newMessageBody =
-        props.dialogsPage.newMessageBody;
-
-    let onSendClick = () => {
-        props.SendClick();
-    }
-    let onNewMessageChange = (e) => {
-        let body = e.target.value;
-        props.updateNewMessage(body)
-    }
-   
     return <div className={p.dialogs}>
         <div className={p.dialogsItems}>
             {dialogElements}
@@ -27,16 +17,34 @@ const Dialogs = (props) => {
         <div className={p.messages}>
             <div>{messagesElements}</div>
             <div>
-                <div>
-                    <textarea value={newMessageBody}
-                        onChange={onNewMessageChange}
-                        placeholder='Enter your message'></textarea>
-                </div>
-                <div>
-                    <button onClick={onSendClick}>Send</button>
-                </div>
+                <AddMessageForm postNewMesageBody={props.postNewMesageBody} />
             </div>
         </div>
     </div>
 }
 export default Dialogs;
+
+const AddMessageForm = ({ postNewMesageBody }) => {
+    const submit = (values, {resetForm}) => {
+        postNewMesageBody(values.newMessageBodyText)
+        resetForm({})
+    }
+    return (
+        <Formik
+            initialValues={{
+                newMessageBodyText: ''
+            }}
+            onSubmit={submit}
+        >
+            <Form>
+                <Field
+                    id="newMessageBodyText"
+                    name="newMessageBodyText"
+                    placeholder="Enter your message"
+                />
+                <br />
+                <button type="submit">Send</button>
+            </Form>
+        </Formik>
+    );
+};
