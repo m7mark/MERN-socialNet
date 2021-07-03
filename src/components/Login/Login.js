@@ -6,10 +6,18 @@ import { login } from '../../redux/auth-reducer';
 
 
 const LoginForm = (props) => {
-    const submit = (values, { resetForm }) => {
+    const submit = (values, { resetForm }, setSubmitting) => {
         props.login(values.email, values.password, values.rememberMe)
         resetForm({})
     }
+
+    const validationSchema = Yup.object().shape({
+        email: Yup.string()
+            .required('Required'),
+        password: Yup.string()
+            .required('Required'),
+    })
+
     return (
         <Formik
             initialValues={{
@@ -17,15 +25,10 @@ const LoginForm = (props) => {
                 password: '',
                 rememberMe: false
             }}
-            validationSchema={Yup.object({
-                email: Yup.string()
-                    .required('Required'),
-                password: Yup.string()
-                    .required('Required')
-            })}
+            validationSchema={validationSchema}
             onSubmit={submit}
         >
-            {({ isSubmitting }) => (
+            {({ errors, isSubmitting, touched }) => (
                 <Form>
                     <Field
                         id="email"
@@ -33,13 +36,16 @@ const LoginForm = (props) => {
                         placeholder="Enter your email"
                         type="email"
                     />
+                    {errors.email}
                     <br />
                     <Field
                         id="password"
                         name="password"
                         placeholder="Enter your password"
                         type="password"
+                        autocomplete="on"
                     />
+                    {errors.password}
                     <br />
                     <label htmlfor="rememberMe">Remember me </label>
                     <Field
@@ -47,11 +53,13 @@ const LoginForm = (props) => {
                         name="rememberMe"
                         type="checkbox"
                     />
+                    <div>{props.isError && !touched.email ? props.errorLoginMessage : ""}
+                    </div>
                     <br />
                     <button type="submit" disabled={isSubmitting}>Sign In</button>
                 </Form>
             )}
-        </Formik>
+        </Formik >
     );
 };
 
@@ -61,10 +69,15 @@ const Login = (props) => {
     }
     return <>
         <h1>Login</h1>
-        <LoginForm login={props.login} />
+        <LoginForm
+            errorLoginMessage={props.errorLoginMessage}
+            isError={props.isError}
+            login={props.login} />
     </>
 }
 const mapStateToProps = (state) => ({
-    isAuth: state.auth.isAuth
+    isAuth: state.auth.isAuth,
+    isError: state.auth.isError,
+    errorLoginMessage: state.auth.errorLoginMessage
 })
 export default connect(mapStateToProps, { login })(Login);

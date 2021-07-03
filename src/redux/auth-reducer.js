@@ -1,12 +1,15 @@
 import { authAPI } from "../api/api";
 
 const SET_USER_DATA = 'SET_USER_DATA'
+const ERROR_LOGIN = 'ERROR_LOGIN'
 
 let initialState = {
     id: null,
     email: null,
     login: null,
-    isAuth: false
+    isAuth: false,
+    isError: false,
+    errorLoginMessage: null
 }
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -14,6 +17,13 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.data,
+                isError: false
+            }
+        case ERROR_LOGIN:
+            return {
+                ...state,
+                isError: true,
+                errorLoginMessage: action.errorLoginMessage
             }
         default:
             return state;
@@ -21,6 +31,9 @@ const authReducer = (state = initialState, action) => {
 }
 export const setAuthUserData = (id, email, login, isAuth) =>
     ({ type: SET_USER_DATA, data: { id, email, login, isAuth } })
+
+export const errorLogin = (errorLoginMessage) =>
+    ({ type: ERROR_LOGIN, errorLoginMessage })
 
 export const authUserData = () => (dispatch) => {
     authAPI.me()
@@ -33,20 +46,25 @@ export const authUserData = () => (dispatch) => {
 }
 export const login = (email, password, rememberMe) => (dispatch) => {
     authAPI.login(email, password, rememberMe)
-        .then(data => {
-            if (data.resultCode === 0) {
+        .then(response => {
+            if (response.data.resultCode === 0) {
                 dispatch(authUserData())
+            }
+            else {
+                let errorLoginMessage = response.data.messages.length > 0
+                    ? response.data.messages[0]
+                    : "Some error";
+                dispatch(errorLogin(errorLoginMessage))
             }
         })
 }
 export const logout = () => (dispatch) => {
     authAPI.logout()
-        .then(data => {
-            if (data.resultCode === 0) {
+        .then(response => {
+            if (response.data.resultCode === 0) {
                 dispatch(setAuthUserData(null, null, null, false))
             }
         })
 }
-
 
 export default authReducer
