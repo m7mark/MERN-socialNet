@@ -36,7 +36,7 @@ export const errorLogin = (errorLoginMessage) =>
     ({ type: ERROR_LOGIN, errorLoginMessage })
 
 export const authUserData = () => (dispatch) => {
-    authAPI.me()
+    return authAPI.me()
         .then(data => {
             if (data.resultCode === 0) {
                 let { id, email, login } = data.data;

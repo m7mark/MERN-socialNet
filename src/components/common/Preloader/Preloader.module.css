@@ -10,8 +10,8 @@
     height: 64px;
     margin: 8px;
     border-radius: 50%;
-    border: 6px solid #fff;
-    border-color: #fff transparent #fff transparent;
+    border: 6px solid rgb(255, 255, 255);
+    border-color: rgb(73, 9, 9) transparent rgb(73, 9, 9) transparent;
     animation: lds_dual 1.2s linear infinite;
   }
   @keyframes lds_dual {
