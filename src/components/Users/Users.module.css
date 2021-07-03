@@ -1,3 +1,7 @@
+.commonPadding{
+    padding: 10px;
+}
+
 .userimg {
     width: 100px;
     height: inherit;

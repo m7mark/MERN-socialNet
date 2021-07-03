@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import { login } from '../../redux/auth-reducer';
+import style from '../common/CommonStyle.module.css'
 
 
 const LoginForm = (props) => {
@@ -67,13 +68,13 @@ const Login = (props) => {
     if (props.isAuth) {
         return <Redirect to={"./profile"} />
     }
-    return <>
+    return <div className={style.commonPadding}>
         <h1>Login</h1>
         <LoginForm
             errorLoginMessage={props.errorLoginMessage}
             isError={props.isError}
             login={props.login} />
-    </>
+    </div>
 }
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
