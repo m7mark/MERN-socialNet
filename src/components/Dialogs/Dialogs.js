@@ -26,9 +26,9 @@ const Dialogs = (props) => {
 }
 export default Dialogs;
 
-const AddMessageForm = ({ postNewMesageBody }) => {
+const AddMessageForm = (props) => {
     const submit = (values, { resetForm }) => {
-        postNewMesageBody(values.newMessageBodyText)
+        props.postNewMesageBody(values.newMessageBodyText)
         resetForm({})
     }
     return (
