@@ -1,4 +1,4 @@
-import { profileAPI, userAPI } from "../api/api";
+import { profileAPI } from "../api/api";
 
 const ADD_POST = 'ADD-POST';
 const SET_USER_PROFILE = 'SET_USER_PROFILE';
@@ -48,7 +48,7 @@ export const setStatus = (status) => ({ type: SET_STATUS, status })
 
 export const getUserProfile = (id) => {
     return (dispatch) => {
-        userAPI.getUserProfile(id)
+        profileAPI.getUserProfile(id)
             .then(data => { dispatch(setUserProfile(data)); });
     }
 }

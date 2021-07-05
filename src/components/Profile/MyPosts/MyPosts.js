@@ -19,7 +19,6 @@ const MyPosts = (props) => {
     </div>
   </div>
 }
-
 export default MyPosts;
 
 const AddPostForm = ({ addNewPostBody }) => {

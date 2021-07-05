@@ -1,7 +1,7 @@
 import React from 'react';
 import p from './Preloader.module.css'
 
-let Preloader = (props) => {
+let Preloader = () => {
 return <div className={p.lds_dual}></div>
 }
 

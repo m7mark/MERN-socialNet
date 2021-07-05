@@ -9,30 +9,24 @@ const instance = axios.create({
 });
 
 export const userAPI = {
-    getUsers(currentPage = 1, pageSize = 10) {
-        return instance.get(`users?page=${currentPage}&count=${pageSize}`)
-            .then(response => response.data);
+    async getUsers(currentPage = 1, pageSize = 10) {
+        const response = await instance.get(`users?page=${currentPage}&count=${pageSize}`);
+        return response.data;
     },
-
-    unfollow(id) {
-        return instance.delete(`follow/${id}`)
-            .then(response => response.data);
+    async unfollow(id) {
+        const response = await instance.delete(`follow/${id}`);
+        return response.data;
     },
-
-    follow(id) {
-        return instance.post(`follow/${id}`)
-            .then(response => response.data);
-    },
-    getUserProfile(id) {
-        console.warn('Obsolete methode, please profile Api object')
-        return profileAPI.getUserProfile(id);
+    async follow(id) {
+        const response = await instance.post(`follow/${id}`);
+        return response.data;
     }
 }
 
 export const profileAPI = {
-    getUserProfile(id) {
-        return instance.get(`profile/${id}`)
-            .then(response => response.data);
+    async getUserProfile(id) {
+        const response = await instance.get(`profile/${id}`);
+        return response.data;
     },
     getStatus(id) {
         return instance.get(`profile/status/${id}`)
@@ -43,9 +37,9 @@ export const profileAPI = {
 }
 
 export const authAPI = {
-    me() {
-        return instance.get(`auth/me`)
-            .then(response => response.data);
+    async me() {
+        const response = await instance.get(`auth/me`);
+        return response.data;
     },
     login(email, password, rememberMe = false) {
         return instance.post(`auth/login`, { email, password, rememberMe })
