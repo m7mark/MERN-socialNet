@@ -5,24 +5,27 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from '../../common/FormsControl/MyForms';
 
-const MyPosts = (props) => {
-
-  let postElements =
-    props.profilePage.postData.map(posts =>
-      <Post message={posts.message} likesCount={posts.likesCount} />)
-
-  return (
-    <div className={p.postblock}>
+class MyPosts extends React.Component {
+  shouldComponentUpdate(nextprops, nextstate) {
+    return false;
+  }
+  render() {
+    console.log('RENDER MY POST')
+    console.log(this.props)
+    let postElements =
+      this.props.profilePage.postData.map(posts =>
+        <Post message={posts.message} likesCount={posts.likesCount} />)
+    return <div className={p.postblock}>
       <h3>My Post</h3>
       <div>
-        <AddPostForm addNewPostBody={props.addNewPostBody} />
+        <AddPostForm addNewPostBody={this.props.addNewPostBody} />
       </div>
       <div className={p.posts}>
         {postElements}
       </div>
     </div>
 
-  );
+  }
 }
 
 export default MyPosts;
