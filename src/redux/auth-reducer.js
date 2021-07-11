@@ -35,36 +35,30 @@ export const setAuthUserData = (id, email, login, isAuth) =>
 export const errorLogin = (errorLoginMessage) =>
     ({ type: ERROR_LOGIN, errorLoginMessage })
 
-export const authUserData = () => (dispatch) => {
-    return authAPI.me()
-        .then(data => {
-            if (data.resultCode === 0) {
-                let { id, email, login } = data.data;
-                dispatch(setAuthUserData(id, email, login, true));
-            }
-        })
+export const authUserData = () => async (dispatch) => {
+    const data = await authAPI.me();
+    if (data.resultCode === 0) {
+        let { id, email, login } = data.data;
+        dispatch(setAuthUserData(id, email, login, true));
+    }
 }
-export const login = (email, password, rememberMe) => (dispatch) => {
-    authAPI.login(email, password, rememberMe)
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(authUserData())
-            }
-            else {
-                let errorLoginMessage = response.data.messages.length > 0
-                    ? response.data.messages[0]
-                    : "Some error";
-                dispatch(errorLogin(errorLoginMessage))
-            }
-        })
+export const login = (email, password, rememberMe) => async (dispatch) => {
+    const response = await authAPI.login(email, password, rememberMe)
+    if (response.data.resultCode === 0) {
+        dispatch(authUserData())
+    }
+    else {
+        let errorLoginMessage = response.data.messages.length > 0
+            ? response.data.messages[0]
+            : "Some error";
+        dispatch(errorLogin(errorLoginMessage))
+    }
 }
-export const logout = () => (dispatch) => {
-    authAPI.logout()
-        .then(response => {
-            if (response.data.resultCode === 0) {
-                dispatch(setAuthUserData(null, null, null, false))
-            }
-        })
+export const logout = () => async (dispatch) => {
+    const response = await authAPI.logout()
+    if (response.data.resultCode === 0) {
+        dispatch(setAuthUserData(null, null, null, false))
+    }
 }
 
 export default authReducer
