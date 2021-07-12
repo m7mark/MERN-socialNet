@@ -2,20 +2,17 @@ import React from 'react';
 import p from './Users.module.css'
 import userIcon from './../../assets/userIcon.png'
 import { NavLink } from 'react-router-dom';
+import Paginator from '../common/Paginator/Paginator';
 
 let Users = (props) => {
-    let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
-    let pages = [];
-    for (let i = 1; i <= pagesCount; i++) {
-        pages.push(i);
-    }
+
     return <div className={p.commonPadding}>
-        <div>
-            {pages.map(el => {
-                return <span className={p.pages}><span className={props.currentPage === el && p.activePage}
-                    onClick={(e) => { props.onPageChanged(el) }}>{el}</span></span>
-            })}
-        </div>
+        <Paginator
+            totalUsersCount={props.totalUsersCount}
+            pageSize={props.pageSize}
+            currentPage={props.currentPage}
+            onPageChanged={props.onPageChanged}
+        />
         {
             props.users.map(u =>
                 <div key={u.id}>

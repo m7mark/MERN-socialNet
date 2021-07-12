@@ -1,0 +1,17 @@
+.commonPadding{
+    padding: 10px;
+}
+
+.userimg {
+    width: 100px;
+    height: inherit;
+}
+
+.activePage{
+    font-weight: bold;
+}
+
+.pages {
+    cursor: default;
+    padding:2px;
+}
