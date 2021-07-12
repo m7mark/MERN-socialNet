@@ -7,7 +7,7 @@ let Paginator = (props) => {
     for (let i = 1; i <= pagesCount; i++) {
         pages.push(i);
     }
-    return <div>
+    return <div className={p.commonPadding}>
         {pages.map(el => {
             return <span className={p.pages}>
                 <span className={props.currentPage === el && p.activePage}
