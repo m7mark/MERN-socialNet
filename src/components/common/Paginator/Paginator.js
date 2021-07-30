@@ -1,20 +1,26 @@
 import React from 'react';
-import p from './Paginator.module.css'
+import ReactPaginate from 'react-paginate';
+import './Paginator.css'
 
 let Paginator = (props) => {
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
-    let pages = [];
-    for (let i = 1; i <= pagesCount; i++) {
-        pages.push(i);
+    let handlePageClick = (data) => {
+        let selected = data.selected+1;
+        props.onPageChanged(selected)
     }
-    return <div className={p.commonPadding}>
-        {pages.map(el => {
-            return <span className={p.pages}>
-                <span className={props.currentPage === el && p.activePage}
-                    onClick={(e) => { props.onPageChanged(el) }}>{el}
-                </span>
-            </span>
-        })}
+    return <div>
+        <ReactPaginate
+            previousLabel={'previous'}
+            nextLabel={'next'}
+            breakLabel={'...'}
+            breakClassName={'break-me'}
+            pageCount={pagesCount}
+            marginPagesDisplayed={2}
+            pageRangeDisplayed={5}
+            onPageChange={handlePageClick}
+            containerClassName={'pagination'}
+            activeClassName={'active'}
+        />
     </div>
 }
 
