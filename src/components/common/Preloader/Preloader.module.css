@@ -1,7 +1,7 @@
 .lds_dual {
     display: inline-block;
     width: 80px;
-    height: 80px;
+    height: 980px;
   }
   .lds_dual:after {
     content: " ";
