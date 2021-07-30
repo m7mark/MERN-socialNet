@@ -4,8 +4,9 @@ import './Paginator.css'
 
 let Paginator = (props) => {
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
+    let pageSize = props.pageSize;
     let handlePageClick = (data) => {
-        let selected = data.selected+1;
+        let selected = data.selected + 1;
         props.onPageChanged(selected)
     }
     return <div>
@@ -16,7 +17,7 @@ let Paginator = (props) => {
             breakClassName={'break-me'}
             pageCount={pagesCount}
             marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
+            pageRangeDisplayed={pageSize}
             onPageChange={handlePageClick}
             containerClassName={'pagination'}
             activeClassName={'active'}
