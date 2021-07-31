@@ -33,7 +33,8 @@ class ProfileContainer extends React.Component {
       profile={this.props.profile}
       status={this.props.status}
       updateStatus={this.props.updateStatus}
-      savePhoto={this.props.savePhoto} />
+      savePhoto={this.props.savePhoto}
+      profileIsFetching={this.props.profileIsFetching} />
   }
 }
 
@@ -41,12 +42,18 @@ let mapStateToProps = (state) => {
   return ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,
+    isFetching: state.profilePage.isFetching,
     authorizedUserId: state.auth.id,
     isAuth: state.auth.isAuth
   })
 }
 
 export default compose(
-  connect(mapStateToProps, { getUserProfile, getStatus, updateStatus, savePhoto }),
+  connect(mapStateToProps, {
+    getUserProfile,
+    getStatus,
+    updateStatus,
+    savePhoto
+  }),
   withRouter,
 )(ProfileContainer)

@@ -5,6 +5,7 @@ const SET_USER_PROFILE = 'SET_USER_PROFILE';
 const SET_STATUS = 'SET_STATUS';
 const DELETE_POST = 'DELETE_POST';
 const SET_PHOTOS_SUCCESS = 'SET_PHOTOS_SUCCESS';
+const PROFILE_IS_FETCHING = 'PROFILE_IS_FETCHING';
 
 let initialState = {
     postData: [
@@ -12,7 +13,8 @@ let initialState = {
         { id: 2, message: "Good and you", likesCount: 2 },
     ],
     profile: null,
-    status: ''
+    status: '',
+    isFetching: false
 }
 const profileReducer = (state = initialState, action) => {
 
@@ -48,6 +50,8 @@ const profileReducer = (state = initialState, action) => {
                 ...state,
                 profile: { ...state.profile, photos: action.photos }
             }
+        case PROFILE_IS_FETCHING:
+            return { ...state, isFetching: action.isFetching }
         default:
             return state;
     }
@@ -58,10 +62,14 @@ export const deletePost = (postId) => ({ type: DELETE_POST, postId })
 export const setUserProfile = (profile) => ({ type: SET_USER_PROFILE, profile })
 export const setStatus = (status) => ({ type: SET_STATUS, status })
 export const savePhotoSuccess = (photos) => ({ type: SET_PHOTOS_SUCCESS, photos })
+export const profileIsFetching = (isFetching) => ({ type: PROFILE_IS_FETCHING, isFetching });
 
 export const getUserProfile = (id) => async (dispatch) => {
+    dispatch(profileIsFetching(true));
     const data = await profileAPI.getUserProfile(id)
+    dispatch(profileIsFetching(false));
     dispatch(setUserProfile(data));
+
 }
 
 export const getStatus = (id) => async (dispatch) => {
