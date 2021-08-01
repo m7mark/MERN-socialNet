@@ -7,7 +7,7 @@ import style from '../common/CommonStyle.module.css'
 
 
 const LoginForm = (props) => {
-    const submit = (values, { resetForm }, setSubmitting) => {
+    const submit = (values, { resetForm }) => {
         props.login(values.email, values.password, values.rememberMe)
         resetForm({})
     }

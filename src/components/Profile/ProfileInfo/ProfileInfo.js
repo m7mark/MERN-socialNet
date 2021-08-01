@@ -3,8 +3,15 @@ import p from './ProfileInfo.module.css'
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
 import userIcon from './../../../assets/userIcon.png'
 import { useState } from 'react';
+import ProfileDataForm from './ProfileDataForm';
 
-const ProfileInfo = ({ profile, status, updateStatus, isOwner, savePhoto }) => {
+const ProfileInfo = ({
+  profile,
+  status,
+  updateStatus,
+  isOwner,
+  savePhoto,
+  saveProfileInfo }) => {
 
   const [editMode, setEditMode] = useState(false);
 
@@ -29,7 +36,9 @@ const ProfileInfo = ({ profile, status, updateStatus, isOwner, savePhoto }) => {
         </div>
       </div>
       {editMode
-        ? <ProfileDataForm />
+        ? <ProfileDataForm setEditMode={setEditMode}
+          profile={profile}
+          saveProfileInfo={saveProfileInfo} />
         : <ProfileData profile={profile}
           isOwner={isOwner}
           goToEditMode={() => { setEditMode(true) }} />
@@ -60,7 +69,4 @@ const Contact = ({ contactTitle, contactValue }) => {
   return <div>{contactValue && <div><b>{contactTitle}:</b> {contactValue}</div>}</div>
 }
 
-const ProfileDataForm = ({ }) => {
-  return <div>Edit</div>
-}
 export default ProfileInfo;
