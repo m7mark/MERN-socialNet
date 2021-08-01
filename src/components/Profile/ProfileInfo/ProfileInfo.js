@@ -35,20 +35,22 @@ const ProfileInfo = ({
           {isOwner && <input type={'file'} onChange={onMainPhotoSelected} />}
         </div>
       </div>
-      {editMode
-        ? <ProfileDataForm setEditMode={setEditMode}
-          profile={profile}
-          saveProfileInfo={saveProfileInfo} />
-        : <ProfileData profile={profile}
-          isOwner={isOwner}
-          goToEditMode={() => { setEditMode(true) }} />
-      }
+      <div className={p.description}>
+        {editMode
+          ? <ProfileDataForm setEditMode={setEditMode}
+            profile={profile}
+            saveProfileInfo={saveProfileInfo} />
+          : <ProfileData profile={profile}
+            isOwner={isOwner}
+            goToEditMode={() => { setEditMode(true) }} />
+        }
+      </div>
     </div>
   );
 }
 
 const ProfileData = ({ profile, isOwner, goToEditMode }) => {
-  return <div className={p.description}>
+  return <div>
     <div>{isOwner && <button onClick={goToEditMode}>Edit</button>}</div>
     <div><b>Full name: </b>{profile.fullName}</div>
     <div><b>About me: </b>{profile.aboutMe}</div>

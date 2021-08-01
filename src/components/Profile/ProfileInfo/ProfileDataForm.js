@@ -47,6 +47,21 @@ const ProfileDataForm = ({ setEditMode, saveProfileInfo, profile }) => {
                 value={formik.values.lookingForAJobDescription}
             />
             <br />
+            <div><b>Contacts:</b>
+                {Object.keys(profile.contacts)
+                    .map(key => {
+                        return <div>
+                            <div><label htmlFor={key}>{key}</label></div>
+                            <input key={key}
+                                id={key}
+                                name={"contacts." + key}
+                                type="text"
+                                onChange={formik.handleChange}
+                                value={formik.values.contacts[key]} /> </div>
+                    })}
+            </div>
+            <br />
+
             <button type="submit">Save</button>
         </form>
     );
