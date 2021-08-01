@@ -95,6 +95,12 @@ export const saveProfileInfo = (profile) => async (dispatch, getState) => {
     if (response.data.resultCode === 0) {
         dispatch(getUserProfile(userId));
     }
+    else {
+        let errorLoginMessage = response.data.messages.length > 0
+            ? response.data.messages[0]
+            : "Some error";
+        return Promise.reject(errorLoginMessage);
+    }
 }
 
 export default profileReducer;

@@ -1,15 +1,27 @@
-import { useFormik } from 'formik';
+import { useFormik, Formik } from 'formik';
+import { useState } from 'react';
+import p from './ProfileInfo.module.css'
 
 const ProfileDataForm = ({ setEditMode, saveProfileInfo, profile }) => {
+    const [errorMessage, setErrorMessage] = useState();
     const formik = useFormik({
         initialValues: { ...profile },
         onSubmit: values => {
-            saveProfileInfo(values);
-            setEditMode(false);
+            saveProfileInfo(values)
+                .then(() => {
+                    setEditMode(false);
+                })
+                .catch(error => {
+                    setErrorMessage(error);
+                })
         },
     });
     return (
         <form onSubmit={formik.handleSubmit}>
+            <div className={p.error}><b>
+                {errorMessage && errorMessage}
+            </b></div>
+            <br />
             <label htmlFor="fullName">Full Name </label>
             <input
                 id="fullName"
@@ -61,7 +73,6 @@ const ProfileDataForm = ({ setEditMode, saveProfileInfo, profile }) => {
                     })}
             </div>
             <br />
-
             <button type="submit">Save</button>
         </form>
     );
