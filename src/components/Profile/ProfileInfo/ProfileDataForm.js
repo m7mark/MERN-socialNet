@@ -1,4 +1,4 @@
-import { useFormik, Formik } from 'formik';
+import { useFormik } from 'formik';
 import { useState } from 'react';
 import p from './ProfileInfo.module.css'
 

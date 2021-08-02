@@ -10,6 +10,7 @@ import {
 } from '../../redux/profile-reducer';
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
+import { withAuthRedirect } from '../../hoc/withAuthRedirect';
 
 class ProfileContainer extends React.Component {
 
@@ -58,4 +59,5 @@ export default compose(
     saveProfileInfo
   }),
   withRouter,
+  withAuthRedirect
 )(ProfileContainer)

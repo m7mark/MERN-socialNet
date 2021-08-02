@@ -8,7 +8,7 @@ import style from '../common/CommonStyle.module.css'
 
 const LoginForm = (props) => {
     const submit = (values, { resetForm }) => {
-        props.login(values.email, values.password, values.rememberMe)
+        props.login(values.email, values.password, values.rememberMe, values.captcha)
         resetForm({})
     }
 
@@ -17,6 +17,9 @@ const LoginForm = (props) => {
             .required('Required'),
         password: Yup.string()
             .required('Required'),
+        // captcha: Yup.string()
+        //     .required('Required'),
+
     })
 
     return (
@@ -24,7 +27,8 @@ const LoginForm = (props) => {
             initialValues={{
                 email: '',
                 password: '',
-                rememberMe: false
+                rememberMe: false,
+                captcha: null
             }}
             validationSchema={validationSchema}
             onSubmit={submit}
@@ -57,6 +61,19 @@ const LoginForm = (props) => {
                     <div>{props.isError && !touched.email ? props.errorLoginMessage : ""}
                     </div>
                     <br />
+                    <div>{props.captchaUrl &&
+                        <img src={props.captchaUrl} alt="captcha" />}
+                    </div>
+                    {props.captchaUrl && <div>
+                        <div> <label htmlfor="captcha">Enter captcha text </label>
+                        </div>
+                        <Field
+                            id="captcha"
+                            name="captcha"
+                            type="text"
+                        />
+                    </div>}
+
                     <button type="submit" disabled={isSubmitting}>Sign In</button>
                 </Form>
             )}
@@ -73,12 +90,14 @@ const Login = (props) => {
         <LoginForm
             errorLoginMessage={props.errorLoginMessage}
             isError={props.isError}
-            login={props.login} />
+            login={props.login}
+            captchaUrl={props.captchaUrl} />
     </div>
 }
 const mapStateToProps = (state) => ({
     isAuth: state.auth.isAuth,
     isError: state.auth.isError,
-    errorLoginMessage: state.auth.errorLoginMessage
+    errorLoginMessage: state.auth.errorLoginMessage,
+    captchaUrl: state.auth.captchaUrl
 })
 export default connect(mapStateToProps, { login })(Login);
