@@ -82,6 +82,12 @@ export const updateStatus = (status) => async (dispatch) => {
     if (response.data.resultCode === 0) {
         dispatch(setStatus(status));
     }
+    else {
+        let errorStatusMessage = response.data.messages.length > 0
+            ? response.data.messages[0]
+            : "Some error";
+        return Promise.reject(errorStatusMessage);
+    }
 }
 export const savePhoto = (file) => async (dispatch) => {
     const response = await profileAPI.savePhoto(file)

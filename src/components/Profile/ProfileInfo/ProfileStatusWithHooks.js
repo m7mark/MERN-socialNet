@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import p from './ProfileInfo.module.css'
 
 const ProfileStatusWithHooks = (props) => {
+    const [errorMessage, setErrorMessage] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [status, setStatus] = useState(props.status);
     useEffect(() => {
@@ -12,6 +13,7 @@ const ProfileStatusWithHooks = (props) => {
         event.target.select();
     }
     const activateEditMode = () => {
+        setErrorMessage (null);
         setEditMode(true)
     }
     const onStatusChange = (e) => {
@@ -19,7 +21,9 @@ const ProfileStatusWithHooks = (props) => {
     }
     const deactivateEditMode = () => {
         setEditMode(false)
-        props.updateStatus(status);
+        props.updateStatus(status).catch(error => {
+            setErrorMessage(error);
+        });
     }
     return (
         <div className={p.description}>
@@ -44,6 +48,10 @@ const ProfileStatusWithHooks = (props) => {
                         </input>
                     </span>
                 </div>}
+            <div className={p.error}><b>
+                {errorMessage && errorMessage}
+            </b>
+            </div>
         </div>
     )
 }
