@@ -82,7 +82,7 @@ export const updateStatus = (status) => async (dispatch) => {
     if (response.data.resultCode === 0) {
         dispatch(setStatus(status));
     }
-    else {
+    else if (response.data.resultCode === 1) {
         let errorStatusMessage = response.data.messages.length > 0
             ? response.data.messages[0]
             : "Some error";

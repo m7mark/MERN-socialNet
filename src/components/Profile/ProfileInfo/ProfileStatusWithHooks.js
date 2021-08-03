@@ -13,7 +13,7 @@ const ProfileStatusWithHooks = (props) => {
         event.target.select();
     }
     const activateEditMode = () => {
-        setErrorMessage (null);
+        setErrorMessage(null);
         setEditMode(true)
     }
     const onStatusChange = (e) => {
@@ -22,7 +22,8 @@ const ProfileStatusWithHooks = (props) => {
     const deactivateEditMode = () => {
         setEditMode(false)
         props.updateStatus(status).catch(error => {
-            setErrorMessage(error);
+            error.length > 0 &&
+                setErrorMessage(error);
         });
     }
     return (

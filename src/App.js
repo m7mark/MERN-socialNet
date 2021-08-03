@@ -18,8 +18,15 @@ import { withSuspense } from './hoc/withSuspense'
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 class App extends React.Component {
+  catchAllUnhandleErrors = (reason, promise) => {
+    alert("Some error")
+  }
   componentDidMount() {
     this.props.initializeApp();
+    window.addEventListener("unhandledrejection", this.catchAllUnhandleErrors)
+  }
+  componentWillUnmount() {
+    window.removeEventListener("unhandledrejection", this.catchAllUnhandleErrors)
   }
   render() {
     if (!this.props.initialized) {
