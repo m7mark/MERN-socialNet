@@ -7,7 +7,7 @@ import Nav from './components/Nav/Nav'
 import UsersContainer from './components/Users/UsersContainer'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { withRouter } from 'react-router-dom'
+import { Redirect, withRouter } from 'react-router-dom'
 import { initializeApp } from './redux/app-reducer'
 import Preloader from './components/common/Preloader/Preloader'
 import store from './redux/store'
@@ -30,6 +30,8 @@ class App extends React.Component {
         <HeaderContainer />
         <Nav />
         <div className='app-wrapper-content'>
+          <Route path='/'
+            render={() => <Redirect to={'/profile'} />} />
           <Route path='/profile/:userId?'
             render={withSuspense(ProfileContainer)} />
           <Route path='/messages'
