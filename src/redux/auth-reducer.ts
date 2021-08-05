@@ -4,24 +4,17 @@ const SET_USER_DATA = 'SET_USER_DATA'
 const ERROR_LOGIN = 'ERROR_LOGIN'
 const GET_CAPTCHA_URL = 'GET_CAPTCHA_URL'
 
-export type InitialStateAuth = {
-    id: number | null
-    email: string | null
-    login: string | null
-    isAuth: boolean
-    isError: boolean
-    errorLoginMessage: string | null
-    captchaUrl: string | null
-}
-let initialState: InitialStateAuth = {
-    id: null,
-    email: null,
-    login: null,
+let initialState = {
+    id: null as number | null,
+    email: null as string | null,
+    login: null as string | null,
     isAuth: false,
     isError: false,
-    errorLoginMessage: null,
-    captchaUrl: null //if null captcha is not required
+    errorLoginMessage: null as string | null,
+    captchaUrl: null as string | null //if null captcha is not required
 }
+export type InitialStateAuth = typeof initialState
+
 const authReducer = (state = initialState, action: any): InitialStateAuth => {
     switch (action.type) {
         case SET_USER_DATA:
