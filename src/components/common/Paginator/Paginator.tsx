@@ -2,10 +2,15 @@ import React from 'react';
 import ReactPaginate from 'react-paginate';
 import './Paginator.css'
 
-let Paginator = (props) => {
+type Props ={
+    totalUsersCount: number
+    pageSize: number
+    onPageChanged: (selected: number) => void
+}
+let Paginator: React.FC<Props> = (props) => {
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
     let pageSize = props.pageSize;
-    let handlePageClick = (data) => {
+    let handlePageClick = (data: any) => {
         let selected = data.selected + 1;
         props.onPageChanged(selected)
     }
