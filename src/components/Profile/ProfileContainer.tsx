@@ -11,11 +11,39 @@ import {
 import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { withAuthRedirect } from '../../hoc/withAuthRedirect';
+import { AppStateType } from '../../redux/store';
+import { ProfileType } from '../../types/types';
+import { RouteComponentProps } from 'react-router';
 
-class ProfileContainer extends React.Component {
+interface MatchParams {
+  userId: string | undefined
+}
+interface MatchProps extends RouteComponentProps<MatchParams> {
+}
+
+type MapStatePropsType = {
+  profile: ProfileType | null
+  status: string | null
+  isFetching: boolean
+  authorizedUserId: number | null
+  isAuth: boolean
+}
+
+type MapDispatchPropsType = {
+  getUserProfile: (userId: string | undefined) => void
+  getStatus: (userId: string | undefined) => void
+  updateStatus: (status: string) => void
+  savePhoto: () => void
+  saveProfileInfo: () => void
+}
+
+type PropsType = MapStatePropsType & MapDispatchPropsType & MatchProps
+
+class ProfileContainer extends React.Component<PropsType> {
 
   refreshProfile() {
     let userId = this.props.match.params.userId;
+    //@ts-ignore
     if (!userId) { userId = this.props.authorizedUserId; };
     if (!userId) { this.props.history.push("/login") };
     this.props.getUserProfile(userId);
@@ -24,7 +52,7 @@ class ProfileContainer extends React.Component {
   componentDidMount() {
     this.refreshProfile();
   }
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: PropsType) {
     if (this.props.match.params.userId !== prevProps.match.params.userId) {
       this.refreshProfile();
     }
@@ -40,7 +68,7 @@ class ProfileContainer extends React.Component {
   }
 }
 
-let mapStateToProps = (state) => {
+let mapStateToProps = (state: AppStateType): MapStatePropsType => {
   return ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,

@@ -1,6 +1,9 @@
+import { Dispatch } from "redux";
+import { ThunkAction } from "redux-thunk";
 import { userAPI } from "../api/api";
 import { updateObjectInArray } from "../components/utils/object-helpers";
 import { UserType } from "../types/types";
+import { AppStateType } from "./store";
 
 const FOLLOW = 'FOLLOW';
 const UNFOLLOW = 'UNFOLLOW';
@@ -21,7 +24,7 @@ let initialState = {
     // fake: 10
 }
 type InitialState = typeof initialState
-const usersReducer = (state = initialState, action: any):
+const usersReducer = (state = initialState, action: ActionsTypes):
     InitialState => {
     switch (action.type) {
         // case "FAKE": return { ...state, fake: state.fake + 1 }
@@ -63,6 +66,10 @@ const usersReducer = (state = initialState, action: any):
             return state;
     }
 }
+type ActionsTypes = FollowSuccessActionType | UnfollowSuccessActionType |
+    SetUsersActionType | SetCurrentPageActionType | SetTotalUsersCountActionType |
+    ToggleIsFetchingActionType | ToggleFollowingProgressActionType
+
 type FollowSuccessActionType = {
     type: typeof FOLLOW
     userId: number
@@ -120,14 +127,15 @@ const followUnfollowFlow = async (dispatch: any, id: number, apiMethod: any, act
     dispatch(toggleFollowingProgress(false, id));
 }
 
-export const getUsers = (currentPage: number, pageSize: number) => async (dispatch: any) => {
-    dispatch(toggleIsFetching(true));
-    const data = await userAPI.getUsers(currentPage, pageSize);
-    dispatch(setCurrentPage(currentPage));
-    dispatch(toggleIsFetching(false));
-    dispatch(setUsers(data.items));
-    dispatch(setTotalUsersCount(data.totalCount));
-}
+export const getUsers = (currentPage: number, pageSize: number) =>
+    async (dispatch: Dispatch<ActionsTypes>, getstate: () => AppStateType) => {
+        dispatch(toggleIsFetching(true));
+        const data = await userAPI.getUsers(currentPage, pageSize);
+        dispatch(setCurrentPage(currentPage));
+        dispatch(toggleIsFetching(false));
+        dispatch(setUsers(data.items));
+        dispatch(setTotalUsersCount(data.totalCount));
+    }
 export const follow = (id: number) => {
     return async (dispatch: any) => {
         let apiMethod = userAPI.follow.bind(userAPI);
