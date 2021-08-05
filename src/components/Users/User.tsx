@@ -2,8 +2,16 @@ import React from 'react';
 import p from './Users.module.css'
 import userIcon from './../../assets/userIcon.png'
 import { NavLink } from 'react-router-dom';
+import { UserType } from '../../types/types';
 
-let User = ({ user, followingInProgress, unfollow, follow }) => {
+type Props = {
+    followingInProgress: Array<number>
+    user: UserType
+    unfollow: (id: number) => void
+    follow: (id: number) => void
+}
+
+let User: React.FC<Props> = ({ user, followingInProgress, unfollow, follow }) => {
     return <div className={p.commonPadding}>
         <div>
             <div>

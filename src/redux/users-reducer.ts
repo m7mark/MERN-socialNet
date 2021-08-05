@@ -17,7 +17,7 @@ let initialState = {
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
-    followingInProgress: [] as Array<Number> // Array of Users Id
+    followingInProgress: [] as Array<number> // Array of Users Id
     // fake: 10
 }
 type InitialState = typeof initialState
