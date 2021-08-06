@@ -3,11 +3,33 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import { login } from '../../redux/auth-reducer';
+import { AppStateType } from '../../redux/store';
 import style from '../common/CommonStyle.module.css'
 
+type MapStatePropsType = {
+    isAuth?: boolean
+    isError: boolean
+    errorLoginMessage: string | null
+    captchaUrl: string | null
+}
+type MapDispatchPropsType = {
+    login: (email: string,
+        password: string,
+        rememberMe: boolean,
+        captcha: string | null) => Promise<void>
 
-const LoginForm = (props) => {
-    const submit = (values, { resetForm }) => {
+}
+type FormsValuesType = {
+    email: string
+    password: string
+    rememberMe: boolean
+    captcha: string | null
+}
+
+
+const LoginForm: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) => {
+
+    const submit = (values: FormsValuesType, { resetForm }: any) => {
         props.login(values.email, values.password, values.rememberMe, values.captcha)
         resetForm({})
     }
@@ -17,9 +39,6 @@ const LoginForm = (props) => {
             .required('Required'),
         password: Yup.string()
             .required('Required'),
-        // captcha: Yup.string()
-        //     .required('Required'),
-
     })
 
     return (
@@ -52,7 +71,7 @@ const LoginForm = (props) => {
                     />
                     {errors.password}
                     <br />
-                    <label htmlfor="rememberMe">Remember me </label>
+                    <label htmlFor="rememberMe">Remember me </label>
                     <Field
                         id="rememberMe"
                         name="rememberMe"
@@ -65,7 +84,7 @@ const LoginForm = (props) => {
                         <img src={props.captchaUrl} alt="captcha" />}
                     </div>
                     {props.captchaUrl && <div>
-                        <div> <label htmlfor="captcha">Enter captcha text </label>
+                        <div> <label htmlFor="captcha">Enter captcha text </label>
                         </div>
                         <Field
                             id="captcha"
@@ -81,7 +100,7 @@ const LoginForm = (props) => {
     );
 };
 
-const Login = (props) => {
+const Login: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) => {
     if (props.isAuth) {
         return <Redirect to={"./profile"} />
     }
@@ -94,7 +113,7 @@ const Login = (props) => {
             captchaUrl={props.captchaUrl} />
     </div>
 }
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
     isAuth: state.auth.isAuth,
     isError: state.auth.isError,
     errorLoginMessage: state.auth.errorLoginMessage,
