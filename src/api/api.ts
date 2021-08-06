@@ -1,4 +1,5 @@
 import axios from "axios"
+import { ProfileType } from "../types/types";
 
 const instance = axios.create({
     baseURL: 'https://social-network.samuraijs.com/api/1.0/',
@@ -13,31 +14,31 @@ export const userAPI = {
         const response = await instance.get(`users?page=${currentPage}&count=${pageSize}`);
         return response.data;
     },
-    async unfollow(id) {
+    async unfollow(id: number) {
         const response = await instance.delete(`follow/${id}`);
         return response.data;
     },
-    async follow(id) {
+    async follow(id: number) {
         const response = await instance.post(`follow/${id}`);
         return response.data;
     }
 }
 
 export const profileAPI = {
-    async getUserProfile(id) {
+    async getUserProfile(id: number) {
         const response = await instance.get(`profile/${id}`);
         return response.data;
     },
-    getStatus(id) {
+    getStatus(id: number) {
         return instance.get(`profile/status/${id}`)
     },
-    updateStatus(status) {
+    updateStatus(status: string) {
         return instance.put(`profile/status`, { status })
     },
-    saveProfileInfo(profile) {
+    saveProfileInfo(profile: ProfileType) {
         return instance.put(`profile`, profile)
     },
-    savePhoto(photoFile) {
+    savePhoto(photoFile: any) {
         const formData = new FormData()
         formData.append("image", photoFile);
         return instance.put(`/profile/photo`, formData, {
@@ -47,17 +48,43 @@ export const profileAPI = {
         })
     }
 }
+export enum ResultCodeEnum {
+    Success = 0,
+    Error = 1,
+}
+export enum ResultCodeForCaptcha {
+    CaptchaIsRequired = 10
+}
 
+type MeResponseType = {
+    data: {
+        id: number
+        email: string
+        login: string
+    }
+    resultCode: ResultCodeEnum
+    messages: string
+}
+type LoginResponseType = {
+    data: { userId: number }
+    resultCode: ResultCodeEnum | ResultCodeForCaptcha
+    messages: Array<string>
+}
+type LogoutResponseType = {
+    data: {}
+    resultCode: ResultCodeEnum
+    messages: Array<string>
+}
 export const authAPI = {
     async me() {
-        const response = await instance.get(`auth/me`);
+        const response = await instance.get<MeResponseType>(`auth/me`);
         return response.data;
     },
-    login(email, password, rememberMe = false, captcha = null) {
-        return instance.post(`auth/login`, { email, password, rememberMe, captcha })
+    login(email: string, password: string, rememberMe = false, captcha: string | null = null) {
+        return instance.post<LoginResponseType>(`auth/login`, { email, password, rememberMe, captcha })
     },
     logout() {
-        return instance.delete(`auth/login`)
+        return instance.delete<LogoutResponseType>(`auth/login`)
     }
 }
 

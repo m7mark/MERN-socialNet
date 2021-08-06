@@ -1,4 +1,4 @@
-import { authAPI, securityAPI } from "../api/api";
+import { authAPI, ResultCodeEnum, ResultCodeForCaptcha, securityAPI } from "../api/api";
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const ERROR_LOGIN = 'ERROR_LOGIN'
@@ -68,7 +68,7 @@ export const errorLogin = (errorLoginMessage: string): ErrorLoginActionType =>
 
 export const authUserData = () => async (dispatch: any) => {
     const data = await authAPI.me();
-    if (data.resultCode === 0) {
+    if (data.resultCode === ResultCodeEnum.Success) {
         let { id, email, login } = data.data;
         dispatch(setAuthUserData(id, email, login, true));
     }
@@ -76,13 +76,13 @@ export const authUserData = () => async (dispatch: any) => {
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string) =>
     async (dispatch: any) => {
         const response = await authAPI.login(email, password, rememberMe, captcha)
-        if (response.data.resultCode === 0) {
+        if (response.data.resultCode === ResultCodeEnum.Success) {
             dispatch(authUserData())
             // Delete captcha after success
             dispatch(getCaptchaUrlSuccess(null))
         }
         else {
-            if (response.data.resultCode === 10) {
+            if (response.data.resultCode === ResultCodeForCaptcha.CaptchaIsRequired) {
                 dispatch(getCaptchaUrl());
             }
             let errorLoginMessage = response.data.messages.length > 0
