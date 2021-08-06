@@ -1,4 +1,3 @@
-import React from 'react';
 import p from './Preloader.module.css'
 
 let Preloader = () => {
