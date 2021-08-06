@@ -126,15 +126,15 @@ const _followUnfollowFlow = async (
     dispatch: Dispatch<ActionsTypes>,
     id: number,
     apiMethod: any,
-    actionCreator: (id: number) => FollowSuccessActionType | UnfollowSuccessActionType) => {
+    actionCreator: (id: number) =>
+        FollowSuccessActionType | UnfollowSuccessActionType) => {
     dispatch(toggleFollowingProgress(true, id));
     const data = await apiMethod(id)
     if (data.resultCode === 0) { dispatch(actionCreator(id)) }
     dispatch(toggleFollowingProgress(false, id));
 }
 
-export const getUsers = (currentPage: number, pageSize: number):
-    ThunkType =>
+export const getUsers = (currentPage: number, pageSize: number): ThunkType =>
     async (dispatch, getstate) => {
         dispatch(toggleIsFetching(true));
         const data = await userAPI.getUsers(currentPage, pageSize);
@@ -143,15 +143,13 @@ export const getUsers = (currentPage: number, pageSize: number):
         dispatch(setUsers(data.items));
         dispatch(setTotalUsersCount(data.totalCount));
     }
-export const follow = (id: number):
-    ThunkType => {
+export const follow = (id: number): ThunkType => {
     return async (dispatch) => {
         let apiMethod = userAPI.follow.bind(userAPI);
         _followUnfollowFlow(dispatch, id, apiMethod, followSuccess);
     }
 }
-export const unfollow = (id: number):
-    ThunkType => {
+export const unfollow = (id: number): ThunkType => {
     return async (dispatch) => {
         let apiMethod = userAPI.unfollow.bind(userAPI);
         _followUnfollowFlow(dispatch, id, apiMethod, unfollowSuccess);
