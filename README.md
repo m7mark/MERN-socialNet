@@ -7,5 +7,5 @@ This is an educational project of the YouTube channel [IT-KAMASUTRA](https://www
 1) [TypeScript](https://www.typescriptlang.org)
 2) [React](https://reactjs.org/), [Redux](https://redux.js.org/)
 3) [Axios](https://axios-http.com/), [Hooks](https://reactjs.org/docs/hooks-intro.html), [Formik](https://formik.org), \
-   [Reselect](https://github.com/reduxjs/reselect), [Redux-Thunk](https://github.com/reduxjs/redux-thunk), \
+   [Reselect](https://github.com/reduxjs/reselect), [Redux-Thunk](https://github.com/reduxjs/redux-thunk),
 5) [and etc.](https://github.com/m7mark/social-net/blob/master/package.json)
