@@ -1,4 +1,4 @@
-const ADD_NEW_MESSAGE = 'ADD_NEW_MESSAGE';
+import { InferActionsType } from "./store";
 
 type MessagesData = {
     id: number
@@ -25,11 +25,12 @@ let initialState = {
         { id: 5, name: 'Nastya' }
     ] as Array<DialogsData>
 }
+
 export type InitialStateDialogs = typeof initialState
-const dialogsReducer = (state = initialState, action: any):
+const dialogsReducer = (state = initialState, action: ActionsTypes):
     InitialStateDialogs => {
     switch (action.type) {
-        case ADD_NEW_MESSAGE:
+        case 'SN/DIAL/ADD_NEW_MESSAGE':
             return {
                 ...state,
                 messagesData: [...state.messagesData,
@@ -39,12 +40,11 @@ const dialogsReducer = (state = initialState, action: any):
             return state;
     }
 }
-type PostNewMesageBodyActionType = {
-    type: typeof ADD_NEW_MESSAGE
-    newText: string
+
+type ActionsTypes = InferActionsType<typeof actions>
+export const actions = {
+    postNewMesageBody: (newText: string) =>
+        ({ type: 'SN/DIAL/ADD_NEW_MESSAGE', newText: newText } as const)
 }
-export const postNewMesageBody = (newText: string):
-    PostNewMesageBodyActionType =>
-    ({ type: ADD_NEW_MESSAGE, newText: newText })
 
 export default dialogsReducer;

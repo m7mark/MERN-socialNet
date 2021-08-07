@@ -1,13 +1,17 @@
-import profileReducer, { addNewPostBody, deletePost } from "./profile-reducer";
+import profileReducer, { actions } from "./profile-reducer";
 
 let state = {
     postData: [
         { id: 1, message: "How are you", likesCount: 12 },
         { id: 2, message: "Good and you", likesCount: 2 }],
+    profile: null,
+    status: '' as string | null,
+    isFetching: false,
+    newPostText: ''
 }
 test('new post should be added', () => {
     // start data
-    let action = addNewPostBody('Mark Rodovsky')
+    let action = actions.addNewPostBody('Mark Rodovsky')
     // action
     let newState = profileReducer(state, action)
     // expectation
@@ -17,7 +21,7 @@ test('new post should be added', () => {
 
 test('length after delete should be decrement', () => {
     // start data
-    let action = deletePost (1)
+    let action = actions.deletePost(1)
     // action
     let newState = profileReducer(state, action)
     // expectation

@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { addNewPostBody } from './../../../redux/profile-reducer'
+import { actions } from './../../../redux/profile-reducer'
 import MyPosts from './MyPosts';
 
-let mapStateToProps = (state) => {
+const mapStateToProps = (state) => {
   return {
     postData: state.profilePage.postData
   }
 }
 
 export default compose(
-  connect(mapStateToProps, { addNewPostBody })
+  connect(mapStateToProps, { addNewPostBody: actions.addNewPostBody })
 )(MyPosts)
