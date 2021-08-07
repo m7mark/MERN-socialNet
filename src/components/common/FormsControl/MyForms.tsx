@@ -6,6 +6,7 @@ import styles from './MyForms.module.css'
 type Props = {
     id: string
     name: string
+    placeholder: string
     label?: string
     type?:string
 }

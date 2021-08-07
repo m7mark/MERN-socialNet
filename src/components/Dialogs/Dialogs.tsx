@@ -3,9 +3,21 @@ import Message from './Message/Message';
 import DialogItem from './DialogItem/DialogItem';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import MyTextInput from './../common/FormsControl/MyForms';
+import MyTextInput from '../common/FormsControl/MyForms';
+import { InitialStateDialogs } from '../../redux/dialog-reducer';
 
-const Dialogs = (props) => {
+
+type OwnPropsType = {
+    dialogsPage: InitialStateDialogs
+    postNewMesageBody: (newText: string) => void
+}
+type AddMessageFormProps = {
+    postNewMesageBody: (newText: string) => void
+}
+type FormsValuesType = {
+    newMessageBodyText: string
+}
+const Dialogs: React.FC<OwnPropsType> = (props) => {
     let dialogElements =
         props.dialogsPage.dialogsData.map(d => <DialogItem name={d.name} id={d.id} />);
 
@@ -26,8 +38,8 @@ const Dialogs = (props) => {
 }
 export default Dialogs;
 
-const AddMessageForm = (props) => {
-    const submit = (values, { resetForm }) => {
+const AddMessageForm: React.FC<AddMessageFormProps> = (props) => {
+    const submit = (values: FormsValuesType, { resetForm }: any) => {
         props.postNewMesageBody(values.newMessageBodyText)
         resetForm({})
     }
