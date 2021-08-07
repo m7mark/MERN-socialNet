@@ -1,4 +1,6 @@
-import { authAPI, ResultCodeEnum, ResultCodeForCaptcha, securityAPI } from "../api/api";
+import { ResultCodeEnum, ResultCodeForCaptchaEnum } from "../api/api";
+import { authAPI } from "../api/auth-api";
+import { securityAPI } from "../api/security-api";
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const ERROR_LOGIN = 'ERROR_LOGIN'
@@ -82,7 +84,7 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
             dispatch(getCaptchaUrlSuccess(null))
         }
         else {
-            if (response.data.resultCode === ResultCodeForCaptcha.CaptchaIsRequired) {
+            if (response.data.resultCode === ResultCodeForCaptchaEnum.CaptchaIsRequired) {
                 dispatch(getCaptchaUrl());
             }
             let errorLoginMessage = response.data.messages.length > 0
