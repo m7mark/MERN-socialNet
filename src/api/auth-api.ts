@@ -11,7 +11,7 @@ type MeResponseDataType = {
     login: string
 }
 type LoginResponseDataType = {
-    userId: number
+    userId: number | null
 }
 export const authAPI = {
     async me() {

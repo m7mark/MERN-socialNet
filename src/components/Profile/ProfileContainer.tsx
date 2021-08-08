@@ -16,35 +16,28 @@ import { ProfileType } from '../../types/types';
 import { RouteComponentProps } from 'react-router';
 
 interface MatchParams {
-  userId: string | undefined
+  userId: string
 }
 interface MatchProps extends RouteComponentProps<MatchParams> {
 }
-
-type MapStatePropsType = {
-  profile: ProfileType | null
-  status: string | null
-  isFetching: boolean
-  authorizedUserId: number | null
-  isAuth: boolean
-}
-
+type MapStatePropsType = ReturnType<typeof mapStateToProps>
 type MapDispatchPropsType = {
-  getUserProfile: (userId: string | undefined) => void
-  getStatus: (userId: string | undefined) => void
-  updateStatus: (status: string) => void
-  savePhoto: () => void
-  saveProfileInfo: () => void
+  getUserProfile: (userId: number | null) => void
+  getStatus: (userId: number | null) => void
+  updateStatus: (status: string | undefined) => Promise<void>
+  savePhoto: (file: File) => void
+  saveProfileInfo: (profile: ProfileType) => Promise<void>
 }
-
 type PropsType = MapStatePropsType & MapDispatchPropsType & MatchProps
-
 class ProfileContainer extends React.Component<PropsType> {
 
   refreshProfile() {
-    let userId = this.props.match.params.userId;
-    if (!userId) { userId = this.props.authorizedUserId?.toString(); };
+    let userId: number | null = +this.props.match.params.userId;
+    if (!userId) { userId = this.props.authorizedUserId };
     if (!userId) { this.props.history.push("/login") };
+    // if (!userId) {
+    //   throw new Error('ID should exists')
+    // }
     this.props.getUserProfile(userId);
     this.props.getStatus(userId);
   }
@@ -67,7 +60,7 @@ class ProfileContainer extends React.Component<PropsType> {
   }
 }
 
-let mapStateToProps = (state: AppStateType): MapStatePropsType => {
+let mapStateToProps = (state: AppStateType) => {
   return ({
     profile: state.profilePage.profile,
     status: state.profilePage.status,

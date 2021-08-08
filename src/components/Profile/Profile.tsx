@@ -1,9 +1,11 @@
-import ProfileInfo from './ProfileInfo/ProfileInfo';
+import ProfileInfo, { ProfileInfoProps } from './ProfileInfo/ProfileInfo';
 import MyPostsContainer from './MyPosts/MyPostsContainer';
 import Preloader from '../common/Preloader/Preloader';
 
-const Profile = (props) => {
-
+type ProfileProps = {
+  isFetching?: boolean;
+} & Omit<ProfileInfoProps, 'isFetching'>;
+const Profile: React.FC<ProfileProps> = (props) => {
   return (
     <div>
       {props.isFetching ? <Preloader /> :

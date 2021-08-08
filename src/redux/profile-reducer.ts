@@ -9,7 +9,7 @@ let initialState = {
         { id: 2, message: "Good and you", likesCount: 2 },
     ] as Array<PostData>,
     profile: null as ProfileType | null,
-    status: '' as string | null,
+    status: '' as string | undefined,
     isFetching: false,
     newPostText: ''
 }
@@ -63,7 +63,7 @@ export const actions = {
         ({ type: 'SN/PROF/DELETE_POST', postId } as const),
     setUserProfile: (profile: ProfileType) =>
         ({ type: 'SN/PROF/SET_USER_PROFILE', profile } as const),
-    setStatus: (status: string | null) =>
+    setStatus: (status: string | undefined) =>
         ({ type: 'SN/PROF/SET_STATUS', status } as const),
     savePhotoSuccess: (photos: PhotosType) =>
         ({ type: 'SN/PROF/SET_PHOTOS_SUCCESS', photos } as const),

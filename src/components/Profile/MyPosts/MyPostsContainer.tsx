@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { actions } from '../../../redux/profile-reducer'
 import { AppStateType } from '../../../redux/store';
-import MyPosts from './MyPosts';
+import MyPosts, { MyPostsDispatchProps, MyPostsProps } from './MyPosts';
 
 const mapStateToProps = (state: AppStateType) => {
   return {
@@ -11,5 +11,6 @@ const mapStateToProps = (state: AppStateType) => {
 }
 
 export default compose(
-  connect(mapStateToProps, { addNewPostBody: actions.addNewPostBody })
+  connect<MyPostsProps, MyPostsDispatchProps, {}, AppStateType>
+    (mapStateToProps, { addNewPostBody: actions.addNewPostBody })
 )(MyPosts)
