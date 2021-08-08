@@ -2,7 +2,14 @@ import p from './Header.module.css';
 import logo from './01.png';
 import { NavLink } from 'react-router-dom';
 
-const Header = (props) => {
+export type StatePropsType = {
+  isAuth: boolean
+  login: string | null
+}
+export type DispatchPropsType = {
+  logout: () => void
+}
+const Header: React.FC<StatePropsType & DispatchPropsType> = (props) => {
   return (
     <header className={p.header}>
       <img src={logo} alt="header" />
@@ -15,7 +22,6 @@ const Header = (props) => {
         }
       </div>
     </header>
-
   );
 }
 export default Header;
