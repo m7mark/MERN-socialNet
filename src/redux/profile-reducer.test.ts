@@ -5,7 +5,7 @@ let state = {
         { id: 1, message: "How are you", likesCount: 12 },
         { id: 2, message: "Good and you", likesCount: 2 }],
     profile: null,
-    status: '' as string | null,
+    status: '' as string | undefined,
     isFetching: false,
     newPostText: ''
 }

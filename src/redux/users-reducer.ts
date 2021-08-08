@@ -12,7 +12,7 @@ let initialState = {
     isFetching: false,
     followingInProgress: [] as Array<number> // Array of Users Id
 }
-type InitialState = typeof initialState
+export type InitialState = typeof initialState
 const usersReducer = (state = initialState, action: ActionsTypes):
     InitialState => {
     switch (action.type) {
