@@ -1,6 +1,6 @@
 import p from './../Dialogs.module.css';
 
-const Message = (props) => {
+const Message: React.FC<{text: string}> = (props) => {
     return (
         <div className={p.message}>{props.text}</div>
     );

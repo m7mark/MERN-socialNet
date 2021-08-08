@@ -4,20 +4,21 @@ import Preloader from '../common/Preloader/Preloader';
 import User from './User';
 import { UserType } from "../../types/types";
 
-
-type Props = {
+export type StatePropsType = {
     currentPage: number
     totalUsersCount: number
     pageSize: number
     followingInProgress: Array<number>
     users: Array<UserType>
     isFetching: boolean
+}
+export type DispatchPropsType = {
     unfollow: (id: number) => void
     follow: (id: number) => void
     onPageChanged: (pageNumber: number) => void
 }
-
-let Users: React.FC<Props> = (props) => {
+type PropsType = StatePropsType & DispatchPropsType
+let Users: React.FC<PropsType> = (props) => {
     let CurrentUsers = (): JSX.Element => {
         return <>
             {props.users.map(u => <User

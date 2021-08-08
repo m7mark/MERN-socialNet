@@ -1,6 +1,6 @@
 import p from './Preloader.module.css'
 
-let Preloader = () => {
+let Preloader: React.FC = () => {
     return <div className={p.lds_dual}></div>
 }
 

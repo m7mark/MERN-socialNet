@@ -4,14 +4,13 @@ import userIcon from './../../assets/userIcon.png'
 import { NavLink } from 'react-router-dom';
 import { UserType } from '../../types/types';
 
-type Props = {
+type PropsType = {
     followingInProgress: Array<number>
     user: UserType
     unfollow: (id: number) => void
     follow: (id: number) => void
 }
-
-let User: React.FC<Props> = ({ user, followingInProgress, unfollow, follow }) => {
+let User: React.FC<PropsType> = ({ user, followingInProgress, unfollow, follow }) => {
     return <div className={p.commonPadding}>
         <div>
             <div>
@@ -38,10 +37,6 @@ let User: React.FC<Props> = ({ user, followingInProgress, unfollow, follow }) =>
             <div>
                 <div>{user.name}</div>
                 <div>{user.status}</div>
-            </div>
-            <div>
-                {/* <div>{"user.location.country"}</div>
-                <div>{"user.location.city"}</div> */}
             </div>
         </div>
     </div>

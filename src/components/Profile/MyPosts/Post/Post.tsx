@@ -1,11 +1,10 @@
 import p from './Post.module.css'
 
-type PostProps = {
+type PropsType = {
   message: string
   likesCount: number
 }
-
-const Post: React.FC<PostProps> = (props) => {
+const Post: React.FC<PropsType> = (props) => {
   return (
     <div className={p.item}>
       <div>

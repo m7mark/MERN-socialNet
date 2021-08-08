@@ -5,16 +5,16 @@ import * as Yup from 'yup';
 import MyTextInput from '../../common/FormsControl/MyForms';
 import { PostData } from '../../../types/types';
 
-export type MyPostsProps = {
+export type StatePropsType = {
   postData : Array<PostData>
 }
-export type MyPostsDispatchProps = {
+export type DispatchPropsType = {
   addNewPostBody: (newPostText: string) => void
 }
 type AddPostFormValuesType = {
   newPostBodyText: string
 }
-const MyPosts: React.FC<MyPostsProps & MyPostsDispatchProps> = (props) => {
+const MyPosts: React.FC<StatePropsType & DispatchPropsType> = (props) => {
   let postElements =
     props.postData.map(posts =>
       <Post message={posts.message} likesCount={posts.likesCount} />)
@@ -30,7 +30,7 @@ const MyPosts: React.FC<MyPostsProps & MyPostsDispatchProps> = (props) => {
 }
 export default MyPosts;
 
-const AddPostForm: React.FC <MyPostsDispatchProps> = ({ addNewPostBody }) => {
+const AddPostForm: React.FC <DispatchPropsType> = ({ addNewPostBody }) => {
   const submit = (values : AddPostFormValuesType, { resetForm } : any) => {
     addNewPostBody(values.newPostBodyText)
     resetForm({})

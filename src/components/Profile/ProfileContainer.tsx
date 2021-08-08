@@ -18,17 +18,17 @@ import { RouteComponentProps } from 'react-router';
 interface MatchParams {
   userId: string
 }
-interface MatchProps extends RouteComponentProps<MatchParams> {
+interface MatchPropsType extends RouteComponentProps<MatchParams> {
 }
-type MapStatePropsType = ReturnType<typeof mapStateToProps>
-type MapDispatchPropsType = {
+type StatePropsType = ReturnType<typeof mapStateToProps>
+type DispatchPropsType = {
   getUserProfile: (userId: number | null) => void
   getStatus: (userId: number | null) => void
   updateStatus: (status: string | undefined) => Promise<void>
   savePhoto: (file: File) => void
   saveProfileInfo: (profile: ProfileType) => Promise<void>
 }
-type PropsType = MapStatePropsType & MapDispatchPropsType & MatchProps
+type PropsType = StatePropsType & DispatchPropsType & MatchPropsType
 class ProfileContainer extends React.Component<PropsType> {
 
   refreshProfile() {

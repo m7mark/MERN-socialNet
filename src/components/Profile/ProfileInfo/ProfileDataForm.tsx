@@ -4,15 +4,12 @@ import { ContactsType, ProfileType } from '../../../types/types';
 import p from './ProfileInfo.module.css'
 
 
-type ProfileDataFormProps = {
+type PropsType = {
     saveProfileInfo: (profile: ProfileType) => Promise<void>
     profile: ProfileType
     setEditMode: (arg0: boolean) => void
 }
-// type ProfileDataFormValues = {
-//     value: ProfileType
-// }
-const ProfileDataForm: React.FC<ProfileDataFormProps> =
+const ProfileDataForm: React.FC<PropsType> =
     ({ setEditMode, saveProfileInfo, profile, ...props }) => {
         const [errorMessage, setErrorMessage] = useState();
         const formik = useFormik({

@@ -7,7 +7,7 @@ import ProfileDataForm from './ProfileDataForm';
 import { ProfileType } from '../../../types/types';
 
 
-export type ProfileInfoProps = {
+export type ProfileInfoPropsType = {
   profile: ProfileType | null
   status: string | undefined
   updateStatus: (status: string | undefined) => Promise<void>
@@ -15,7 +15,7 @@ export type ProfileInfoProps = {
   savePhoto: (file: File) => void
   saveProfileInfo: (profile: ProfileType) => Promise<void>
 }
-const ProfileInfo : React.FC<ProfileInfoProps> = ({
+const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
   profile,
   status,
   updateStatus,
@@ -29,7 +29,7 @@ const ProfileInfo : React.FC<ProfileInfoProps> = ({
     return <Preloader />
   }
   const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length ) {
+    if (e.target.files?.length) {
       savePhoto(e.target.files[0])
     }
   }

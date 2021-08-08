@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import p from './ProfileInfo.module.css'
 
-type PropsType ={
+type PropsType = {
     status: string | undefined
     updateStatus: (status: string | undefined) => Promise<void>
 }
@@ -13,7 +13,7 @@ const ProfileStatusWithHooks: React.FC<PropsType> = (props) => {
         setStatus(props.status);
     }, [props.status]);
 
-    const handleFocus = (event:ChangeEvent<HTMLInputElement>) => {
+    const handleFocus = (event: ChangeEvent<HTMLInputElement>) => {
         event.target.select();
     }
     const activateEditMode = () => {
