@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
 import './Paginator.css'
 
-type Props ={
+type Props = {
     totalUsersCount: number
     pageSize: number
     onPageChanged: (selected: number) => void
+    currentPage: number
 }
-let Paginator: React.FC<Props> = (props) => {
+const Paginator: React.FC<Props> = (props) => {
+    const [page, setPage] = useState(0);
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
     let pageSize = props.pageSize;
-    let handlePageClick = (data: any) => {
-        let selected = data.selected + 1;
-        props.onPageChanged(selected)
+    const handlePageClick = (data: any) => {
+        const selectedPage = data.selected
+        setPage(selectedPage)
     }
+    useEffect(() => {
+        props.onPageChanged(page + 1)
+    }, [page])
     return <div>
         <ReactPaginate
+            forcePage={props.currentPage - 1}
             previousLabel={'previous'}
             nextLabel={'next'}
             breakLabel={'...'}
