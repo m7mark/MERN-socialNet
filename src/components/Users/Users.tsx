@@ -1,52 +1,71 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Paginator from '../common/Paginator/Paginator';
 import Preloader from '../common/Preloader/Preloader';
 import User from './User';
-import { UserType } from "../../types/types";
 import { UsersSearchForm } from './UsersSearchForm';
-import { FilterType } from '../../redux/users-reducer';
+import { FilterType, getUsers, follow, unfollow } from '../../redux/users-reducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCurrentPage, getFollowingInProgress, getIsFetching, getPageSize, getTotalUsersCount, getUsersFilter, getUsersFromState } from '../../redux/users-selector';
 
-export type StatePropsType = {
-    currentPage: number
-    totalUsersCount: number
-    pageSize: number
-    followingInProgress: Array<number>
-    users: Array<UserType>
-    isFetching: boolean
-    filter: FilterType
+type PropsType = {
+    pageTitle: string
 }
-export type DispatchPropsType = {
-    unfollow: (id: number) => void
-    follow: (id: number) => void
-    onPageChanged: (pageNumber: number) => void
-    onFilterChanged: (filter: FilterType) => void
+export const  Users: React.FC<PropsType> = (props) => {
 
-}
-type PropsType = StatePropsType & DispatchPropsType
-let Users: React.FC<PropsType> = (props) => {
-    let CurrentUsers = (): JSX.Element => {
+    const totalUsersCount = useSelector(getTotalUsersCount)
+    const currentPage = useSelector(getCurrentPage)
+    const pageSize = useSelector(getPageSize)
+    const filter = useSelector(getUsersFilter)
+    const users = useSelector(getUsersFromState)
+    const followingInProgress = useSelector(getFollowingInProgress)
+    const isFetching = useSelector(getIsFetching)
+
+    useEffect(() => {
+        const filter: FilterType = {
+            term: '',
+            friend: null
+        }
+        setTimeout(() => {
+            dispatch(getUsers(1, pageSize, filter))
+        }, 100)
+    }, [])
+
+    const dispatch = useDispatch()
+    const onPageChanged = (pageNumber: number) => {
+        dispatch(getUsers(pageNumber, pageSize, filter))
+    }
+    const onFilterChanged = (filter: FilterType) => {
+        dispatch(getUsers(1, pageSize, filter))
+    }
+    const unfollowThunk = (id: number) => {
+        dispatch(unfollow(id))
+    }
+    const followThunk = (id: number) => {
+        dispatch(follow(id))
+    }
+
+    const CurrentUsers = (): JSX.Element => {
         return <>
-            {props.users.map(u => <User
+            {users.map(u => <User
                 user={u}
                 key={u.id}
-                followingInProgress={props.followingInProgress}
-                unfollow={props.unfollow}
-                follow={props.follow} />)}
+                followingInProgress={followingInProgress}
+                unfollow={unfollowThunk}
+                follow={followThunk} />)}
         </>
     }
 
     return <div>
+        <h2>{props.pageTitle}</h2>
         <Paginator
-            totalUsersCount={props.totalUsersCount}
-            pageSize={props.pageSize}
-            currentPage={props.currentPage}
-            onPageChanged={props.onPageChanged}
+            totalUsersCount={totalUsersCount}
+            pageSize={pageSize}
+            currentPage={currentPage}
+            onPageChanged={onPageChanged}
         />
-        <UsersSearchForm 
-        onFilterChanged={props.onFilterChanged}
+        <UsersSearchForm
+            onFilterChanged={onFilterChanged}
         />
-        {props.isFetching ? <Preloader /> : <CurrentUsers />}
+        {isFetching ? <Preloader /> : <CurrentUsers />}
     </div>
 }
-
-export default Users;

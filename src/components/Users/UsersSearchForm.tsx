@@ -3,7 +3,6 @@ import { FilterType } from "../../redux/users-reducer";
 
 type PropsType = {
     onFilterChanged: (filter: FilterType) => void
-
 }
 export const UsersSearchForm: React.FC<PropsType> = (props) => {
     const formik = useFormik({

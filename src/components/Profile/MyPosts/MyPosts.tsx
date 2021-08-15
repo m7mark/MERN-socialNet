@@ -6,7 +6,7 @@ import MyTextInput from '../../common/FormsControl/MyForms';
 import { PostData } from '../../../types/types';
 
 export type StatePropsType = {
-  postData : Array<PostData>
+  postData: Array<PostData>
 }
 export type DispatchPropsType = {
   addNewPostBody: (newPostText: string) => void
@@ -17,7 +17,7 @@ type AddPostFormValuesType = {
 const MyPosts: React.FC<StatePropsType & DispatchPropsType> = (props) => {
   let postElements =
     props.postData.map(posts =>
-      <Post message={posts.message} likesCount={posts.likesCount} />)
+      <Post key={posts.id} message={posts.message} likesCount={posts.likesCount} />)
   return <div className={p.postblock}>
     <h3>My Post</h3>
     <div>
@@ -30,8 +30,8 @@ const MyPosts: React.FC<StatePropsType & DispatchPropsType> = (props) => {
 }
 export default MyPosts;
 
-const AddPostForm: React.FC <DispatchPropsType> = ({ addNewPostBody }) => {
-  const submit = (values : AddPostFormValuesType, { resetForm } : any) => {
+const AddPostForm: React.FC<DispatchPropsType> = ({ addNewPostBody }) => {
+  const submit = (values: AddPostFormValuesType, { resetForm }: any) => {
     addNewPostBody(values.newPostBodyText)
     resetForm({})
   }

@@ -2,9 +2,8 @@ import { Route } from 'react-router'
 import * as React from 'react'
 import './App.css'
 import HeaderContainer from './components/Header/HeaderContainer'
-import Login from './components/Login/Login'
+import { Login } from './components/Login/Login'
 import Nav from './components/Nav/Nav'
-import UsersContainer from './components/Users/UsersContainer'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Redirect, withRouter } from 'react-router-dom'
@@ -14,6 +13,7 @@ import store, { AppStateType } from './redux/store'
 import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom'
 import { withSuspense } from './hoc/withSuspense'
+import { Users } from './components/Users/Users'
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
@@ -48,10 +48,10 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
           <Route path='/'
             render={() => <Redirect to={'/profile'} />} />
           <Route path='/profile/:userId?'
-            render={() => <SuspenseProfile/>} />
+            render={() => <SuspenseProfile />} />
           <Route path='/messages'
-            render={() => <DialogsProfile/>} />
-          <Route path='/users' render={() => <UsersContainer pageTitle={"Самураи"} />} />
+            render={() => <DialogsProfile />} />
+          <Route path='/users' render={() => <Users pageTitle={"Самураи"} />} />
           <Route path='/login' render={() => <Login />} />
         </div>
       </div>

@@ -1,24 +1,11 @@
 import { Formik, Form, Field } from 'formik';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import * as Yup from 'yup';
 import { login } from '../../redux/auth-reducer';
 import { AppStateType } from '../../redux/store';
 import style from '../common/CommonStyle.module.css'
 
-type MapStatePropsType = {
-    isAuth?: boolean
-    isError: boolean
-    errorLoginMessage: string | null
-    captchaUrl: string | null
-}
-type MapDispatchPropsType = {
-    login: (email: string,
-        password: string,
-        rememberMe: boolean,
-        captcha: string | null) => Promise<void>
-
-}
 type FormsValuesType = {
     email: string
     password: string
@@ -26,14 +13,18 @@ type FormsValuesType = {
     captcha: string | null
 }
 
+const LoginForm: React.FC = (props) => {
 
-const LoginForm: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) => {
+    const captchaUrl = useSelector((state: AppStateType) => state.auth.captchaUrl)
+    const isError = useSelector((state: AppStateType) => state.auth.isError)
+    const errorLoginMessage = useSelector((state: AppStateType) => state.auth.errorLoginMessage)
+    const dispatch = useDispatch()
+
 
     const submit = (values: FormsValuesType, { resetForm }: any) => {
-        props.login(values.email, values.password, values.rememberMe, values.captcha)
+        dispatch(login(values.email, values.password, values.rememberMe, values.captcha))
         resetForm({})
     }
-
     const validationSchema = Yup.object().shape({
         email: Yup.string()
             .required('Required'),
@@ -77,13 +68,13 @@ const LoginForm: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) =>
                         name="rememberMe"
                         type="checkbox"
                     />
-                    <div>{props.isError && !touched.email ? props.errorLoginMessage : ""}
+                    <div>{isError && !touched.email ? errorLoginMessage : ""}
                     </div>
                     <br />
-                    <div>{props.captchaUrl &&
-                        <img src={props.captchaUrl} alt="captcha" />}
+                    <div>{captchaUrl &&
+                        <img src={captchaUrl} alt="captcha" />}
                     </div>
-                    {props.captchaUrl && <div>
+                    {captchaUrl && <div>
                         <div> <label htmlFor="captcha">Enter captcha text </label>
                         </div>
                         <Field
@@ -100,23 +91,13 @@ const LoginForm: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) =>
     );
 };
 
-const Login: React.FC<MapStatePropsType & MapDispatchPropsType> = (props) => {
-    if (props.isAuth) {
+export const Login: React.FC = (props) => {
+    const isAuth = useSelector((state: AppStateType) => state.auth.isAuth)
+    if (isAuth) {
         return <Redirect to={"./profile"} />
     }
     return <div className={style.commonPadding}>
         <h1>Login</h1>
-        <LoginForm
-            errorLoginMessage={props.errorLoginMessage}
-            isError={props.isError}
-            login={props.login}
-            captchaUrl={props.captchaUrl} />
+        <LoginForm />
     </div>
 }
-const mapStateToProps = (state: AppStateType): MapStatePropsType => ({
-    isAuth: state.auth.isAuth,
-    isError: state.auth.isError,
-    errorLoginMessage: state.auth.errorLoginMessage,
-    captchaUrl: state.auth.captchaUrl
-})
-export default connect(mapStateToProps, { login })(Login);

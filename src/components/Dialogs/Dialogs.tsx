@@ -19,10 +19,12 @@ type FormsValuesType = {
 }
 const Dialogs: React.FC<OwnPropsType> = (props) => {
     let dialogElements =
-        props.dialogsPage.dialogsData.map(d => <DialogItem name={d.name} id={d.id} />);
+        props.dialogsPage.dialogsData.map(d => <DialogItem
+            key={d.id} name={d.name} id={d.id} />);
 
     let messagesElements =
-        props.dialogsPage.messagesData.map(m => <Message text={m.message} />);
+        props.dialogsPage.messagesData.map(m => <Message
+            key={m.id} text={m.message} />);
 
     return <div className={p.dialogs}>
         <div className={p.dialogsItems}>
