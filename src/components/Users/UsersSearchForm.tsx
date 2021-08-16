@@ -1,14 +1,19 @@
 import { useFormik } from "formik";
+import { useSelector } from "react-redux";
 import { FilterType } from "../../redux/users-reducer";
+import { getUsersFilter } from "../../redux/users-selector";
 
 type PropsType = {
     onFilterChanged: (filter: FilterType) => void
 }
 export const UsersSearchForm: React.FC<PropsType> = (props) => {
+
+    const filter = useSelector(getUsersFilter)
     const formik = useFormik({
+        enableReinitialize: true,
         initialValues: {
-            term: '',
-            friend: ''
+            term: filter.term,
+            friend: String(filter.friend)
         },
         onSubmit: (values) => {
             const filter: FilterType = {

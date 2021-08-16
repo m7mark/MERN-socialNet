@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactPaginate from 'react-paginate';
 import './Paginator.css'
 
@@ -9,17 +9,12 @@ type Props = {
     currentPage: number
 }
 const Paginator: React.FC<Props> = (props) => {
-    const [page, setPage] = useState(0);
     let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize);
     let pageSize = props.pageSize;
     const handlePageClick = (data: any) => {
         const selectedPage = data.selected
-        setPage(selectedPage)
-        props.onPageChanged(page + 1)
+        props.onPageChanged(selectedPage + 1)
     }
-    useEffect(() => {
-        props.onPageChanged(page + 1)
-    }, [page])
 
     return <div>
         <ReactPaginate

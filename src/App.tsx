@@ -1,4 +1,4 @@
-import { Route } from 'react-router'
+// import { Route } from 'react-router'
 import * as React from 'react'
 import './App.css'
 import HeaderContainer from './components/Header/HeaderContainer'
@@ -6,7 +6,7 @@ import { Login } from './components/Login/Login'
 import Nav from './components/Nav/Nav'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Redirect, withRouter } from 'react-router-dom'
+import { Route, Redirect, withRouter } from 'react-router-dom'
 import { initializeApp } from './redux/app-reducer'
 import Preloader from './components/common/Preloader/Preloader'
 import store, { AppStateType } from './redux/store'
@@ -14,6 +14,7 @@ import { Provider } from 'react-redux';
 import { HashRouter } from 'react-router-dom'
 import { withSuspense } from './hoc/withSuspense'
 import { Users } from './components/Users/Users'
+import { QueryParamProvider } from 'use-query-params'
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
@@ -70,10 +71,13 @@ let AppContainer = compose<React.ComponentType>(
 
 const MainApp = () => {
   return <HashRouter>
-    <Provider store={store}>
-      <AppContainer />
-    </Provider>
+    <QueryParamProvider ReactRouterRoute={Route} >
+      <Provider store={store}>
+        <AppContainer />
+      </Provider>
+    </QueryParamProvider>
   </HashRouter>
+
 }
 
 export default MainApp
