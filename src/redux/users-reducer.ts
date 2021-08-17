@@ -7,7 +7,7 @@ import { BaseThunkType, InferActionsType } from "./store";
 
 let initialState = {
     users: [] as Array<UserType>,
-    pageSize: 6,
+    pageSize: 10,
     totalUsersCount: 0,
     currentPage: 1,
     isFetching: false,
@@ -43,6 +43,9 @@ const usersReducer = (state = initialState, action: ActionsTypes):
         case 'SN/USER/SET_CURRENT_PAGE':
             return { ...state, currentPage: action.currentPage }
 
+        case 'SN/USER/SET_PAGE_SIZE':
+            return { ...state, pageSize: action.pageSize }
+
         case 'SN/USER/SET_FILTER':
             return { ...state, filter: action.payload }
 
@@ -74,6 +77,8 @@ export const actions = {
         ({ type: 'SN/USER/SET_USERS', users } as const),
     setCurrentPage: (currentPage: number) =>
         ({ type: 'SN/USER/SET_CURRENT_PAGE', currentPage } as const),
+    setPageSize: (pageSize: number) =>
+        ({ type: 'SN/USER/SET_PAGE_SIZE', pageSize } as const),
     setFilter: (filter: FilterType) =>
         ({ type: 'SN/USER/SET_FILTER', payload: filter } as const),
     setTotalUsersCount: (totalCount: number) =>
@@ -98,6 +103,7 @@ export const getUsers = (currentPage: number, pageSize: number, filter: FilterTy
     async (dispatch) => {
         dispatch(actions.toggleIsFetching(true));
         dispatch(actions.setCurrentPage(currentPage));
+        dispatch(actions.setPageSize(pageSize));
         dispatch(actions.setFilter(filter));
         const data = await userAPI.getUsers(
             currentPage, pageSize, filter.term, filter.friend);

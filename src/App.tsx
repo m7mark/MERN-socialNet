@@ -24,6 +24,7 @@ import { withSuspense } from './hoc/withSuspense'
 import { Users } from './components/Users/Users'
 import { QueryParamProvider } from 'use-query-params'
 import { AppHeader } from './components/AppHeader/AppHeader';
+// import { Footer } from 'antd/lib/layout/layout';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
@@ -91,7 +92,6 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
             </Col>
             <Col flex="auto"><AppHeader /></Col>
           </Row>
-
           <Content
             className="site-layout-background"
             style={{
@@ -109,6 +109,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
             <Route path='/users' render={() => <Users pageTitle={"Самураи"} />} />
             <Route path='/login' render={() => <Login />} />
           </Content>
+          {/* <Footer></Footer> */}
         </Layout>
       </Layout>
     );

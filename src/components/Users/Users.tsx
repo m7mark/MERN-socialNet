@@ -22,19 +22,22 @@ export const Users: React.FC<PropsType> = (props) => {
 
     const totalUsersCount = useSelector(getTotalUsersCount)
     const currentPage = useSelector(getCurrentPage)
-    const pageSize = useSelector(getPageSize)
-    const filter = useSelector(getUsersFilter)
+    const pageSizeState = useSelector(getPageSize)
+    const filterState = useSelector(getUsersFilter)
     const users = useSelector(getUsersFromState)
     const followingInProgress = useSelector(getFollowingInProgress)
     const isFetching = useSelector(getIsFetching)
     const history = useHistory()
 
     const dispatch = useDispatch()
-    const onPageChanged = (pageNumber: number) => {
-        dispatch(getUsers(pageNumber, pageSize, filter))
+    const onPageChanged = (pageNumber: number, pageSize?: number) => {
+        if (!pageNumber) { pageNumber = currentPage }
+        if (!pageSize) { pageSize = pageSizeState }
+        // if (!filter) { filter = filterState }
+        dispatch(getUsers(pageNumber, pageSize, filterState))
     }
     const onFilterChanged = (filter: FilterType) => {
-        dispatch(getUsers(1, pageSize, filter))
+        dispatch(getUsers(1, pageSizeState, filter))
     }
     const unfollowThunk = (id: number) => {
         dispatch(unfollow(id))
@@ -46,30 +49,26 @@ export const Users: React.FC<PropsType> = (props) => {
         term: StringParam,
         friend: StringParam,
         page: NumberParam,
+        count: NumberParam
     });
 
     useEffect(() => {
-        if (!!filter.term) setQuery({ term: filter.term });
+        if (!!filterState.term) setQuery({ term: filterState.term });
         else { setQuery({ term: undefined }) }
-        if (filter.friend !== null) setQuery({ friend: String(filter.friend) });
+        if (filterState.friend !== null) setQuery({ friend: String(filterState.friend) });
         else { setQuery({ friend: undefined }) }
         if (currentPage !== 1) setQuery({ page: currentPage });
         else { setQuery({ page: undefined }) }
+        setQuery({ count: pageSizeState });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter, currentPage])
-
-    useEffect(() => {
-        history.push({
-            pathname: '/users',
-            search: `?${stringify(query)}`
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [query])
+    }, [filterState, currentPage, pageSizeState])
 
     useEffect(() => {
         let actualPage = currentPage
-        let actualFilter = filter
+        let actualPageSize = pageSizeState
+        let actualFilter = filterState
         if (!!query.page) actualPage = query.page
+        if (!!query.count) actualPageSize = query.count
         if (!!query.term) actualFilter = { ...actualFilter, term: query.term }
         switch (query.friend) {
             case 'null':
@@ -82,9 +81,17 @@ export const Users: React.FC<PropsType> = (props) => {
                 actualFilter = { ...actualFilter, friend: false }
                 break
         }
-        dispatch(getUsers(actualPage, pageSize, actualFilter))
+        dispatch(getUsers(actualPage, actualPageSize, actualFilter))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
+    useEffect(() => {
+        history.push({
+            pathname: '/users',
+            search: `?${stringify(query)}`
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [query])
 
     const CurrentUsers = (): JSX.Element => {
         return <>
@@ -101,10 +108,11 @@ export const Users: React.FC<PropsType> = (props) => {
         <h2>{props.pageTitle}</h2>
         <Paginator
             totalUsersCount={totalUsersCount}
-            pageSize={pageSize}
+            pageSize={pageSizeState}
             currentPage={currentPage}
             onPageChanged={onPageChanged}
         />
+        <br />
         <UsersSearchForm
             onFilterChanged={onFilterChanged}
         />
