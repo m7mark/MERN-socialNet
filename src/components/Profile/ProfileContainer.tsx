@@ -22,8 +22,8 @@ interface MatchPropsType extends RouteComponentProps<MatchParams> {
 }
 type StatePropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
-  getUserProfile: (userId: number | null) => void
-  getStatus: (userId: number | null) => void
+  getUserProfile: (userId: number | undefined) => void
+  getStatus: (userId: number | undefined) => void
   updateStatus: (status: string | undefined) => Promise<void>
   savePhoto: (file: File) => void
   saveProfileInfo: (profile: ProfileType) => Promise<void>
@@ -32,7 +32,7 @@ type PropsType = StatePropsType & DispatchPropsType & MatchPropsType
 class ProfileContainer extends React.Component<PropsType> {
 
   refreshProfile() {
-    let userId: number | null = +this.props.match.params.userId;
+    let userId: number | undefined = +this.props.match.params.userId;
     if (!userId) { userId = this.props.authorizedUserId };
     if (!userId) { this.props.history.push("/login") };
     // if (!userId) {

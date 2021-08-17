@@ -54,9 +54,9 @@ const ProfileDataForm: React.FC<PropsType> =
                     id="lookingForAJob"
                     name="lookingForAJob"
                     type="checkbox"
-                    onChange={formik.handleChange}
+                    onChange={() => formik.setFieldValue(
+                        "lookingForAJob", !formik.values.lookingForAJob)}
                     checked={formik.values.lookingForAJob}
-                    value={formik.values.lookingForAJob}
                 />
                 <br />
                 <label htmlFor="lookingForAJobDescription">Looking job description </label>
@@ -70,9 +70,9 @@ const ProfileDataForm: React.FC<PropsType> =
                 <br />
                 <div><b>Contacts:</b>
                     {Object.keys(profile.contacts).map(key => {
-                        return <div>
+                        return <div key={key}>
                             <div><label htmlFor={key}>{key}</label></div>
-                            <input key={key}
+                            <input
                                 id={key}
                                 name={"contacts." + key}
                                 type="text"

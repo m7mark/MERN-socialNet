@@ -19,7 +19,7 @@ const profileReducer = (state = initialState, action: ActionsTypes):
     switch (action.type) {
         case "SN/PROF/ADD_POST":
             let newPost = {
-                id: 5,
+                id: state.postData.length + 1,
                 message: action.newPostText,
                 likesCount: 0
             }
@@ -72,11 +72,12 @@ export const actions = {
 }
 
 type ThunkType = BaseThunkType<ActionsTypes>
-export const getUserProfile = (id: number | null): ThunkType =>
+export const getUserProfile = (id: number | undefined): ThunkType =>
     async (dispatch) => {
         dispatch(actions.profileIsFetching(true));
         const data = await profileAPI.getUserProfile(id)
         dispatch(actions.profileIsFetching(false));
+        if (!data.contacts.mainLink) { data.contacts.mainLink = '' }
         dispatch(actions.setUserProfile(data));
 
     }

@@ -4,7 +4,7 @@ import { securityAPI } from "../api/security-api";
 import { BaseThunkType, InferActionsType } from "./store";
 
 let initialState = {
-    id: null as number | null,
+    id: undefined as number | undefined,
     email: null as string | null,
     login: null as string | null,
     isAuth: false,
@@ -40,7 +40,7 @@ const authReducer = (state = initialState, action: ActionsTypes):
 
 type ActionsTypes = InferActionsType<typeof actions>
 export const actions = {
-    setAuthUserData: (id: number | null, email: string | null, login: string | null, isAuth: boolean) =>
+    setAuthUserData: (id: number | undefined, email: string | null, login: string | null, isAuth: boolean) =>
         ({ type: 'SN/AUTH/SET_USER_DATA', data: { id, email, login, isAuth } } as const),
     getCaptchaUrlSuccess: (captchaUrl: string | null) =>
         ({ type: 'SN/AUTH/GET_CAPTCHA_URL', captchaUrl } as const),
@@ -79,7 +79,7 @@ export const logout = ():
     ThunkType => async (dispatch) => {
         const response = await authAPI.logout()
         if (response.data.resultCode === 0) {
-            dispatch(actions.setAuthUserData(null, null, null, false))
+            dispatch(actions.setAuthUserData(undefined, null, null, false))
         }
     }
 export const getCaptchaUrl = ():

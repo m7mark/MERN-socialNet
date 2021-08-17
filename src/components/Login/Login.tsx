@@ -58,7 +58,7 @@ const LoginForm: React.FC = (props) => {
                         name="password"
                         placeholder="Enter your password"
                         type="password"
-                        autocomplete="on"
+                        autoComplete="on"
                     />
                     {errors.password}
                     <br />

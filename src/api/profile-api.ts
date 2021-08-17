@@ -3,7 +3,7 @@ import { CommonResponseType, instance } from "./api";
 
 
 export const profileAPI = {
-    async getUserProfile(id: number | null) {
+    async getUserProfile(id: number | undefined) {
         const response = await instance.get
             <ProfileType>(`profile/${id}`);
         return response.data;

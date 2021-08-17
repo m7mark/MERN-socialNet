@@ -14,15 +14,15 @@ export type ContactsType = {
     youtube: string | undefined
 }
 export type PhotosType = {
-    large: string | null
-    small: string | null
+    large: string | undefined
+    small: string | undefined
 }
 export type ProfileType = {
     aboutMe: string | undefined
     fullName: string | undefined
-    lookingForAJob: any
+    lookingForAJob: boolean | undefined
     lookingForAJobDescription: string | undefined
-    userId: number | null
+    userId: number | undefined
     contacts: ContactsType
     photos: PhotosType
 }
