@@ -59,7 +59,6 @@ export const Users: React.FC<PropsType> = (props) => {
     }, [filter, currentPage])
 
     useEffect(() => {
-        console.log(query)
         history.push({
             pathname: '/users',
             search: `?${stringify(query)}`
