@@ -1,12 +1,20 @@
+import { Col, Layout, Menu, Row } from 'antd';
+import {
+  MenuUnfoldOutlined,
+  MenuFoldOutlined,
+  UserOutlined,
+  MessageOutlined,
+  TeamOutlined,
+} from '@ant-design/icons';
+
 // import { Route } from 'react-router'
 import * as React from 'react'
 import './App.css'
-import HeaderContainer from './components/Header/HeaderContainer'
+import 'antd/dist/antd.css'
 import { Login } from './components/Login/Login'
-import Nav from './components/Nav/Nav'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
-import { Route, Redirect, withRouter } from 'react-router-dom'
+import { Route, Redirect, withRouter, Link } from 'react-router-dom'
 import { initializeApp } from './redux/app-reducer'
 import Preloader from './components/common/Preloader/Preloader'
 import store, { AppStateType } from './redux/store'
@@ -15,18 +23,32 @@ import { HashRouter } from 'react-router-dom'
 import { withSuspense } from './hoc/withSuspense'
 import { Users } from './components/Users/Users'
 import { QueryParamProvider } from 'use-query-params'
+import { AppHeader } from './components/AppHeader/AppHeader';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
 const SuspenseProfile = withSuspense(ProfileContainer)
 const DialogsProfile = withSuspense(DialogsContainer)
 
+const { Header, Sider, Content } = Layout;
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
   initializeApp: () => void
 }
+
 class App extends React.Component<MapPropsType & DispatchPropsType> {
+
+  state = {
+    collapsed: false,
+  };
+
+  toggle = () => {
+    this.setState({
+      collapsed: !this.state.collapsed,
+    });
+  };
+
   catchAllUnhandleErrors = (e: PromiseRejectionEvent) => {
     alert("Some error")
   }
@@ -42,20 +64,53 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
       return <Preloader />
     }
     return (
-      <div className="app-wrapper">
-        <HeaderContainer />
-        <Nav />
-        <div className='app-wrapper-content'>
-          <Route path='/'
-            render={() => <Redirect to={'/profile'} />} />
-          <Route path='/profile/:userId?'
-            render={() => <SuspenseProfile />} />
-          <Route path='/messages'
-            render={() => <DialogsProfile />} />
-          <Route path='/users' render={() => <Users pageTitle={"Самураи"} />} />
-          <Route path='/login' render={() => <Login />} />
-        </div>
-      </div>
+      <Layout id="components-layout-custom-trigger">
+        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+          <div className="logo"></div>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+            <Menu.Item key="1" icon={<UserOutlined />}>
+              <Link to="/profile">Profile</Link>
+            </Menu.Item>
+            <Menu.Item key="2" icon={<MessageOutlined />}>
+              <Link to="/messages">Messages</Link>
+            </Menu.Item>
+            <Menu.Item key="3" icon={<TeamOutlined />}>
+              <Link to="/users">Friends</Link>
+            </Menu.Item>
+          </Menu>
+        </Sider>
+        <Layout className="site-layout">
+          <Row>
+            <Col flex="50px">
+              <Header className="site-layout-background" style={{ padding: 0 }}>
+                {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
+                  className: 'trigger',
+                  onClick: this.toggle,
+                })}
+              </Header>
+            </Col>
+            <Col flex="auto"><AppHeader /></Col>
+          </Row>
+
+          <Content
+            className="site-layout-background"
+            style={{
+              margin: '24px 16px',
+              padding: 24,
+              minHeight: 280,
+            }}
+          >
+            <Route path='/'
+              render={() => <Redirect to={'/profile'} />} />
+            <Route path='/profile/:userId?'
+              render={() => <SuspenseProfile />} />
+            <Route path='/messages'
+              render={() => <DialogsProfile />} />
+            <Route path='/users' render={() => <Users pageTitle={"Самураи"} />} />
+            <Route path='/login' render={() => <Login />} />
+          </Content>
+        </Layout>
+      </Layout>
     );
   }
 }
