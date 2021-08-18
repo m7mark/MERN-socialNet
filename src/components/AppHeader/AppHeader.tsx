@@ -21,7 +21,7 @@ export const AppHeader: React.FC = () => {
           isAuth
             ? <div> <Text mark>{login} {' '}</Text> 
               <Button onClick={logoutCallback}>Log Out</Button> </div>
-            : <Link to={'/login'}><Button>Login</Button></Link>
+            : <Link to={'/login'} replace><Button>Login</Button></Link>
         }
       </div>
     </header>

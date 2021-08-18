@@ -15,7 +15,7 @@ let User: React.FC<PropsType> = ({ user, followingInProgress, unfollow, follow }
     return <div className={p.commonPadding}>
         <div>
             <div>
-                <NavLink to={'/profile/' + user.id}>
+                <NavLink to={'/profile/' + user.id} replace>
                     <img className={p.userimg} src={user.photos.small
                         != null ? user.photos.small : userIcon} alt="" />
                 </NavLink>

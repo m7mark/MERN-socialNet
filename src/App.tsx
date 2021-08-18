@@ -28,8 +28,10 @@ import { AppHeader } from './components/AppHeader/AppHeader';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const ChatPage = React.lazy(() => import('./pages/Chat/ChatPage'));
 const SuspenseProfile = withSuspense(ProfileContainer)
 const DialogsProfile = withSuspense(DialogsContainer)
+const SuspenseChatPage = withSuspense(ChatPage)
 
 const { Header, Sider, Content } = Layout;
 
@@ -75,13 +77,16 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
           <div className="logo"></div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1" icon={<UserOutlined />}>
-              <Link to="/profile">Profile</Link>
+              <Link to="/profile" replace>Profile</Link>
             </Menu.Item>
             <Menu.Item key="2" icon={<MessageOutlined />}>
-              <Link to="/messages">Messages</Link>
+              <Link to="/messages" replace>Messages</Link>
             </Menu.Item>
             <Menu.Item key="3" icon={<TeamOutlined />}>
-              <Link to="/users">Friends</Link>
+              <Link to="/users" replace>Friends</Link>
+            </Menu.Item>
+            <Menu.Item key="4" icon={<TeamOutlined />}>
+              <Link to="/chat" replace>Chat</Link>
             </Menu.Item>
           </Menu>
         </Sider>
@@ -111,6 +116,8 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
               render={() => <SuspenseProfile />} />
             <Route path='/messages'
               render={() => <DialogsProfile />} />
+            <Route path='/chat'
+              render={() => <SuspenseChatPage />} />
             <Route path='/users' render={() => <Users pageTitle={"Самураи"} />} />
             <Route path='/login' render={() => <Login />} />
           </Content>

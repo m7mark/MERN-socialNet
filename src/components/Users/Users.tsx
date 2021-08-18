@@ -53,23 +53,23 @@ export const Users: React.FC<PropsType> = (props) => {
         dispatch(follow(id))
     }
 
-    useEffect(() => {
-        history.push({
-            pathname: '/users',
-            search: `?${stringify(query)}`
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [query])
-    useEffect(() => {
-        if (!!filter.term) setQuery({ term: filter.term });
-        else { setQuery({ term: undefined }) }
-        if (filter.friend !== null) setQuery({ friend: String(filter.friend) });
-        else { setQuery({ friend: undefined }) }
-        if (currentPage !== 1) setQuery({ page: currentPage });
-        else { setQuery({ page: undefined }) }
-        setQuery({ count: pageSizeState });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [filter, currentPage, pageSizeState])
+    // useEffect(() => {
+    //     history.push({
+    //         pathname: '/users',
+    //         search: `?${stringify(query)}`
+    //     })
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [query])
+    // useEffect(() => {
+    //     if (!!filter.term) setQuery({ term: filter.term });
+    //     else { setQuery({ term: undefined }) }
+    //     if (filter.friend !== null) setQuery({ friend: String(filter.friend) });
+    //     else { setQuery({ friend: undefined }) }
+    //     if (currentPage !== 1) setQuery({ page: currentPage });
+    //     else { setQuery({ page: undefined }) }
+    //     setQuery({ count: pageSizeState });
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [filter, currentPage, pageSizeState])
 
     useEffect(() => {
         let actualPage = currentPage

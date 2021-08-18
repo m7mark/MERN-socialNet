@@ -10,7 +10,7 @@ const DialogItem:React.FC<PropsType> = (props) => {
     let path = "/messages/" + props.id;
     return (
         <div className={p.dialog}>
-            <NavLink to={path} activeClassName={p.active}>{props.name}</NavLink>
+            <NavLink to={path} replace activeClassName={p.active}>{props.name}</NavLink>
         </div>
     );
 }

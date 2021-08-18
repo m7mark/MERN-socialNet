@@ -39,8 +39,9 @@ const UsersSearchForm: React.FC<PropsType> = (props) => {
         <Formik
             initialValues={initialValues}
             onSubmit={handleSubmit}
-            render={SearchFormDisplay}
-        />
+        >
+            {SearchFormDisplay}
+        </Formik>
     );
 }
 
