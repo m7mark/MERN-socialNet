@@ -66,7 +66,12 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
     }
     return (
       <Layout id="components-layout-custom-trigger">
-        <Sider trigger={null} collapsible collapsed={this.state.collapsed}>
+        <Sider 
+        trigger={null} 
+        collapsible 
+        collapsed={this.state.collapsed}
+        collapsedWidth='0'
+        >
           <div className="logo"></div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
             <Menu.Item key="1" icon={<UserOutlined />}>

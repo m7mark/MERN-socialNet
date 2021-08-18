@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactPaginate from 'react-paginate';
 import './Paginator.css'
 import { Pagination } from 'antd';
 

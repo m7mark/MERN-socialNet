@@ -3,6 +3,7 @@ import p from './Users.module.css'
 import userIcon from './../../assets/userIcon.png'
 import { NavLink } from 'react-router-dom';
 import { UserType } from '../../types/types';
+import { Button } from 'antd';
 
 type PropsType = {
     followingInProgress: Array<number>
@@ -21,22 +22,32 @@ let User: React.FC<PropsType> = ({ user, followingInProgress, unfollow, follow }
             </div>
             <div>
                 {user.followed
-                    ? <button disabled={followingInProgress
-                        .some(id => id === user.id)} onClick={() => {
-                            unfollow(user.id)
-                        }}>
-                        UnFollow</button>
-                    : <button disabled={followingInProgress
-                        .some(id => id === user.id)} onClick={() => {
-                            follow(user.id)
-                        }}>
-                        Follow</button>}
+                    ? <Button
+                        type="primary"
+                        ghost
+                        size='small'
+                        disabled={followingInProgress
+                            .some(id => id === user.id)} onClick={() => {
+                                unfollow(user.id)
+                            }}>
+                        UnFollow
+                    </Button>
+                    : <Button
+                        type="primary"
+
+                        size='small'
+                        disabled={followingInProgress
+                            .some(id => id === user.id)} onClick={() => {
+                                follow(user.id)
+                            }}>
+                        Follow
+                    </Button>}
             </div>
         </div>
         <div>
             <div>
                 <div>{user.name}</div>
-                <div>{user.status}</div>
+                <div>{user.status?.substring(0, 20)}</div>
             </div>
         </div>
     </div>

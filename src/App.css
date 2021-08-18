@@ -1,9 +1,9 @@
 #components-layout-custom-trigger .trigger {
-  padding: 0 24px;
-  font-size: 18px;
+  padding    : 0 24px;
+  font-size  : 18px;
   line-height: 64px;
-  cursor: pointer;
-  transition: color 0.3s;
+  cursor     : pointer;
+  transition : color 0.3s;
 }
 
 #components-layout-custom-trigger .trigger:hover {
@@ -11,29 +11,27 @@
 }
 
 #components-layout-custom-trigger .logo {
-  height: 32px;
-  margin: 16px;
+  height    : 32px;
+  margin    : 16px;
   background: rgba(255, 255, 255, 0.3);
 }
-
 
 .site-layout .site-layout-background {
   background: #fff;
 }
 
+.form-container {
+  display: flex;
 
-.app-wrapper {
-  display: grid;
-
-  grid-template-areas:
-    "h h"
-    "n c";
-  grid-template-rows   : 60px 1fr;
-  grid-template-columns: 2fr 10fr;
-  /* grid-gap          : 10px; */
+  flex-wrap : wrap;
+  text-align: left;
 }
 
-.app-wrapper-content {
-  grid-area       : c;
-  background-color: lightsalmon;
+.field-container {
+  margin-right: 20px;
+}
+
+.users_map {
+  display  : flex;
+  flex-wrap: wrap;
 }
