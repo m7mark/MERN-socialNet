@@ -1,17 +1,13 @@
-import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Input } from 'antd';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { v4 as uuidv4 } from 'uuid';
+import { ChatMessageApiType } from '../../api/chat-api';
 import { sendMessage, startMessagesListening, stopMessagesListening } from '../../redux/chat-reducer';
 import { AppStateType } from '../../redux/store';
 
+const { TextArea } = Input;
 
-export type ChatMessageType = {
-    message: string
-    photo: string
-    userId: number,
-    userName: string
-}
+export type ChatMessageType = ChatMessageApiType & {id: string}
 const ChatPage: React.FC = () => {
     return (
         < Chat />
@@ -39,18 +35,32 @@ const Chat: React.FC = () => {
 }
 
 const Messages: React.FC = () => {
-
+    const messagesAnchorRef = useRef<HTMLDivElement>(null)
     const messages = useSelector((state: AppStateType) => state.chat.messages)
+    const [isAutoScroll, setIsAutoScroll] = useState(true);
+    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
+        const el = e.currentTarget
+        if (el.offsetHeight + el.scrollTop >= el.scrollHeight) {
+            !isAutoScroll && setIsAutoScroll(true);
+        }
+        else { isAutoScroll && setIsAutoScroll(false) }
+    }
+    useEffect(() => {
+        if (isAutoScroll) {
+            messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' })
+        }
+    }, [messages]);
     return (
-        <div style={{ height: '400px', overflowY: 'auto' }}>
-            {messages.map((m): any => <Message key={uuidv4()} message={m} />)}
+        <div style={{ height: '400px', overflowY: 'auto' }} onScroll={scrollHandler}>
+            {messages.map((m): any => <Message key={m.id} message={m} />)}
+            <div ref={messagesAnchorRef}></div>
         </div>
     );
 }
 
 
-const Message: React.FC<{ message: ChatMessageType }> = ({ message }) => {
-
+const Message: React.FC<{ message: ChatMessageType }> = React.memo(({ message }) => {
+    console.log('>>>>>>>>>Messages')
     return (
         <div>
             <img style={{ height: '30px' }} src={message.photo} alt='' />
@@ -59,7 +69,7 @@ const Message: React.FC<{ message: ChatMessageType }> = ({ message }) => {
             {message.message}
         </div>
     );
-}
+})
 
 
 const AddMessageForm: React.FC = () => {
@@ -75,10 +85,13 @@ const AddMessageForm: React.FC = () => {
 
     return (
         <div>
-            <div><textarea
+            <div style={{ margin: '10px 0', width: 'max-content' }}><TextArea
+                onPressEnter={sendMessageHandler}
+                allowClear
+                rows={2}
                 onChange={(e) => setMessage(e.target.value)}
                 value={message}
-            ></textarea></div>
+            /></div>
             <div><Button
                 disabled={status !== 'ready'}
                 onClick={sendMessageHandler}

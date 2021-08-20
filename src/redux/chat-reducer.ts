@@ -1,7 +1,8 @@
 import { Dispatch } from "redux";
-import { chatApi, StatusType } from "../api/chat-api";
-import { ChatMessageType } from "../pages/Chat/ChatPage";
+import { chatApi, ChatMessageApiType, StatusType } from "../api/chat-api";
 import { BaseThunkType, InferActionsType } from "./store";
+import { v1 } from 'uuid';
+import { ChatMessageType } from "../pages/Chat/ChatPage";
 
 let initialState = {
     messages: [] as ChatMessageType[],
@@ -14,7 +15,9 @@ const chatReducer = (state = initialState, action: ActionsTypes):
         case 'SN/CHAT/MESSAGES_RECIEVED':
             return {
                 ...state,
-                messages: [...state.messages, ...action.payload.messages]
+                messages: [...state.messages, ...action.payload.messages
+                    .map(m => ({ ...m, id: v1() }))]
+                    .filter((m, index, array) => index >= array.length - 100)
             }
         case 'SN/CHAT/MESSAGES_CLEANED':
             return {
@@ -33,7 +36,7 @@ const chatReducer = (state = initialState, action: ActionsTypes):
 
 type ActionsTypes = InferActionsType<typeof actions>
 export const actions = {
-    messagesRecieved: (messages: ChatMessageType[]) =>
+    messagesRecieved: (messages: ChatMessageApiType[]) =>
         ({ type: 'SN/CHAT/MESSAGES_RECIEVED', payload: { messages } } as const),
     messagesCleaned: () =>
         ({ type: 'SN/CHAT/MESSAGES_CLEANED' } as const),
@@ -41,7 +44,7 @@ export const actions = {
         ({ type: 'SN/CHAT/STATUS_CHANGED', payload: { status } } as const),
 }
 
-let _newMessagesHandler: ((messages: ChatMessageType[]) => void) | null = null
+let _newMessagesHandler: ((messages: ChatMessageApiType[]) => void) | null = null
 const newMessagesHandlerCreator = (dispatch: Dispatch) => {
     if (_newMessagesHandler === null) {
         return _newMessagesHandler = (messages) => {
@@ -56,6 +59,7 @@ const newStatusHandlerCreator = (dispatch: Dispatch) => {
     if (_newStatusHandler === null || _newStatusHandler === undefined) {
         return _newStatusHandler = (status) => {
             dispatch(actions.statusChanged(status))
+            dispatch(actions.messagesCleaned())
         }
     }
     return _newStatusHandler

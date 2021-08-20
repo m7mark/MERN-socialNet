@@ -1,4 +1,4 @@
-type MessagesRecievedSubscriberType = (messages: ChatMessageType[]) => void
+type MessagesRecievedSubscriberType = (messages: ChatMessageApiType[]) => void
 type StatusChangedSubscriberType = (status: StatusType) => void
 
 type EventsNamesType = 'messages-recieved' | 'status-changed'
@@ -75,7 +75,7 @@ export const chatApi = {
     }
 }
 
-export type ChatMessageType = {
+export type ChatMessageApiType = {
     message: string
     photo: string
     userId: number,
