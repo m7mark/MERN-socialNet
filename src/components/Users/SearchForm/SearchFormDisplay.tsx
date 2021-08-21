@@ -1,6 +1,6 @@
 import { Form, Field } from "formik";
 import { useEffect } from "react";
-import { AntInput, AntSelect, } from "./CreateAntFields";
+import { AntSearch, AntSelect, } from "../../UI/formAnt/CreateAntFields";
 // import { isRequired } from "./ValidateFields";
 
 type PropsType ={
@@ -20,7 +20,7 @@ const SearchFormDisplay:React.FC<PropsType> = ({ handleSubmit, values, submitCou
   return (
     <Form className="form-container" onSubmit={handleSubmit}>
       <Field
-        component={AntInput}
+        component={AntSearch}
         name="text"
         type="text"
         // label="Find"

@@ -11,7 +11,7 @@ import {
 import * as React from 'react'
 import './App.css'
 import 'antd/dist/antd.css'
-import { Login } from './components/Login/Login'
+import { Login } from './pages/LoginPage'
 import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { Route, Redirect, withRouter, Link } from 'react-router-dom'
@@ -28,7 +28,7 @@ import { AppHeader } from './components/AppHeader/AppHeader';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
 const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
-const ChatPage = React.lazy(() => import('./pages/Chat/ChatPage'));
+const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 const SuspenseProfile = withSuspense(ProfileContainer)
 const DialogsProfile = withSuspense(DialogsContainer)
 const SuspenseChatPage = withSuspense(ChatPage)

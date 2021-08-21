@@ -1,7 +1,7 @@
 import { Dispatch } from "redux";
 import { CommonResponseType } from "../api/api";
 import { userAPI } from "../api/users-api";
-import { updateObjectInArray } from "../components/utils/object-helpers";
+import { updateObjectInArray } from "../utils/object-helpers";
 import { UserType } from "../types/types";
 import { BaseThunkType, InferActionsType } from "./store";
 

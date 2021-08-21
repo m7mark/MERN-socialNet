@@ -2,7 +2,7 @@ import { Dispatch } from "redux";
 import { chatApi, ChatMessageApiType, StatusType } from "../api/chat-api";
 import { BaseThunkType, InferActionsType } from "./store";
 import { v1 } from 'uuid';
-import { ChatMessageType } from "../pages/Chat/ChatPage";
+import { ChatMessageType } from "../pages/ChatPage";
 
 let initialState = {
     messages: [] as ChatMessageType[],

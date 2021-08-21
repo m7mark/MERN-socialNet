@@ -1,13 +1,14 @@
 import { Button, Input } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ChatMessageApiType } from '../../api/chat-api';
-import { sendMessage, startMessagesListening, stopMessagesListening } from '../../redux/chat-reducer';
-import { AppStateType } from '../../redux/store';
+import { ChatMessageApiType } from '../api/chat-api';
+import { selectIsAuth } from '../redux/auth-selector';
+import { sendMessage, startMessagesListening, stopMessagesListening } from '../redux/chat-reducer';
+import { AppStateType } from '../redux/store';
 
 const { TextArea } = Input;
 
-export type ChatMessageType = ChatMessageApiType & {id: string}
+export type ChatMessageType = ChatMessageApiType & { id: string }
 const ChatPage: React.FC = () => {
     return (
         < Chat />
@@ -76,6 +77,7 @@ const AddMessageForm: React.FC = () => {
 
     const [message, setMessage] = useState<string>('');
     const status = useSelector((state: AppStateType) => state.chat.status)
+    const isAuth = useSelector(selectIsAuth)
     const dispatch = useDispatch()
     const sendMessageHandler = () => {
         if (!message) { return }
@@ -93,7 +95,7 @@ const AddMessageForm: React.FC = () => {
                 value={message}
             /></div>
             <div><Button
-                disabled={status !== 'ready'}
+                disabled={status !== 'ready' || isAuth === false}
                 onClick={sendMessageHandler}
             >Send</Button></div>
         </div>
