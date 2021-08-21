@@ -88,7 +88,7 @@ export const getStatus = (id: number): ThunkType =>
         dispatch(actions.setStatus(response.data));
     }
 
-export const updateStatus = (status: string): ThunkType =>
+export const updateStatus = (status: string | undefined): ThunkType =>
     async (dispatch) => {
         const response = await profileAPI.updateStatus(status)
         if (response.data.resultCode === ResultCodeEnum.Success) {

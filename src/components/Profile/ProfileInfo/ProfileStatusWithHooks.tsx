@@ -1,58 +1,42 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
+import { Typography } from 'antd';
+import React, { useState } from 'react'
 import p from './ProfileInfo.module.css'
+import { HighlightOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectStatus } from '../../../redux/profile-selector';
+import { updateStatus } from '../../../redux/profile-reducer';
+const { Text, Paragraph } = Typography;
 
-type PropsType = {
-    status: string | undefined
-    updateStatus: (status: string | undefined) => Promise<void>
-}
-const ProfileStatusWithHooks: React.FC<PropsType> = (props) => {
+
+const ProfileStatusWithHooks: React.FC = () => {
+
+    const status = useSelector(selectStatus)
     const [errorMessage, setErrorMessage] = useState(null);
-    const [editMode, setEditMode] = useState(false);
-    const [status, setStatus] = useState(props.status);
-    useEffect(() => {
-        setStatus(props.status);
-    }, [props.status]);
-
-    const handleFocus = (event: ChangeEvent<HTMLInputElement>) => {
-        event.target.select();
-    }
-    const activateEditMode = () => {
-        setErrorMessage(null);
-        setEditMode(true)
-    }
-    const onStatusChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setStatus(e.target.value)
-    }
-    const deactivateEditMode = () => {
-        setEditMode(false)
-        props.updateStatus(status).catch(error => {
-            error.length > 0 &&
-                setErrorMessage(error);
-        });
+    const dispatch = useDispatch()
+    const saveNewStatus = (e: string) => {
+        dispatch(updateStatus(e))
+        // .catch(error => {
+        //     error.length > 0 &&
+        //         setErrorMessage(error);
+        // });
     }
     return (
-        <div className={p.description}>
-            {!editMode &&
-                <div>
-                    <span><b>Status: </b></span>
-                    <span onDoubleClick={activateEditMode}>
-                        {props.status || 'Please enter status...'}
-                    </span>
-                </div>}
-            {editMode &&
-                <div>
-                    <span
-                        onBlur={deactivateEditMode}
-                    >
-                        <input
-                            onChange={onStatusChange}
-                            value={status}
-                            autoFocus={true}
-                            onFocus={handleFocus}
-                        >
-                        </input>
-                    </span>
-                </div>}
+        <div>
+            <div>
+                <Text type="secondary">Status: </Text>
+                <Paragraph
+                    editable={{
+                        icon: <HighlightOutlined />,
+                        tooltip: 'click to edit status',
+                        autoSize: true,
+                        maxLength: 300,
+                        onStart: () => setErrorMessage(null),
+                        onChange: saveNewStatus,
+                    }}
+                >
+                    {status || 'Please enter status...'}
+                </Paragraph>
+            </div>
             <div className={p.error}><b>
                 {errorMessage && errorMessage}
             </b>

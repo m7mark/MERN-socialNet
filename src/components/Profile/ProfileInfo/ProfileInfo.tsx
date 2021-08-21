@@ -9,16 +9,12 @@ import { ProfileType } from '../../../types/types';
 
 export type ProfileInfoPropsType = {
   profile: ProfileType | null
-  status: string | undefined
-  updateStatus: (status: string | undefined) => Promise<void>
   isOwner: boolean
   savePhoto: (file: File) => void
   saveProfileInfo: (profile: ProfileType) => Promise<void>
 }
 const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
   profile,
-  status,
-  updateStatus,
   isOwner,
   savePhoto,
   saveProfileInfo }) => {
@@ -35,7 +31,7 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
   }
   return (
     <div>
-      <div>< ProfileStatusWithHooks status={status} updateStatus={updateStatus} /></div>
+      <div>< ProfileStatusWithHooks /></div>
       <div className={p.description}>
         <div>
           <img src={profile.photos.large || userIcon}

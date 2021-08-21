@@ -12,7 +12,7 @@ export const profileAPI = {
         return instance.get
             <string>(`profile/status/${id}`)
     },
-    updateStatus(status: string) {
+    updateStatus(status: string | undefined) {
         return instance.put
             <CommonResponseType>(`profile/status`, { status })
     },
