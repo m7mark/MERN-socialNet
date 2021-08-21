@@ -1,4 +1,4 @@
-import { PhotosType, ProfileType } from "../types/types";
+import { ProfileType } from "../types/types";
 import { CommonResponseType, instance } from "./api";
 
 
@@ -20,14 +20,14 @@ export const profileAPI = {
         return instance.put
             <CommonResponseType>(`profile`, profile)
     },
-    savePhoto(photoFile: any) {
-        const formData = new FormData()
-        formData.append("image", photoFile);
-        return instance.put
-            <CommonResponseType<{photos: PhotosType}>>(`/profile/photo`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            })
-    }
+    //     savePhoto(photoFile: any) {
+    //         const formData = new FormData()
+    //         formData.append("image", photoFile);
+    //         return instance.put
+    //             <CommonResponseType<{photos: PhotosType}>>(`/profile/photo`, formData, {
+    //                 headers: {
+    //                     'Content-Type': 'multipart/form-data'
+    //                 }
+    //             })
+    //     }
 }

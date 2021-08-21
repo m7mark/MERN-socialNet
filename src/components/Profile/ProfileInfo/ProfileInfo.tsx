@@ -2,46 +2,71 @@ import Preloader from '../../common/Preloader/Preloader';
 import p from './ProfileInfo.module.css'
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
 import userIcon from './../../../assets/userIcon.png'
-import { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 import ProfileDataForm from './ProfileDataForm';
 import { ProfileType } from '../../../types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectProfile } from '../../../redux/profile-selector';
+import { Upload, message, Button, Descriptions } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import { apiKey } from '../../../api/api';
+import { actions } from '../../../redux/profile-reducer';
+
 
 
 export type ProfileInfoPropsType = {
-  profile: ProfileType | null
   isOwner: boolean
-  savePhoto: (file: File) => void
   saveProfileInfo: (profile: ProfileType) => Promise<void>
 }
 const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
-  profile,
   isOwner,
-  savePhoto,
   saveProfileInfo }) => {
 
+
+  const profile = useSelector(selectProfile)
+  const dispatch = useDispatch()
   const [editMode, setEditMode] = useState(false);
+  const props = {
+    name: 'image',
+    action: 'https://social-network.samuraijs.com/api/1.0/profile/photo',
+    headers: {
+      'API-KEY': apiKey,
+    },
+    withCredentials: true,
+    onChange(info: any) {
+      if (info.file.status !== 'uploading') {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === 'done') {
+        message.success(`${info.file.name} uploaded successfully`);
+        dispatch(actions.savePhotoSuccess(info.file.response.data.photos))
+      } else if (info.file.status === 'error') {
+        message.error(`Upload failed: ${info.file.response.message}`);
+      }
+    },
+  };
 
   if (!profile) {
     return <Preloader />
   }
-  const onMainPhotoSelected = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files?.length) {
-      savePhoto(e.target.files[0])
-    }
-  }
   return (
     <div>
-      <div>< ProfileStatusWithHooks /></div>
-      <div className={p.description}>
+      <div>< ProfileStatusWithHooks isOwner={isOwner} /></div>
+      <div>
         <div>
           <img src={profile.photos.large || userIcon}
             className={p.profileimg} alt="" ></img>
         </div>
-        <div>
-          {isOwner && <input type={'file'} onChange={onMainPhotoSelected} />}
+        <div >
+          {isOwner && <Upload {...props}>
+            <Button
+              ghost
+              type='primary'
+              icon={<UploadOutlined />}>Click to Upload</Button>
+          </Upload>}
         </div>
       </div>
-      <div className={p.description}>
+      <div>
         {editMode
           ? <ProfileDataForm setEditMode={setEditMode}
             profile={profile}
@@ -61,20 +86,33 @@ type ProfileDataProps = {
   goToEditMode: () => void
 }
 const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner, goToEditMode }) => {
-  return <div>
-    <div>{isOwner && <button onClick={goToEditMode}>Edit</button>}</div>
-    <div><b>Full name: </b>{profile.fullName}</div>
-    <div><b>About me: </b>{profile.aboutMe}</div>
-    <div><b>Looking for a job: </b>{profile.lookingForAJob ? 'yes' : 'no'}</div>
-    {profile.lookingForAJob &&
-      <div> <b>Skills: </b>{profile.lookingForAJobDescription}</div>
-    }
-    <div><b>Contacts: </b>{Object.keys(profile.contacts)
-      .map(key => {
-        return <Contact key={key}
-          contactTitle={key}
-          contactValue={profile.contacts[key]} />
-      })}</div>
+  return <div style={{ marginTop: '30px', maxWidth: '700px' }}>
+    <Descriptions
+      title="Description"
+      bordered
+      column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }}
+    >
+      <Descriptions.Item label="Full name">{profile.fullName}</Descriptions.Item>
+      <Descriptions.Item label="Looking a job">{profile.lookingForAJob ? 'yes' : 'no'}</Descriptions.Item>
+      <Descriptions.Item label="About me">{profile.aboutMe}</Descriptions.Item>
+      <Descriptions.Item label="Skills">{profile.lookingForAJobDescription}</Descriptions.Item>
+      <Descriptions.Item label="Contacts">
+        {Object.keys(profile.contacts)
+          .map(key => {
+            return <Contact key={key}
+              contactTitle={key}
+              contactValue={profile.contacts[key]} />
+          })}
+      </Descriptions.Item>
+
+    </Descriptions>
+    <div>{isOwner &&
+      <Button
+        size={'small'}
+        type='primary'
+        style={{ minWidth: '150px', marginTop: '10px' }}
+        onClick={goToEditMode}>Edit
+      </Button>}</div>
   </div>
 }
 
@@ -83,7 +121,7 @@ type ContactProps = {
   contactValue: string
 }
 const Contact: React.FC<ContactProps> = ({ contactTitle, contactValue }) => {
-  return <div>{contactValue && <div><b>{contactTitle}:</b> {contactValue}</div>}</div>
+  return <div>{contactValue && <div><b>{contactTitle}:</b> {contactValue}<br /></div>}</div>
 }
 
 export default ProfileInfo;

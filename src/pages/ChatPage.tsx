@@ -61,7 +61,6 @@ const Messages: React.FC = () => {
 
 
 const Message: React.FC<{ message: ChatMessageType }> = React.memo(({ message }) => {
-    console.log('>>>>>>>>>Messages')
     return (
         <div>
             <img style={{ height: '30px' }} src={message.photo} alt='' />

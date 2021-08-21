@@ -101,13 +101,13 @@ export const updateStatus = (status: string | undefined): ThunkType =>
             return Promise.reject(errorStatusMessage);
         }
     }
-export const savePhoto = (file: File): ThunkType =>
-    async (dispatch) => {
-        const response = await profileAPI.savePhoto(file)
-        if (response.data.resultCode === ResultCodeEnum.Success) {
-            dispatch(actions.savePhotoSuccess(response.data.data.photos));
-        }
-    }
+// export const savePhoto = (file: File): ThunkType =>
+//     async (dispatch) => {
+//         const response = await profileAPI.savePhoto(file)
+//         if (response.data.resultCode === ResultCodeEnum.Success) {
+//             dispatch(actions.savePhotoSuccess(response.data.data.photos));
+//         }
+//     }
 export const saveProfileInfo = (profile: ProfileType): ThunkType =>
     async (dispatch, getState) => {
         const userId = getState().auth.id;

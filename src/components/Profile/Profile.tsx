@@ -11,9 +11,7 @@ const Profile: React.FC<PropsType> = (props) => {
       {props.isFetching ? <Preloader /> :
         <div>
           <ProfileInfo
-            profile={props.profile}
             isOwner={props.isOwner}
-            savePhoto={props.savePhoto}
             saveProfileInfo={props.saveProfileInfo} />
           <MyPostsContainer />
         </div>}
