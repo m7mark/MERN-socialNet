@@ -1,48 +1,66 @@
-import { Formik } from "formik";
+import { Form, Input } from 'antd';
 import { FilterType } from "../../../redux/users-reducer";
-import SearchFormDisplay from "./SearchFormDisplay";
 
-
+const { Search } = Input;
 export type FormPropsType = {
-    text: string
-    selected: string
+    queryParams: string
+    // querySelector: string
 }
 type PropsType = {
     onFilterChanged: (filter: FilterType) => void
 }
 const UsersSearchForm: React.FC<PropsType> = (props) => {
 
-    const initialValues = {
-        text: '',
-        selected: 'All',
-        selectFollowedOptions: ["All", "Followed", "Unfollowed"]
-    };
-    const handleSubmit = (formProps: FormPropsType) => {
-        const { selected, text } = formProps;
+    const initialValues: FormPropsType = { queryParams: '' }
+    // querySelector: 'All'
+
+    // const querySelector = [
+    //     { label: 'All', value: 'All' },
+    //     { label: 'Followed', value: 'Followed' },
+    //     { label: 'Unfollowed', value: 'Unfollowed' },
+    // ]
+    const handleSubmit = (queryParams: string) => {
         let friendFilter = null
-        switch (selected) {
-            case 'Followed':
-                friendFilter = true
-                break
-            case 'Unfollowed':
-                friendFilter = false
-                break
-        }
+        // switch (querySelector) {
+        //     case 'Followed':
+        //         friendFilter = true
+        //         break
+        //     case 'Unfollowed':
+        //         friendFilter = false
+        //         break
+        // }
         let filter = {
-            term: text,
+            term: queryParams,
             friend: friendFilter
         }
         props.onFilterChanged(filter)
     };
-
     return (
-        <Formik
+        <Form
             initialValues={initialValues}
-            onSubmit={handleSubmit}
+            layout='horizontal'
+            className="form-container"
         >
-            {SearchFormDisplay}
-        </Formik>
-    );
+            <Form.Item
+                name="queryParams"
+            >
+                <Search
+                    placeholder="input search text"
+                    allowClear
+                    enterButton="Search"
+                    onSearch={handleSubmit}
+                />
+            </Form.Item>
+            {/* <Form.Item name="querySelector" >
+                <Select
+                    style={{ minWidth: '120px' }}
+                    defaultValue="All"
+                    options={querySelector}
+                    // onChange={handleChange}
+                     />
+            </Form.Item> */}
+        </Form>
+    )
 }
 
 export default UsersSearchForm;

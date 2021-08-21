@@ -1,10 +1,9 @@
-import { Formik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import * as Yup from 'yup';
-import { LoginPageForm } from '../components/LoginPageForm';
-import { login } from '../redux/auth-reducer';
+import { actions, login } from '../redux/auth-reducer';
 import { AppStateType } from '../redux/store';
+import { Form, Input, Button, Checkbox } from 'antd';
+import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 export type FormsValuesType = {
     email: string
@@ -14,31 +13,92 @@ export type FormsValuesType = {
 }
 
 const LoginForm: React.FC = () => {
-    const initialValues = {
+
+    const initialValues: FormsValuesType = {
         email: '',
         password: '',
         rememberMe: false,
         captcha: null
     }
+    const captchaUrl = useSelector((state: AppStateType) => state.auth.captchaUrl)
+    const errorLoginMessage = useSelector((state: AppStateType) => state.auth.errorLoginMessage)
     const dispatch = useDispatch()
-    const handleSubmit = (values: FormsValuesType, { resetForm }: any) => {
+    const onFinish = (values: FormsValuesType) => {
         dispatch(login(values.email, values.password, values.rememberMe, values.captcha))
-        resetForm({})
-    }
-    const validationSchema = Yup.object().shape({
-        email: Yup.string()
-            .required('Required'),
-        password: Yup.string()
-            .required('Required'),
-    })
+    };
+    const cleaErrorLoginMessage = () => dispatch(actions.errorLogin(''))
 
     return (
-        <Formik
+        <Form
+            name="loginForm"
+            className="login-form"
+            style={{ maxWidth: 'max-content' }}
             initialValues={initialValues}
-            onSubmit={handleSubmit}
+            onFinish={onFinish}
+            onFieldsChange={cleaErrorLoginMessage}
         >
-            {LoginPageForm}
-        </Formik >
+            <Form.Item
+                {...errorLoginMessage && {
+                    help: errorLoginMessage,
+                    validateStatus: 'error',
+                }}
+            >
+                <Form.Item
+                    name="email"
+                    rules={[
+                        { type: 'email', message: 'The input is not valid E-mail!' },
+                        { required: true, message: 'Please input your E-mail!' },
+                    ]}
+                >
+                    <Input prefix={<UserOutlined
+                        className="site-form-item-icon" />}
+                        placeholder="E-mail" />
+                </Form.Item>
+                <Form.Item
+                    name="password"
+                    rules={[{ required: true, message: 'Please input your Password!' }]}
+                >
+                    <Input
+                        prefix={<LockOutlined className="site-form-item-icon" />}
+                        type="password"
+                        placeholder="Password"
+                    />
+                </Form.Item>
+            </Form.Item>
+            <Form.Item>
+                <Form.Item name="rememberMe" valuePropName="checked" noStyle>
+                    <Checkbox>Remember me</Checkbox>
+                </Form.Item>
+            </Form.Item>
+            <div>{captchaUrl &&
+                <img src={captchaUrl} alt="captcha" />}
+            </div>
+            <Form.Item
+                hidden={!captchaUrl}
+                name="captcha"
+                rules={[{
+                    required: !!captchaUrl,
+                    message: 'Please input captcha!'
+                }]}
+            >
+                <Input
+                    type="text"
+                    placeholder="Captcha"
+                />
+            </Form.Item>
+            <Form.Item>
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    className="login-form-button"
+                    style={{ width: '100%' }}
+                >
+                    Log in
+                </Button>
+                Or <a href="https://social-network.samuraijs.com/signUp"
+                    rel="noreferrer" target="_blank">register now!</a>
+            </Form.Item>
+        </Form>
     );
 };
 

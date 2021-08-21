@@ -23,7 +23,7 @@ import { HashRouter } from 'react-router-dom'
 import { withSuspense } from './hoc/withSuspense'
 import { Users } from './components/Users/Users'
 import { QueryParamProvider } from 'use-query-params'
-import { AppHeader } from './components/AppHeader/AppHeader';
+import { AppHeader } from './components/UI/Header/AppHeader';
 // import { Footer } from 'antd/lib/layout/layout';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));

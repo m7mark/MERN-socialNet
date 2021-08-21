@@ -1,8 +1,8 @@
-import p from './Header.module.css';
+import p from '../../../styles/Header.module.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectIsAuth, selectUserLogin } from '../../redux/auth-selector';
-import { logout } from '../../redux/auth-reducer';
+import { selectIsAuth, selectUserLogin } from '../../../redux/auth-selector';
+import { logout } from '../../../redux/auth-reducer';
 import { Button } from 'antd';
 import Text from 'antd/lib/typography/Text';
 
