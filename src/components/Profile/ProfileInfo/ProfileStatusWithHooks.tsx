@@ -10,7 +10,7 @@ const { Text, Paragraph } = Typography;
 type PropsType = {
     isOwner: boolean
 }
-const ProfileStatusWithHooks: React.FC<PropsType> = ({ isOwner }) => {
+export const ProfileStatusWithHooks: React.FC<PropsType> = ({ isOwner }) => {
 
     const status = useSelector(selectStatus)
     const [errorMessage, setErrorMessage] = useState(null);
@@ -48,5 +48,3 @@ const ProfileStatusWithHooks: React.FC<PropsType> = ({ isOwner }) => {
         </div>
     )
 }
-export default ProfileStatusWithHooks;
-

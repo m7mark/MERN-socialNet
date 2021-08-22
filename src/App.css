@@ -35,3 +35,6 @@
   display  : flex;
   flex-wrap: wrap;
 }
+.ant-upload-list{
+  max-width: 200px;
+}

@@ -1,13 +1,13 @@
 import Preloader from '../../common/Preloader/Preloader';
 import p from './ProfileInfo.module.css'
-import ProfileStatusWithHooks from './ProfileStatusWithHooks'
+import { ProfileStatusWithHooks } from './ProfileStatusWithHooks'
 import userIcon from './../../../assets/userIcon.png'
 import { useState } from 'react';
-import ProfileDataForm from './ProfileDataForm';
+import {ProfileDataForm} from './ProfileDataForm';
 import { ProfileType } from '../../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectProfile } from '../../../redux/profile-selector';
-import { Upload, message, Button, Descriptions } from 'antd';
+import { Upload, message, Button, Descriptions, Modal } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { apiKey } from '../../../api/api';
 import { actions } from '../../../redux/profile-reducer';
@@ -22,10 +22,8 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
   isOwner,
   saveProfileInfo }) => {
 
-
   const profile = useSelector(selectProfile)
   const dispatch = useDispatch()
-  const [editMode, setEditMode] = useState(false);
   const props = {
     name: 'image',
     action: 'https://social-network.samuraijs.com/api/1.0/profile/photo',
@@ -51,7 +49,7 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
   }
   return (
     <div>
-      <div>< ProfileStatusWithHooks isOwner={isOwner} /></div>
+      < ProfileStatusWithHooks isOwner={isOwner} />
       <div>
         <div>
           <img src={profile.photos.large || userIcon}
@@ -66,16 +64,7 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
           </Upload>}
         </div>
       </div>
-      <div>
-        {editMode
-          ? <ProfileDataForm setEditMode={setEditMode}
-            profile={profile}
-            saveProfileInfo={saveProfileInfo} />
-          : <ProfileData profile={profile}
-            isOwner={isOwner}
-            goToEditMode={() => { setEditMode(true) }} />
-        }
-      </div>
+      <ProfileData profile={profile} isOwner={isOwner} />
     </div>
   );
 }
@@ -83,9 +72,19 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
 type ProfileDataProps = {
   profile: ProfileType
   isOwner: boolean
-  goToEditMode: () => void
 }
-const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner, goToEditMode }) => {
+const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner }) => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
   return <div style={{ marginTop: '30px', maxWidth: '700px' }}>
     <Descriptions
       title="Description"
@@ -104,15 +103,17 @@ const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner, goToEditMod
               contactValue={profile.contacts[key]} />
           })}
       </Descriptions.Item>
-
     </Descriptions>
     <div>{isOwner &&
       <Button
         size={'small'}
         type='primary'
         style={{ minWidth: '150px', marginTop: '10px' }}
-        onClick={goToEditMode}>Edit
+        onClick={showModal}>Edit
       </Button>}</div>
+    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+      <ProfileDataForm />
+    </Modal>
   </div>
 }
 
