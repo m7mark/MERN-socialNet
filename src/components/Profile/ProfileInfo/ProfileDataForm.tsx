@@ -68,6 +68,9 @@ export const ProfileDataForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
     const onFinish = (values: ProfileType) => {
         setisFetchingState(true)
         dispatch(saveProfileInfo(values))
+        if (profileErrorMessage) {
+            setisFetchingState(false)
+        }
     };
 
     if (!profile) { return <Preloader /> }
