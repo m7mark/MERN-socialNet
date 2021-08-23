@@ -1,9 +1,22 @@
-import p from './MyPosts.module.css';
 import Post from './Post/Post';
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import MyTextInput from '../../common/FormsControl/MyForms';
+import React from 'react';
+import { actions } from '../../../redux/profile-reducer';
+import {
+  Avatar,
+  Form,
+  Input,
+  List,
+  Space
+} from 'antd';
+import { Col, Row } from 'antd';
+import { LikeOutlined, MessageOutlined, StarOutlined } from '@ant-design/icons';
 import { PostData } from '../../../types/types';
+import { Typography } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppStateType } from '../../../redux/store';
+
+const { Title } = Typography;
+const { Search } = Input;
 
 export type StatePropsType = {
   postData: Array<PostData>
@@ -14,47 +27,103 @@ export type DispatchPropsType = {
 type AddPostFormValuesType = {
   newPostBodyText: string
 }
-const MyPosts: React.FC<StatePropsType & DispatchPropsType> = (props) => {
-  let postElements =
-    props.postData.map(posts =>
-      <Post key={posts.id} message={posts.message} likesCount={posts.likesCount} />)
-  return <div className={p.postblock}>
-    <h3>My Post</h3>
-    <div>
-      <AddPostForm addNewPostBody={props.addNewPostBody} />
-    </div>
-    <div className={p.posts}>
-      {postElements}
-    </div>
-  </div>
-}
-export default MyPosts;
-
-const AddPostForm: React.FC<DispatchPropsType> = ({ addNewPostBody }) => {
-  const submit = (values: AddPostFormValuesType, { resetForm }: any) => {
-    addNewPostBody(values.newPostBodyText)
-    resetForm({})
-  }
+export const MyPosts: React.FC = () => {
   return (
-    <Formik
-      initialValues={{ newPostBodyText: "" }}
-      validationSchema={Yup.object({
-        newPostBodyText: Yup.string()
-          .max(15, 'Must be 15 characters or less')
-          .required('Required')
-      })}
-      onSubmit={submit}
+    <div style={{ marginTop: '30px' }}>
+      <AddPostForm />
+      <Row>
+        <Col lg={18} xs={24} sm={24}>
+          <PostsList />
+        </Col>
+      </Row>
+    </div>
+  )
+}
+
+
+const AddPostForm: React.FC = () => {
+  const dispatch = useDispatch();
+  const [form] = Form.useForm();
+  const onSearch = () => { form.submit() }
+  const onFinish = (values: AddPostFormValuesType) => {
+    dispatch(actions.addNewPostBody(values.newPostBodyText))
+    form.resetFields()
+  }
+
+  return (
+    <Form
+      form={form}
+      name="addNewPost"
+      onFinish={onFinish}
     >
-      <Form>
-        <MyTextInput
-          id="newPostBodyText"
-          name="newPostBodyText"
-          type="text"
-          placeholder="Post message"
+      <Form.Item
+        name="newPostBodyText"
+        style={{ maxInlineSize: '350px' }}
+        rules={[
+          { required: true, message: 'Please input your Post text!' },
+        ]}
+      >
+        <Search
+          placeholder="Add new post text"
+          enterButton="Add Post"
+          // size="large"
+          onSearch={onSearch}
         />
-        <br />
-        <button type="submit">Add Post</button>
-      </Form>
-    </Formik>
+      </Form.Item>
+    </Form>
+  )
+}
+
+const PostsList: React.FC = () => {
+  const avaUrl = 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png'
+  const postListData = useSelector((state: AppStateType) => state.profilePage.postData);
+  const listData = [];
+  for (let i = 0; i < postListData.length; i++) {
+    listData.push({
+      title: `ant design part ${i}`,
+      avatar: 'https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png',
+      content: { ...postListData },
+    });
+  }
+
+  const IconText = ({ icon, text }: any) => (
+    <Space>
+      {React.createElement(icon)}
+      {text}
+    </Space>
   );
-};
+
+  return (
+    <List
+      itemLayout="vertical"
+      size="large"
+      pagination={{
+        onChange: page => {
+          console.log(page);
+        },
+        pageSize: 3,
+      }}
+      dataSource={postListData}
+      footer={
+        <div>
+          <b>Like</b> Dymych
+        </div>
+      }
+      renderItem={item => (
+        <List.Item
+          key={item.id}
+          actions={[
+            <IconText icon={StarOutlined} text={138 - item.likesCount} key="list-vertical-star-o" />,
+            <IconText icon={LikeOutlined} text={item.likesCount} key="list-vertical-like-o" />,
+          ]}
+        >
+          <List.Item.Meta
+            avatar={<Avatar src={avaUrl} />}
+            title={`${item.id} is a number`}
+          />
+          {item.message}
+        </List.Item>
+      )}
+    />
+  )
+}

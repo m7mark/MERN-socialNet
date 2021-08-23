@@ -5,8 +5,8 @@ import { BaseThunkType, InferActionsType } from "./store";
 
 let initialState = {
     postData: [
-        { id: 1, message: "How are you", likesCount: 12 },
-        { id: 2, message: "Good and you", likesCount: 2 },
+        { id: 2, message: "The heart of the prudent getteth knowledge; and the ear of the wise seeketh knowledge.", likesCount: 12 },
+        { id: 1, message: "A wise king scattereth the wicked, and bringeth the wheel over them.", likesCount: 2 },
     ] as Array<PostData>,
     profile: undefined as ProfileType | undefined,
     status: '' as string | undefined,
@@ -26,7 +26,7 @@ const profileReducer = (state = initialState, action: ActionsTypes):
             }
             return {
                 ...state,
-                postData: [...state.postData, newPost],
+                postData: [newPost, ...state.postData],
                 newPostText: ''
             }
         case "SN/PROF/DELETE_POST":

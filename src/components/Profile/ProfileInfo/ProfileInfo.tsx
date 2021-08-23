@@ -10,7 +10,7 @@ import {
   message,
   Modal,
   Upload
-  } from 'antd';
+} from 'antd';
 import { ProfileDataForm } from './ProfileDataForm';
 import { ProfileStatusWithHooks } from './ProfileStatusWithHooks';
 import { ProfileType } from '../../../types/types';
@@ -60,6 +60,7 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
         <div >
           {isOwner && <Upload {...props}>
             <Button
+              size='small'
               ghost
               type='primary'
               icon={<UploadOutlined />}>Click to Upload</Button>
@@ -88,7 +89,7 @@ const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner }) => {
   // const memoProfile = useMemo(() => { return { ...profile } }, [profile])
   return <div style={{ marginTop: '30px', maxWidth: '700px' }}>
     <Descriptions
-      title="Description"
+      // title="Description"
       bordered
       column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }}
     >
@@ -107,9 +108,10 @@ const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner }) => {
     </Descriptions>
     <div>{isOwner &&
       <Button
-        // size={'small'}
+        size={'small'}
+        ghost
         type='primary'
-        style={{ minWidth: '150px', marginTop: '10px' }}
+        style={{ minWidth: '100px', marginTop: '10px' }}
         onClick={showModal}>Edit
       </Button>}</div>
     <Modal

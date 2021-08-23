@@ -1,4 +1,30 @@
-import { Col, Layout, Menu, Row } from 'antd';
+import * as React from 'react';
+import Preloader from './components/common/Preloader/Preloader';
+import store, { AppStateType } from './redux/store';
+import { AppHeader } from './components/UI/Header/AppHeader';
+import {
+  Col,
+  Layout,
+  Menu,
+  Row
+  } from 'antd';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
+import { HashRouter } from 'react-router-dom';
+import { initializeApp } from './redux/app-reducer';
+import {
+  Link,
+  Redirect,
+  Route,
+  withRouter
+  } from 'react-router-dom';
+import { Login } from './pages/LoginPage';
+import { Provider } from 'react-redux';
+import { QueryParamProvider } from 'use-query-params';
+import { Users } from './components/Users/Users';
+import { withSuspense } from './hoc/withSuspense';
+import './App.css';
+import 'antd/dist/antd.css';
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
@@ -6,24 +32,6 @@ import {
   MessageOutlined,
   TeamOutlined,
 } from '@ant-design/icons';
-
-// import { Route } from 'react-router'
-import * as React from 'react'
-import './App.css'
-import 'antd/dist/antd.css'
-import { Login } from './pages/LoginPage'
-import { connect } from 'react-redux'
-import { compose } from 'redux'
-import { Route, Redirect, withRouter, Link } from 'react-router-dom'
-import { initializeApp } from './redux/app-reducer'
-import Preloader from './components/common/Preloader/Preloader'
-import store, { AppStateType } from './redux/store'
-import { Provider } from 'react-redux';
-import { HashRouter } from 'react-router-dom'
-import { withSuspense } from './hoc/withSuspense'
-import { Users } from './components/Users/Users'
-import { QueryParamProvider } from 'use-query-params'
-import { AppHeader } from './components/UI/Header/AppHeader';
 // import { Footer } from 'antd/lib/layout/layout';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
@@ -39,19 +47,16 @@ type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
   initializeApp: () => void
 }
-
 class App extends React.Component<MapPropsType & DispatchPropsType> {
 
   state = {
     collapsed: false,
   };
-
   toggle = () => {
     this.setState({
       collapsed: !this.state.collapsed,
     });
   };
-
   catchAllUnhandleErrors = (e: PromiseRejectionEvent) => {
     alert("Some error")
   }
@@ -68,11 +73,11 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
     }
     return (
       <Layout id="components-layout-custom-trigger">
-        <Sider 
-        trigger={null} 
-        collapsible 
-        collapsed={this.state.collapsed}
-        collapsedWidth='0'
+        <Sider
+          trigger={null}
+          collapsible
+          collapsed={this.state.collapsed}
+          collapsedWidth='0'
         >
           <div className="logo"></div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
@@ -103,12 +108,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
             <Col flex="auto"><AppHeader /></Col>
           </Row>
           <Content
-            className="site-layout-background"
-            style={{
-              margin: '24px 16px',
-              padding: 24,
-              minHeight: 280,
-            }}
+            className={"site-layout-background site-main-content"}
           >
             <Route path='/'
               render={() => <Redirect to={'/profile'} />} />
