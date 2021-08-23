@@ -23,7 +23,7 @@ import { Provider } from 'react-redux';
 import { QueryParamProvider } from 'use-query-params';
 import { Users } from './components/Users/Users';
 import { withSuspense } from './hoc/withSuspense';
-import './App.css';
+import './styles/App.scss';
 import 'antd/dist/antd.css';
 import {
   MenuUnfoldOutlined,
