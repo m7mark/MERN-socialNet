@@ -1,26 +1,28 @@
+import p from './ProfileInfo.module.css';
 import Preloader from '../../common/Preloader/Preloader';
-import p from './ProfileInfo.module.css'
-import { ProfileStatusWithHooks } from './ProfileStatusWithHooks'
-import userIcon from './../../../assets/userIcon.png'
-import { useState } from 'react';
-import {ProfileDataForm} from './ProfileDataForm';
-import { ProfileType } from '../../../types/types';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectProfile } from '../../../redux/profile-selector';
-import { Upload, message, Button, Descriptions, Modal } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import { apiKey } from '../../../api/api';
+import React, { useState } from 'react';
+import userIcon from './../../../assets/userIcon.png';
 import { actions } from '../../../redux/profile-reducer';
-
-
+import { apiKey } from '../../../api/api';
+import {
+  Button,
+  Descriptions,
+  message,
+  Modal,
+  Upload
+  } from 'antd';
+import { ProfileDataForm } from './ProfileDataForm';
+import { ProfileStatusWithHooks } from './ProfileStatusWithHooks';
+import { ProfileType } from '../../../types/types';
+import { selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
+import { UploadOutlined } from '@ant-design/icons';
+import { useDispatch, useSelector } from 'react-redux';
 
 export type ProfileInfoPropsType = {
   isOwner: boolean
-  saveProfileInfo: (profile: ProfileType) => Promise<void>
 }
 const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
-  isOwner,
-  saveProfileInfo }) => {
+  isOwner }) => {
 
   const profile = useSelector(selectProfile)
   const dispatch = useDispatch()
@@ -52,7 +54,7 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
       < ProfileStatusWithHooks isOwner={isOwner} />
       <div>
         <div>
-          <img src={profile.photos.large || userIcon}
+          <img src={profile?.photos.large || userIcon}
             className={p.profileimg} alt="" ></img>
         </div>
         <div >
@@ -70,49 +72,55 @@ const ProfileInfo: React.FC<ProfileInfoPropsType> = ({
 }
 
 type ProfileDataProps = {
-  profile: ProfileType
+  profile: ProfileType | undefined
   isOwner: boolean
 }
 const ProfileData: React.FC<ProfileDataProps> = ({ profile, isOwner }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
+  const dispatch = useDispatch();
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  const showModal = () => {
+    setIsModalVisible(true);
+    dispatch(actions.profileIsFetching(true))
+  };
+  // const memoProfile = useMemo(() => { return { ...profile } }, [profile])
   return <div style={{ marginTop: '30px', maxWidth: '700px' }}>
     <Descriptions
       title="Description"
       bordered
       column={{ xxl: 2, xl: 2, lg: 2, md: 2, sm: 1, xs: 1 }}
     >
-      <Descriptions.Item label="Full name">{profile.fullName}</Descriptions.Item>
-      <Descriptions.Item label="Looking a job">{profile.lookingForAJob ? 'yes' : 'no'}</Descriptions.Item>
-      <Descriptions.Item label="About me">{profile.aboutMe}</Descriptions.Item>
-      <Descriptions.Item label="Skills">{profile.lookingForAJobDescription}</Descriptions.Item>
+      <Descriptions.Item label="Full name">{profile?.fullName}</Descriptions.Item>
+      <Descriptions.Item label="Looking a job">{profile?.lookingForAJob ? 'yes' : 'no'}</Descriptions.Item>
+      <Descriptions.Item label="About me">{profile?.aboutMe}</Descriptions.Item>
+      <Descriptions.Item label="Skills">{profile?.lookingForAJobDescription}</Descriptions.Item>
       <Descriptions.Item label="Contacts">
-        {Object.keys(profile.contacts)
+        {profile && Object.keys(profile.contacts)
           .map(key => {
             return <Contact key={key}
               contactTitle={key}
-              contactValue={profile.contacts[key]} />
+              contactValue={profile?.contacts[key]} />
           })}
       </Descriptions.Item>
     </Descriptions>
     <div>{isOwner &&
       <Button
-        size={'small'}
+        // size={'small'}
         type='primary'
         style={{ minWidth: '150px', marginTop: '10px' }}
         onClick={showModal}>Edit
       </Button>}</div>
-    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-      <ProfileDataForm />
+    <Modal
+      title="Profile"
+      visible={isModalVisible}
+      onCancel={handleCancel}
+      footer={null}
+    >
+      <ProfileDataForm
+        setIsModalVisible={setIsModalVisible}
+      />
     </Modal>
   </div>
 }

@@ -8,13 +8,13 @@ type PropsType = {
 const Profile: React.FC<PropsType> = (props) => {
   return (
     <div>
-      {props.isFetching ? <Preloader /> :
+      
         <div>
           <ProfileInfo
             isOwner={props.isOwner}
-            saveProfileInfo={props.saveProfileInfo} />
+          />
           <MyPostsContainer />
-        </div>}
+        </div>
     </div>
   );
 }

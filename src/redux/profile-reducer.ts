@@ -8,10 +8,11 @@ let initialState = {
         { id: 1, message: "How are you", likesCount: 12 },
         { id: 2, message: "Good and you", likesCount: 2 },
     ] as Array<PostData>,
-    profile: null as ProfileType | null,
+    profile: undefined as ProfileType | undefined,
     status: '' as string | undefined,
-    isFetching: false,
-    newPostText: ''
+    isFetching: true,
+    newPostText: '',
+    profileErrorMessage: '' as string | undefined
 }
 export type InitialStateType = typeof initialState
 const profileReducer = (state = initialState, action: ActionsTypes):
@@ -50,6 +51,8 @@ const profileReducer = (state = initialState, action: ActionsTypes):
             }
         case "SN/PROF/PROFILE_IS_FETCHING":
             return { ...state, isFetching: action.isFetching }
+        case "SN/PROF/PROFILE_SAVE_ERROR_MESSAGE":
+            return { ...state, profileErrorMessage: action.profileErrorMessage }
         default:
             return state;
     }
@@ -68,13 +71,15 @@ export const actions = {
     savePhotoSuccess: (photos: PhotosType) =>
         ({ type: 'SN/PROF/SET_PHOTOS_SUCCESS', photos } as const),
     profileIsFetching: (isFetching: boolean) =>
-        ({ type: 'SN/PROF/PROFILE_IS_FETCHING', isFetching } as const)
+        ({ type: 'SN/PROF/PROFILE_IS_FETCHING', isFetching } as const),
+    profileSaveErrorMessage: (profileErrorMessage: string) =>
+        ({ type: 'SN/PROF/PROFILE_SAVE_ERROR_MESSAGE', profileErrorMessage } as const),
 }
 
 type ThunkType = BaseThunkType<ActionsTypes>
 export const getUserProfile = (id: number | undefined): ThunkType =>
     async (dispatch) => {
-        dispatch(actions.profileIsFetching(true));
+        // dispatch(actions.profileIsFetching(true));
         const data = await profileAPI.getUserProfile(id)
         dispatch(actions.profileIsFetching(false));
         if (!data.contacts.mainLink) { data.contacts.mainLink = '' }
@@ -114,12 +119,13 @@ export const saveProfileInfo = (profile: ProfileType): ThunkType =>
         const response = await profileAPI.saveProfileInfo(profile)
         if (response.data.resultCode === ResultCodeEnum.Success) {
             dispatch(getUserProfile(userId));
+
         }
         else {
             let errorLoginMessage = response.data.messages.length > 0
                 ? response.data.messages[0]
                 : "Some error";
-            return Promise.reject(errorLoginMessage);
+            dispatch(actions.profileSaveErrorMessage(errorLoginMessage))
         }
     }
 

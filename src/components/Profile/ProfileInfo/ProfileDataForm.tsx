@@ -1,11 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { selectProfile } from '../../../redux/profile-selector';
-import { ContactsType, ProfileType } from '../../../types/types';
 import Preloader from '../../common/Preloader/Preloader';
-import { Form, Input, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
-import { saveProfileInfo } from '../../../redux/profile-reducer';
-
-const { Option } = Select;
+import { actions, saveProfileInfo } from '../../../redux/profile-reducer';
+import {
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useState
+} from 'react';
+import { UploadOutlined } from '@ant-design/icons';
+import { ProfileType } from '../../../types/types';
+import { selectIsFetching, selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    Button,
+    Checkbox,
+    Form,
+    Input,
+} from 'antd';
 
 const formItemLayout = {
     labelCol: {
@@ -30,24 +40,44 @@ const tailFormItemLayout = {
     },
 };
 
-export const ProfileDataForm: React.FC = () => {
+type PropsType = {
+    setIsModalVisible: Dispatch<SetStateAction<boolean>>
+}
+
+export const ProfileDataForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
     const [form] = Form.useForm();
     const profile = useSelector(selectProfile)
+    const isFetching = useSelector(selectIsFetching)
+    const [isFetchingState, setisFetchingState] = useState(false);
+    const profileErrorMessage = useSelector(selectProfileErrorMessage)
+    const cleaErrorLoginMessage = () => dispatch(actions.profileSaveErrorMessage(''))
     const dispatch = useDispatch()
-    const onFinish = (values: any) => {
+
+    useEffect(() => {
+        if (!isFetching) {
+            setIsModalVisible(false);
+            cleaErrorLoginMessage()
+            dispatch(actions.profileIsFetching(true))
+            setisFetchingState(false)
+        }
+        if (profileErrorMessage) {
+            setisFetchingState(false)
+        }
+    }, [isFetching, profileErrorMessage]);
+
+    const onFinish = (values: ProfileType) => {
+        setisFetchingState(true)
         dispatch(saveProfileInfo(values))
-        console.log('Received values of form: ', values);
     };
-    if (!profile) {
-        return <Preloader />
-    }
+
+    if (!profile) { return <Preloader /> }
     return (
         <Form
             {...formItemLayout}
-
             form={form}
             name="profileInfo"
             onFinish={onFinish}
+            onValuesChange={cleaErrorLoginMessage}
             initialValues={{ ...profile }}
             scrollToFirstError
         >
@@ -55,23 +85,16 @@ export const ProfileDataForm: React.FC = () => {
                 name="fullName"
                 label="Full Name"
                 rules={[
-                    {
-                        required: true,
-                        message: 'Please input your Full Name!',
-                    },
+                    { required: true, message: 'Please input your Full Name!' },
                 ]}
             >
                 <Input />
             </Form.Item>
-
             <Form.Item
                 name="aboutMe"
                 label="About Me"
                 rules={[
-                    {
-                        required: true,
-                        message: 'Please tell About Yourself!',
-                    },
+                    { required: true, message: 'Please tell About Yourself!' },
                 ]}
             >
                 <Input />
@@ -80,12 +103,6 @@ export const ProfileDataForm: React.FC = () => {
                 name="lookingForAJob"
                 valuePropName="checked"
                 label='Looking for a job'
-            // rules={[
-            //     {
-            //         validator: (_, value) =>
-            //             value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
-            //     },
-            // ]}
             >
                 <Checkbox />
             </Form.Item>
@@ -96,122 +113,40 @@ export const ProfileDataForm: React.FC = () => {
             >
                 <Input />
             </Form.Item>
-            <Form.Item {...tailFormItemLayout}>
+            <Form.Item {...profileErrorMessage && {
+                help: profileErrorMessage,
+                validateStatus: 'error',
+            }}
+                {...tailFormItemLayout}>
                 <div>Contacts:</div>
             </Form.Item>
-            {Object.keys(profile.contacts).map(key => {
-                return <Form.Item
-                    key={key}
-                    label={key}
-                >
+
+            {profile && Object.keys(profile.contacts).map(key => {
+                return (
                     <Form.Item
-                        // initialValue={{ ...profile.contacts }}
-                        name={'contacts.' + key}>
-                        <Input value={profile.contacts[key]} />
+                        key={key}
+                        noStyle
+                    >
+                        <Form.Item
+                            label={key}
+                            name={['contacts', key]}
+                        >
+                            <Input />
+                        </Form.Item>
                     </Form.Item>
-                </Form.Item>
+                )
             })}
             <Form.Item {...tailFormItemLayout}>
-                <Button type="primary" htmlType="submit">
-                    Register
+                <Button
+                    type="primary"
+                    htmlType="submit"
+                    icon={<UploadOutlined />}
+                    loading={isFetchingState}
+                >
+                    Save Profile Info
                 </Button>
             </Form.Item>
         </Form>
     );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // const [errorMessage, setErrorMessage] = useState();
-    // const formik = useFormik({
-    //     initialValues: { ...profile },
-    //     onSubmit: values => {
-    //         // todo: remove then
-    //         console.log(values)
-
-    //     },
-    // });
-    // if (!profile) {
-    //     return <Preloader />
-    // }
-    // return (
-    //     <form onSubmit={formik.handleSubmit}>
-    //         { }
-    //         <div className={p.error}><b>
-    //             {errorMessage && errorMessage}
-    //         </b></div>
-    //         <br />
-    //         <label htmlFor="fullName">Full Name </label>
-    //         <input
-    //             id="fullName"
-    //             name="fullName"
-    //             type="text"
-    //             onChange={formik.handleChange}
-    //             value={formik.values.fullName}
-    //         />
-    //         <br />
-    //         <label htmlFor="aboutMe">About Me </label>
-    //         <input
-    //             id="aboutMe"
-    //             name="aboutMe"
-    //             type="text"
-    //             onChange={formik.handleChange}
-    //             value={formik.values.aboutMe}
-    //         />
-    //         <br />
-    //         <label htmlFor="lookingForAJob">Looking for a job </label>
-    //         <input
-    //             id="lookingForAJob"
-    //             name="lookingForAJob"
-    //             type="checkbox"
-    //             onChange={() => formik.setFieldValue(
-    //                 "lookingForAJob", !formik.values.lookingForAJob)}
-    //             checked={formik.values.lookingForAJob}
-    //         />
-    //         <br />
-    //         <label htmlFor="lookingForAJobDescription">Looking job description </label>
-    //         <input
-    //             id="lookingForAJobDescription"
-    //             name="lookingForAJobDescription"
-    //             type="text"
-    //             onChange={formik.handleChange}
-    //             value={formik.values.lookingForAJobDescription}
-    //         />
-    //         <br />
-    //         <div><b>Contacts:</b>
-    //             {Object.keys(profile.contacts).map(key => {
-    //                 return <div key={key}>
-    //                     <div><label htmlFor={key}>{key}</label></div>
-    //                     <input
-    //                         id={key}
-    //                         name={"contacts." + key}
-    //                         type="text"
-    //                         onChange={formik.handleChange}
-    //                         //@ts-ignore
-    //                         value={formik.values.contacts[key as keyof ContactsType]} /> </div>
-    //             })}
-    //         </div>
-    //         <br />
-    //         <button type="submit">Save</button>
-    //     </form>
-    // );
 }
 

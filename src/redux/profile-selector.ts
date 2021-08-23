@@ -6,3 +6,9 @@ export const selectStatus = (state: AppStateType) => {
 export const selectProfile = (state: AppStateType) => {
     return state.profilePage.profile
 }
+export const selectIsFetching = (state: AppStateType) => {
+    return state.profilePage.isFetching
+}
+export const selectProfileErrorMessage = (state: AppStateType) => {
+    return state.profilePage.profileErrorMessage
+}

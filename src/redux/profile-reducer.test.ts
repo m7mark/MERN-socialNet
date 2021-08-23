@@ -4,10 +4,11 @@ let state = {
     postData: [
         { id: 1, message: "How are you", likesCount: 12 },
         { id: 2, message: "Good and you", likesCount: 2 }],
-    profile: null,
+    profile: undefined,
     status: '' as string | undefined,
     isFetching: false,
-    newPostText: ''
+    newPostText: '',
+    profileErrorMessage: '' as string | undefined
 }
 test('new post should be added', () => {
     // start data

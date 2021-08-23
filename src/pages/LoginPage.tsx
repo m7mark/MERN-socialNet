@@ -35,7 +35,7 @@ const LoginForm: React.FC = () => {
             style={{ maxWidth: 'max-content' }}
             initialValues={initialValues}
             onFinish={onFinish}
-            onFieldsChange={cleaErrorLoginMessage}
+            onValuesChange={cleaErrorLoginMessage}
         >
             <Form.Item
                 {...errorLoginMessage && {
