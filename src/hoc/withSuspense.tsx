@@ -1,9 +1,9 @@
 import { Suspense } from 'react';
-import Preloader from '../components/common/Preloader/Preloader';
+import { AntPreloader } from '../components/UI/AntPreloader';
 
 export function withSuspense<WCP>(WrappedComponent: React.ComponentType<WCP>) {
         return (props: WCP) => {
-                return <Suspense fallback={<Preloader />}>
+                return <Suspense fallback={<AntPreloader />}>
                         <WrappedComponent {...props} />
                 </Suspense>
         }

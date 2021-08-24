@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Paginator from '../common/Paginator/Paginator';
-import Preloader from '../common/Preloader/Preloader';
 import User from './User';
 import { FilterType, getUsers, follow, unfollow } from '../../redux/users-reducer';
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,6 +12,7 @@ import {
     NumberParam,
 } from 'use-query-params';
 import UsersSearchForm from './SearchForm/UsersSearchForm';
+import { AntPreloader } from '../UI/AntPreloader';
 
 
 type PropsType = {
@@ -95,7 +95,7 @@ export const Users: React.FC<PropsType> = (props) => {
 
 
     const CurrentUsers = (): JSX.Element => {
-        return <div className='users_map'>
+        return <div className='users-mapping-items'>
             {users.map(u => <User
                 user={u}
                 key={u.id}
@@ -116,6 +116,6 @@ export const Users: React.FC<PropsType> = (props) => {
         <br />
         <UsersSearchForm
             onFilterChanged={onFilterChanged} />
-        {isFetching ? <Preloader /> : <CurrentUsers />}
+        {isFetching ? <AntPreloader /> : <CurrentUsers />}
     </div>
 }

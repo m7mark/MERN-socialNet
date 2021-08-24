@@ -1,12 +1,19 @@
-import { Button, Input } from 'antd';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { AppStateType } from '../redux/store';
+import {
+    Avatar,
+    Button,
+    Col,
+    Input,
+    List,
+    Row
+} from 'antd';
 import { ChatMessageApiType } from '../api/chat-api';
 import { selectIsAuth } from '../redux/auth-selector';
 import { sendMessage, startMessagesListening, stopMessagesListening } from '../redux/chat-reducer';
-import { AppStateType } from '../redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 
-const { TextArea } = Input;
+const { TextArea } = Input
 
 export type ChatMessageType = ChatMessageApiType & { id: string }
 const ChatPage: React.FC = () => {
@@ -14,7 +21,6 @@ const ChatPage: React.FC = () => {
         < Chat />
     )
 }
-
 const Chat: React.FC = () => {
     const status = useSelector((state: AppStateType) => state.chat.status)
     const dispatch = useDispatch()
@@ -51,29 +57,32 @@ const Messages: React.FC = () => {
             messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' })
         }
     }, [messages]);
+
     return (
-        <div style={{ height: '400px', overflowY: 'auto' }} onScroll={scrollHandler}>
-            {messages.map((m): any => <Message key={m.id} message={m} />)}
+        <div style={{ height: '400px', overflowY: 'auto', marginTop:'20px' }} onScroll={scrollHandler}>
+            <Row>
+                <Col style={{ maxWidth: '1000px' }} md={22} sm={24} xs={24}>
+                    <List
+                        size='default'
+                        itemLayout="horizontal"
+                        dataSource={messages}
+                        renderItem={item => (
+                            <List.Item>
+                                <List.Item.Meta
+                                    avatar={<Avatar shape='square' src={item.photo} />}
+                                    title={item.userName}
+                                    description={item.message}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                </Col></Row>
             <div ref={messagesAnchorRef}></div>
         </div>
     );
 }
 
-
-const Message: React.FC<{ message: ChatMessageType }> = React.memo(({ message }) => {
-    return (
-        <div>
-            <img style={{ height: '30px' }} src={message.photo} alt='' />
-            <b>{message.userName}</b>
-            <br />
-            {message.message}
-        </div>
-    );
-})
-
-
 const AddMessageForm: React.FC = () => {
-
     const [message, setMessage] = useState<string>('');
     const status = useSelector((state: AppStateType) => state.chat.status)
     const isAuth = useSelector(selectIsAuth)
@@ -83,20 +92,24 @@ const AddMessageForm: React.FC = () => {
         dispatch(sendMessage(message))
         setMessage('')
     }
-
     return (
         <div>
-            <div style={{ margin: '10px 0', width: 'max-content' }}><TextArea
-                onPressEnter={sendMessageHandler}
-                allowClear
-                rows={2}
-                onChange={(e) => setMessage(e.target.value)}
-                value={message}
-            /></div>
-            <div><Button
-                disabled={status !== 'ready' || isAuth === false}
-                onClick={sendMessageHandler}
-            >Send</Button></div>
+            <div style={{ margin: '10px 0', maxWidth: '500px' }}>
+                <TextArea
+                    onPressEnter={sendMessageHandler}
+                    allowClear
+                    rows={2}
+                    onChange={(e) => setMessage(e.target.value)}
+                    value={message}
+                /></div>
+            <div>
+                <Button
+                type='primary'
+                    disabled={status !== 'ready' || isAuth === false}
+                    onClick={sendMessageHandler}
+                >
+                    Send</Button>
+            </div>
         </div>
     );
 }

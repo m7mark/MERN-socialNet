@@ -12,7 +12,7 @@ type PropsType = {
     follow: (id: number) => void
 }
 let User: React.FC<PropsType> = ({ user, followingInProgress, unfollow, follow }) => {
-    return <div className={p.commonPadding}>
+    return <div className='user-current-card'>
         <div>
             <div>
                 <NavLink to={'/profile/' + user.id} replace>

@@ -9,6 +9,9 @@ export const selectProfile = (state: AppStateType) => {
 export const selectIsFetching = (state: AppStateType) => {
     return state.profilePage.isFetching
 }
+export const selectIsLoaded = (state: AppStateType) => {
+    return state.profilePage.isLoaded
+}
 export const selectProfileErrorMessage = (state: AppStateType) => {
     return state.profilePage.profileErrorMessage
 }

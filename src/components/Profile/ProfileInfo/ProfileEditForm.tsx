@@ -1,5 +1,5 @@
-import Preloader from '../../common/Preloader/Preloader';
 import { actions, saveProfileInfo } from '../../../redux/profile-reducer';
+import { AntPreloader } from '../../UI/AntPreloader';
 import {
     Dispatch,
     SetStateAction,
@@ -7,7 +7,7 @@ import {
     useState
     } from 'react';
 import { ProfileType } from '../../../types/types';
-import { selectIsFetching, selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
+import { selectIsLoaded, selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -47,24 +47,26 @@ type PropsType = {
 export const ProfileEditForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
     const [form] = Form.useForm();
     const profile = useSelector(selectProfile)
-    const isFetching = useSelector(selectIsFetching)
+    const isLoaded = useSelector(selectIsLoaded)
     const [isFetchingState, setisFetchingState] = useState(false);
     const profileErrorMessage = useSelector(selectProfileErrorMessage)
     const cleaErrorLoginMessage = () => dispatch(actions.profileSaveErrorMessage(''))
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (!isFetching) {
+        if (isLoaded) {
             setIsModalVisible(false);
             cleaErrorLoginMessage()
-            dispatch(actions.profileIsFetching(true))
             setisFetchingState(false)
+            dispatch(actions.profileIsLoaded(false))
+            dispatch(actions.profileIsFetching(false))
+
         }
         if (profileErrorMessage) {
             setisFetchingState(false)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isFetching, profileErrorMessage]);
+    }, [isLoaded, profileErrorMessage]);
 
     const onFinish = (values: ProfileType) => {
         setisFetchingState(true)
@@ -73,7 +75,7 @@ export const ProfileEditForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
             setisFetchingState(false)
         }
     }
-    if (!profile) { return <Preloader /> }
+    if (!profile) { return <AntPreloader /> }
     return (
         <Form
             {...formItemLayout}

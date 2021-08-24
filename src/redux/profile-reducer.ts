@@ -10,7 +10,8 @@ let initialState = {
     ] as Array<PostData>,
     profile: undefined as ProfileType | undefined,
     status: '' as string | undefined,
-    isFetching: true,
+    isFetching: false,
+    isLoaded: false,
     newPostText: '',
     profileErrorMessage: '' as string | undefined
 }
@@ -51,6 +52,8 @@ const profileReducer = (state = initialState, action: ActionsTypes):
             }
         case "SN/PROF/PROFILE_IS_FETCHING":
             return { ...state, isFetching: action.isFetching }
+        case "SN/PROF/PROFILE_IS_LOADED":
+            return { ...state, isLoaded: action.isLoaded }
         case "SN/PROF/PROFILE_SAVE_ERROR_MESSAGE":
             return { ...state, profileErrorMessage: action.profileErrorMessage }
         default:
@@ -72,6 +75,8 @@ export const actions = {
         ({ type: 'SN/PROF/SET_PHOTOS_SUCCESS', photos } as const),
     profileIsFetching: (isFetching: boolean) =>
         ({ type: 'SN/PROF/PROFILE_IS_FETCHING', isFetching } as const),
+    profileIsLoaded: (isLoaded: boolean) =>
+        ({ type: 'SN/PROF/PROFILE_IS_LOADED', isLoaded } as const),
     profileSaveErrorMessage: (profileErrorMessage: string) =>
         ({ type: 'SN/PROF/PROFILE_SAVE_ERROR_MESSAGE', profileErrorMessage } as const),
 }
@@ -79,12 +84,12 @@ export const actions = {
 type ThunkType = BaseThunkType<ActionsTypes>
 export const getUserProfile = (id: number | undefined): ThunkType =>
     async (dispatch) => {
-        // dispatch(actions.profileIsFetching(true));
+        dispatch(actions.profileIsFetching(true));
         const data = await profileAPI.getUserProfile(id)
-        dispatch(actions.profileIsFetching(false));
         if (!data.contacts.mainLink) { data.contacts.mainLink = '' }
         dispatch(actions.setUserProfile(data));
-
+        dispatch(actions.profileIsFetching(false));
+        dispatch(actions.profileIsLoaded(true));
     }
 
 export const getStatus = (id: number): ThunkType =>
@@ -106,13 +111,6 @@ export const updateStatus = (status: string | undefined): ThunkType =>
             return Promise.reject(errorStatusMessage);
         }
     }
-// export const savePhoto = (file: File): ThunkType =>
-//     async (dispatch) => {
-//         const response = await profileAPI.savePhoto(file)
-//         if (response.data.resultCode === ResultCodeEnum.Success) {
-//             dispatch(actions.savePhotoSuccess(response.data.data.photos));
-//         }
-//     }
 export const saveProfileInfo = (profile: ProfileType): ThunkType =>
     async (dispatch, getState) => {
         const userId = getState().auth.id;
@@ -128,5 +126,12 @@ export const saveProfileInfo = (profile: ProfileType): ThunkType =>
             dispatch(actions.profileSaveErrorMessage(errorLoginMessage))
         }
     }
+// export const savePhoto = (file: File): ThunkType =>
+//     async (dispatch) => {
+//         const response = await profileAPI.savePhoto(file)
+//         if (response.data.resultCode === ResultCodeEnum.Success) {
+//             dispatch(actions.savePhotoSuccess(response.data.data.photos));
+//         }
+//     }
 
 export default profileReducer;

@@ -27,7 +27,7 @@ const Dialogs: React.FC<OwnPropsType> = (props) => {
             key={m.id} text={m.message} />);
 
     return <div className={p.dialogs}>
-        <div className={p.dialogsItems}>
+        <div>
             {dialogElements}
             <div>
                 <AddMessageForm postNewMesageBody={props.postNewMesageBody} />

@@ -1,48 +1,18 @@
 import * as React from 'react';
-import Preloader from './components/common/Preloader/Preloader';
 import store, { AppStateType } from './redux/store';
-import { AppHeader } from './components/UI/Header/AppHeader';
-import {
-  Col,
-  Layout,
-  Menu,
-  message,
-  Row
-  } from 'antd';
+import { AntPreloader } from './components/UI/AntPreloader';
+import { AppMainPage } from './pages/AppMainPage';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { HashRouter } from 'react-router-dom';
 import { initializeApp } from './redux/app-reducer';
-import {
-  Link,
-  Redirect,
-  Route,
-  withRouter
-  } from 'react-router-dom';
-import { Login } from './pages/LoginPage';
+import { message } from 'antd';
 import { Provider } from 'react-redux';
 import { QueryParamProvider } from 'use-query-params';
-import { Users } from './components/Users/Users';
-import { withSuspense } from './hoc/withSuspense';
+import { Route, withRouter } from 'react-router-dom';
 import './styles/App.scss';
 import 'antd/dist/antd.css';
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  UserOutlined,
-  MessageOutlined,
-  TeamOutlined,
-} from '@ant-design/icons';
 // import { Footer } from 'antd/lib/layout/layout';
-
-const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
-const ProfileContainer = React.lazy(() => import('./components/Profile/Profile'));
-const ChatPage = React.lazy(() => import('./pages/ChatPage'));
-const SuspenseProfile = withSuspense(ProfileContainer)
-const DialogsProfile = withSuspense(DialogsContainer)
-const SuspenseChatPage = withSuspense(ChatPage)
-
-const { Header, Sider, Content } = Layout;
 
 type MapPropsType = ReturnType<typeof mapStateToProps>
 type DispatchPropsType = {
@@ -50,16 +20,8 @@ type DispatchPropsType = {
 }
 class App extends React.Component<MapPropsType & DispatchPropsType> {
 
-  state = {
-    collapsed: false,
-  };
-  toggle = () => {
-    this.setState({
-      collapsed: !this.state.collapsed,
-    });
-  };
   catchAllUnhandleErrors = (e: PromiseRejectionEvent) => {
-      message.error('Some error ocured! Check your network');
+    message.error('Some error ocured! Check your network');
   }
   componentDidMount() {
     this.props.initializeApp();
@@ -70,62 +32,13 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
   }
   render() {
     if (!this.props.initialized) {
-      return <Preloader />
+      return <div className='site-main-preloader'>
+        <AntPreloader />
+      </div>
     }
     return (
-      <Layout id="components-layout-custom-trigger">
-        <Sider
-          trigger={null}
-          collapsible
-          collapsed={this.state.collapsed}
-          collapsedWidth='0'
-        >
-          <div className="logo"></div>
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
-            <Menu.Item key="1" icon={<UserOutlined />}>
-              <Link to="/profile" replace>Profile</Link>
-            </Menu.Item>
-            <Menu.Item key="2" icon={<MessageOutlined />}>
-              <Link to="/messages" replace>Messages</Link>
-            </Menu.Item>
-            <Menu.Item key="3" icon={<TeamOutlined />}>
-              <Link to="/users" replace>Friends</Link>
-            </Menu.Item>
-            <Menu.Item key="4" icon={<TeamOutlined />}>
-              <Link to="/chat" replace>Chat</Link>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout className="site-layout">
-          <Row>
-            <Col flex="50px">
-              <Header className="site-layout-background" style={{ padding: 0 }}>
-                {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-                  className: 'trigger',
-                  onClick: this.toggle,
-                })}
-              </Header>
-            </Col>
-            <Col flex="auto"><AppHeader /></Col>
-          </Row>
-          <Content
-            className={"site-layout-background site-main-content"}
-          >
-            <Route path='/'
-              render={() => <Redirect to={'/profile'} />} />
-            <Route path='/profile/:userId?'
-              render={() => <SuspenseProfile />} />
-            <Route path='/messages'
-              render={() => <DialogsProfile />} />
-            <Route path='/chat'
-              render={() => <SuspenseChatPage />} />
-            <Route path='/users' render={() => <Users pageTitle={"Самураи"} />} />
-            <Route path='/login' render={() => <Login />} />
-          </Content>
-          {/* <Footer></Footer> */}
-        </Layout>
-      </Layout>
-    );
+      <AppMainPage />
+    )
   }
 }
 

@@ -7,6 +7,7 @@ let state = {
     profile: undefined,
     status: '' as string | undefined,
     isFetching: false,
+    isLoaded: false,
     newPostText: '',
     profileErrorMessage: '' as string | undefined
 }
@@ -17,7 +18,7 @@ test('new post should be added', () => {
     let newState = profileReducer(state, action)
     // expectation
     expect(newState.postData.length).toBe(3);
-    expect(newState.postData[2].message).toBe("Mark Rodovsky");
+    expect(newState.postData[0].message).toBe("Mark Rodovsky");
 });
 
 test('length after delete should be decrement', () => {

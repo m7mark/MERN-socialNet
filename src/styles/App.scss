@@ -23,12 +23,20 @@
 .site-main-content {
     margin    : 24px 16px;
     padding   : 36px;
-    min-height: 280px;
+    min-height: 600px !important;
 
     @media (max-width: 768px) {
         margin    : 0;
-        padding   : 24px;
+        padding   : 18px;
+        min-height: 280px;
     }
+}
+
+.site-main-preloader {
+    margin       : 20px 0;
+    margin-bottom: 20px;
+    padding      : 30px 50px;
+    // text-align: center;
 }
 
 .form-container {
@@ -42,9 +50,28 @@
     margin-right: 20px;
 }
 
-.users_map {
+.users-mapping-items {
     display  : flex;
     flex-wrap: wrap;
+
+    @media (max-width: 768px) {
+        justify-content: space-evenly;
+    }
+}
+
+.user-current-card {
+    margin-right : 20px;
+    margin-bottom: 20px;
+    padding      : 12px;
+    width        : 33%;
+    border       : 1px solid #d9d9d9;
+    min-width    : max-content;
+
+    @media (max-width: 768px) {
+        margin-right: 2px;
+        padding     : 10px;
+
+    }
 }
 
 .ant-upload-list {
