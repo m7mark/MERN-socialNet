@@ -5,10 +5,10 @@ import {
     SetStateAction,
     useEffect,
     useState
-} from 'react';
-import { UploadOutlined } from '@ant-design/icons';
+    } from 'react';
 import { ProfileType } from '../../../types/types';
 import { selectIsFetching, selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
+import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import {
     Button,
@@ -44,7 +44,7 @@ type PropsType = {
     setIsModalVisible: Dispatch<SetStateAction<boolean>>
 }
 
-export const ProfileDataForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
+export const ProfileEditForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
     const [form] = Form.useForm();
     const profile = useSelector(selectProfile)
     const isFetching = useSelector(selectIsFetching)
@@ -63,6 +63,7 @@ export const ProfileDataForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
         if (profileErrorMessage) {
             setisFetchingState(false)
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFetching, profileErrorMessage]);
 
     const onFinish = (values: ProfileType) => {
@@ -71,8 +72,7 @@ export const ProfileDataForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
         if (profileErrorMessage) {
             setisFetchingState(false)
         }
-    };
-
+    }
     if (!profile) { return <Preloader /> }
     return (
         <Form
@@ -123,7 +123,6 @@ export const ProfileDataForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
                 {...tailFormItemLayout}>
                 <div>Contacts:</div>
             </Form.Item>
-
             {profile && Object.keys(profile.contacts).map(key => {
                 return (
                     <Form.Item

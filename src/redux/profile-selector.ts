@@ -12,3 +12,6 @@ export const selectIsFetching = (state: AppStateType) => {
 export const selectProfileErrorMessage = (state: AppStateType) => {
     return state.profilePage.profileErrorMessage
 }
+export const selectAuthId = (state: AppStateType) => {
+    return state.auth.id
+}

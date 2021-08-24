@@ -6,6 +6,7 @@ import {
   Col,
   Layout,
   Menu,
+  message,
   Row
   } from 'antd';
 import { compose } from 'redux';
@@ -35,7 +36,7 @@ import {
 // import { Footer } from 'antd/lib/layout/layout';
 
 const DialogsContainer = React.lazy(() => import('./components/Dialogs/DialogsContainer'));
-const ProfileContainer = React.lazy(() => import('./components/Profile/ProfileContainer'));
+const ProfileContainer = React.lazy(() => import('./components/Profile/Profile'));
 const ChatPage = React.lazy(() => import('./pages/ChatPage'));
 const SuspenseProfile = withSuspense(ProfileContainer)
 const DialogsProfile = withSuspense(DialogsContainer)
@@ -58,7 +59,7 @@ class App extends React.Component<MapPropsType & DispatchPropsType> {
     });
   };
   catchAllUnhandleErrors = (e: PromiseRejectionEvent) => {
-    alert("Some error")
+      message.error('Some error ocured! Check your network');
   }
   componentDidMount() {
     this.props.initializeApp();
