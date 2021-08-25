@@ -1,4 +1,3 @@
-import p from '../../../styles/Header.module.css';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsAuth, selectUserLogin } from '../../../redux/auth-selector';
@@ -16,7 +15,7 @@ export const AppHeader: React.FC = () => {
 
   return (
     <header>
-      <div className={p.loginBlock}>
+      <div>
         {
           isAuth
             ? <div> <Text mark>{login} {' '}</Text> 

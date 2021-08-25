@@ -30,7 +30,7 @@ export const ProfileUserData: React.FC = () => {
   };
   return <div style={{ marginTop: '30px' }}>
     <Row>
-      <Col style={{ maxWidth: '800px' }} md={22} sm={24} xs={24}>
+      <Col style={{ maxWidth: '800px' }} md={24} sm={24} xs={24}>
         <Descriptions
           // title="Description"
           bordered
@@ -44,7 +44,7 @@ export const ProfileUserData: React.FC = () => {
             {profile && Object.keys(profile.contacts)
               .map(key => {
                 let contactValue = profile?.contacts[key] as string
-                return <div>
+                return <div key={key}>
                   {contactValue && <div><b>{key}: </b>
                     <Text copyable={{ tooltips: false }}>{contactValue}</Text>
                   </div>}

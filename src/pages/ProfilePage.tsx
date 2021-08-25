@@ -43,7 +43,7 @@ const ProfilePage: React.FC = () => {
           </div>}
         <div style={{ marginTop: '30px' }}>
           <Row>
-            <Col style={{ maxWidth: '800px' }} md={22} sm={24} xs={24} >
+            <Col style={{ maxWidth: '800px' }} md={24} sm={24} xs={24} >
               <MyPostsAddPostForm />
               <MyPostsList />
             </Col>
