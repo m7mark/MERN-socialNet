@@ -1,5 +1,5 @@
 import { Form, Input } from 'antd';
-import { FilterType } from "../../../redux/users-reducer";
+import { FilterType } from "../../redux/users-reducer";
 
 const { Search } = Input;
 export type FormPropsType = {

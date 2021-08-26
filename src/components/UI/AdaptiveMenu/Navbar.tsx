@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Drawer, Button } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
-import logo from "../../../assets/userIcon.png";
+// import logo from "../../../assets/userIcon.png";
 import { AppHeader } from "../Header/AppHeader";
 
 export const NavBar = ({ menu }: any) => {

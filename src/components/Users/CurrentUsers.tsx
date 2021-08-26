@@ -1,24 +1,33 @@
 import React, { useEffect, useState } from 'react';
-import Paginator from '../common/Paginator/Paginator';
-import User from './User';
-import { FilterType, getUsers, follow, unfollow } from '../../redux/users-reducer';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCurrentPage, getFollowingInProgress, getIsFetching, getPageSize, getTotalUsersCount, getUsersFilter, getUsersFromState } from '../../redux/users-selector';
-import { useHistory } from 'react-router-dom';
+import userIcon from './../../assets/userIcon.png';
+import { Button, Card } from 'antd';
+import {
+    FilterType,
+    follow,
+    getUsers,
+    unfollow
+} from '../../redux/users-reducer';
+import {
+    getCurrentPage,
+    getFollowingInProgress,
+    getIsFetching,
+    getPageSize,
+    getTotalUsersCount,
+    getUsersFilter,
+    getUsersFromState
+} from '../../redux/users-selector';
+import { NavLink, useHistory } from 'react-router-dom';
 import { stringify } from 'query-string';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     useQueryParams,
     StringParam,
     NumberParam,
 } from 'use-query-params';
-import UsersSearchForm from './SearchForm/UsersSearchForm';
-import { AntPreloader } from '../UI/AntPreloader';
 
+const { Meta } = Card;
 
-type PropsType = {
-    pageTitle: string
-}
-export const Users: React.FC<PropsType> = (props) => {
+export const CurrentUsers = (): JSX.Element => {
 
     const totalUsersCount = useSelector(getTotalUsersCount)
     const currentPage = useSelector(getCurrentPage)
@@ -94,28 +103,43 @@ export const Users: React.FC<PropsType> = (props) => {
 
 
 
-    const CurrentUsers = (): JSX.Element => {
-        return <div className='users-mapping-items'>
-            {users.map(u => <User
-                user={u}
-                key={u.id}
-                followingInProgress={followingInProgress}
-                unfollow={unfollowThunk}
-                follow={followThunk} />)}
-        </div>
-    }
-
-    return <div>
-        <h2>{props.pageTitle}</h2>
-        <Paginator
-            totalUsersCount={totalUsersCount}
-            pageSize={pageSizeState}
-            currentPage={currentPage}
-            onPageChanged={onPageChanged}
-        />
-        <br />
-        <UsersSearchForm
-            onFilterChanged={onFilterChanged} />
-        {isFetching ? <AntPreloader /> : <CurrentUsers />}
+    return <div className='users-mapping-items'>
+        {users.map(user =>
+            <Card
+                className='card-container'
+                loading={isFetching}
+                cover={<NavLink to={'/profile/' + user.id} replace>
+                    <img
+                        alt="profile_image"
+                        src={user.photos.small
+                            != null ? user.photos.small : userIcon}
+                    />
+                </NavLink>}
+                actions={[<span>
+                    {user.followed
+                        ? <Button
+                            className='card-action-button-followed'
+                            key="following"
+                            disabled={followingInProgress
+                                .some(id => id === user.id)}
+                            onClick={() => { unfollowThunk(user.id) }}>
+                            UnFollow
+                        </Button>
+                        : <Button className='card-action-button' key="following"
+                            disabled={followingInProgress
+                                .some(id => id === user.id)}
+                            onClick={() => { followThunk(user.id) }}>
+                            Follow
+                        </Button>}
+                </span>]}
+            >
+                <Meta
+                    title={user.name}
+                    description={user.status
+                        != null ? user.status.substring(0, 30) : 'Empty Status'}
+                />
+            </Card>
+        )}
     </div>
+
 }

@@ -14,7 +14,7 @@ const Paginator: React.FC<Props> = (props) => {
         props.onPageChanged(pageNumber, pageSize)
     }
     return (
-        <Pagination showQuickJumper
+        <Pagination 
             pageSize={props.pageSize}
             current={props.currentPage}
             total={props.totalUsersCount}

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppStateType } from '../redux/store';
 import {
     Avatar,
@@ -12,6 +12,7 @@ import { ChatMessageApiType } from '../api/chat-api';
 import { selectIsAuth } from '../redux/auth-selector';
 import { sendMessage, startMessagesListening, stopMessagesListening } from '../redux/chat-reducer';
 import { useDispatch, useSelector } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 const { TextArea } = Input
 
@@ -34,7 +35,11 @@ const Chat: React.FC = () => {
         <div>
             {status === 'error' && <div>SOME ERROR </div>}
             <>
-                <Messages />
+                <Row>
+                    <Col style={{ maxWidth: '800px' }} md={24} sm={24} xs={24}>
+                        <Messages />
+                    </Col>
+                </Row>
                 <AddMessageForm />
             </>
         </div>
@@ -42,26 +47,26 @@ const Chat: React.FC = () => {
 }
 
 const Messages: React.FC = () => {
-    const messagesAnchorRef = useRef<HTMLDivElement>(null)
     const messages = useSelector((state: AppStateType) => state.chat.messages)
-    const [isAutoScroll, setIsAutoScroll] = useState(true);
-    const scrollHandler = (e: React.UIEvent<HTMLDivElement, UIEvent>) => {
-        const el = e.currentTarget
-        if (el.offsetHeight + el.scrollTop >= el.scrollHeight) {
-            !isAutoScroll && setIsAutoScroll(true);
+    const [hasMore, setHasMore] = useState(false);
+    const handleInfiniteOnLoad = () => {
+        if (messages.length >= 100) {
+            setHasMore(false)
+            return;
         }
-        else { isAutoScroll && setIsAutoScroll(false) }
     }
-    useEffect(() => {
-        if (isAutoScroll) {
-            messagesAnchorRef.current?.scrollIntoView({ behavior: 'smooth' })
-        }
-    }, [messages]);
-
     return (
-        <div style={{ height: '400px', overflowY: 'auto', marginTop:'20px' }} onScroll={scrollHandler}>
-            <Row>
-                <Col style={{ maxWidth: '1000px' }} md={22} sm={24} xs={24}>
+        <div>
+            <div className="chat-container">
+                <InfiniteScroll
+                    style={{ display: 'flex', flexDirection: 'column-reverse' }}
+                    height={400}
+                    inverse={true}
+                    dataLength={messages.length}
+                    loader={null}
+                    hasMore={hasMore}
+                    next={handleInfiniteOnLoad}
+                >
                     <List
                         size='default'
                         itemLayout="horizontal"
@@ -76,10 +81,10 @@ const Messages: React.FC = () => {
                             </List.Item>
                         )}
                     />
-                </Col></Row>
-            <div ref={messagesAnchorRef}></div>
+                </InfiniteScroll>
+            </div>
         </div>
-    );
+    )
 }
 
 const AddMessageForm: React.FC = () => {
@@ -104,7 +109,7 @@ const AddMessageForm: React.FC = () => {
                 /></div>
             <div>
                 <Button
-                type='primary'
+                    type='primary'
                     disabled={status !== 'ready' || isAuth === false}
                     onClick={sendMessageHandler}
                 >
@@ -115,5 +120,3 @@ const AddMessageForm: React.FC = () => {
 }
 
 export default ChatPage;
-
-
