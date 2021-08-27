@@ -5,6 +5,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from '../common/FormsControl/MyForms';
 import { InitialStateDialogs } from '../../redux/dialog-reducer';
+import { Button, Col, Result, Row } from 'antd';
 
 
 type OwnPropsType = {
@@ -26,17 +27,28 @@ const Dialogs: React.FC<OwnPropsType> = (props) => {
         props.dialogsPage.messagesData.map(m => <Message
             key={m.id} text={m.message} />);
 
-    return <div className={p.dialogs}>
-        <div>
-            {dialogElements}
-            <div>
-                <AddMessageForm postNewMesageBody={props.postNewMesageBody} />
-            </div>
-        </div>
-        <div className={p.messages}>
-            <div>{messagesElements}</div>
-        </div>
-    </div>
+    return <div>
+        <Row>
+            <Col style={{ maxWidth: '400px' }} md={24} sm={24} xs={24}>
+                {true
+                    ? <Result
+                        status="404"
+                        title="Maintained"
+                        subTitle="Sorry, the page you visited is under development."
+                    // extra={<Button type="primary">Back Home</Button>}
+                    />
+                    : <div>
+                        <div>
+                            {dialogElements}
+                            <AddMessageForm postNewMesageBody={props.postNewMesageBody} />
+                        </div>
+                        <div className={p.messages}>
+                            <div>{messagesElements}</div>
+                        </div>
+                    </div>}
+            </Col>
+        </Row>
+    </div >
 }
 export default Dialogs;
 

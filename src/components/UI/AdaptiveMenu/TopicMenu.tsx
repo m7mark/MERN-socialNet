@@ -1,12 +1,25 @@
 import { Menu } from "antd";
+import React from "react";
+import { MenuItemsType } from "../../../pages/AppMainPage";
 
-export const TopicMenu = ({ topics, selectedKey, changeSelectedKey }: any) => {
-  const styledTopics: any = [];
-  //@ts-ignore
-  topics.forEach((topic, index) =>
+type MenuItem = {
+  icon: JSX.Element
+  title: string
+}
+export type PropsType = {
+  menuItems: MenuItemsType
+  selectedKey: string
+  changeSelectedKey: (event: { key: string; }) => void
+}
+export const TopicMenu: React.FC<PropsType> = ({ menuItems, selectedKey, changeSelectedKey }) => {
+  const styledTopics: Array<JSX.Element> = [];
+  menuItems.forEach((menuItem: MenuItem, index: number) =>
     styledTopics.push(
-      <Menu.Item key={index} onClick={changeSelectedKey}>
-        {topic}
+      <Menu.Item
+        icon={menuItem?.icon}
+        key={index}
+        onClick={changeSelectedKey}>
+        {menuItem.title}
       </Menu.Item>
     )
   );
@@ -16,8 +29,7 @@ export const TopicMenu = ({ topics, selectedKey, changeSelectedKey }: any) => {
       theme="dark"
       mode="inline"
       selectedKeys={[selectedKey]}
-      
-      style={{ paddingTop: '26px' }}
+      className='menu-container'
     >
       {styledTopics}
     </Menu>

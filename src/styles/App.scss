@@ -63,9 +63,13 @@ $bgLay    : #f0f2f5;
     max-width: 200px;
 }
 
-// .menu-sidebar {
-//     // height: 100vh;
-// }
+.menu-container {
+    padding-top: 26px !important;
+
+    @media (max-width: 768px) {
+        padding-top: 0px !important;
+    }
+}
 
 .menu-navbar {
     display         : flex;
@@ -120,4 +124,16 @@ $bgLay    : #f0f2f5;
 .card-action-button-followed {
     background-color: #fff8f8 !important;
     width           : 88%;
+}
+
+.profile-image-container {
+    width: auto;
+
+    img {
+        max-width    : 200px;
+        margin-bottom: 10px;
+    }
+}
+.profile-image-button{
+    width: 200px !important;
 }

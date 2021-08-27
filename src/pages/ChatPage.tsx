@@ -13,6 +13,7 @@ import { selectIsAuth } from '../redux/auth-selector';
 import { sendMessage, startMessagesListening, stopMessagesListening } from '../redux/chat-reducer';
 import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import { withAuthRedirect } from '../hoc/withAuthRedirect';
 
 const { TextArea } = Input
 
@@ -119,4 +120,4 @@ const AddMessageForm: React.FC = () => {
     );
 }
 
-export default ChatPage;
+export default withAuthRedirect(ChatPage);

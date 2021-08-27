@@ -18,12 +18,7 @@ export const MyPostsList: React.FC = () => {
     <List
       itemLayout="vertical"
       size="large"
-      pagination={{
-        onChange: page => {
-          console.log(page);
-        },
-        pageSize: 3,
-      }}
+      pagination={{ pageSize: 3 }}
       dataSource={postListData}
       footer={<div>
         <b>Like</b> Dymych

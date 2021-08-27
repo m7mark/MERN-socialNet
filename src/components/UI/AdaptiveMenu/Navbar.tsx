@@ -4,7 +4,7 @@ import { MenuOutlined } from "@ant-design/icons";
 // import logo from "../../../assets/userIcon.png";
 import { AppHeader } from "../Header/AppHeader";
 
-export const NavBar = ({ menu }: any) => {
+export const NavBar: React.FC<{ menu: JSX.Element }> = ({ menu }) => {
     const [visible, setVisible] = useState(false);
     return (
         <nav className="menu-navbar">

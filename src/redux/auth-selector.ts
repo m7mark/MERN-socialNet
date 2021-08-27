@@ -6,3 +6,6 @@ export const selectIsAuth = (state: AppStateType) => {
 export const selectUserLogin = (state: AppStateType) => {
     return state.auth.login
 }
+export const selectAuthId = (state: AppStateType) => {
+    return state.auth.id
+}
