@@ -5,7 +5,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import MyTextInput from '../common/FormsControl/MyForms';
 import { InitialStateDialogs } from '../../redux/dialog-reducer';
-import { Button, Col, Result, Row } from 'antd';
+import { Col, Result, Row } from 'antd';
 
 
 type OwnPropsType = {

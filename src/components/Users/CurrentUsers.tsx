@@ -19,11 +19,12 @@ export const CurrentUsers = (): JSX.Element => {
     const followThunk = (id: number) => {
         dispatch(follow(id))
     }
-    if (users.length === 0) {return <AntPreloader/>}
+    if (users.length === 0) { return <AntPreloader /> }
 
     return <div className='users-mapping-items'>
         {users.map(user =>
             <Card
+                key={user.id}
                 className='card-container'
                 loading={isFetching}
                 cover={<NavLink to={'/profile/' + user.id} replace>

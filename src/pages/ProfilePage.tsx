@@ -1,4 +1,4 @@
-import { AntPreloader } from '../components/UI/AntPreloader';
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Col, Row } from 'antd';
 import { getStatus, getUserProfile } from '../redux/profile-reducer';
 import { MyPostsAddPostForm } from '../components/Profile/MyPostsAddPostForm';
@@ -64,7 +64,7 @@ const ProfilePage: React.FC = () => {
           </div>}
       </div>
     </div>
-  );
+  )
 }
 
 export default withAuthRedirect(ProfilePage);

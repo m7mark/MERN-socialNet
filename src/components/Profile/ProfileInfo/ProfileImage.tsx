@@ -1,14 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import userIcon from './../../../assets/userIcon.png';
 import { actions } from '../../../redux/profile-reducer';
 import { apiKey, ResultCodeEnum } from '../../../api/api';
-import { Button, message, Skeleton, Upload } from 'antd';
+import {
+    Button,
+    message,
+    Skeleton,
+    Upload
+} from 'antd';
+import { ParamsUserIdType } from '../../../pages/ProfilePage';
+import { selectAuthId } from '../../../redux/auth-selector';
 import { selectIsFetching, selectProfile } from '../../../redux/profile-selector';
 import { UploadOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { selectAuthId } from '../../../redux/auth-selector';
-import { ParamsUserIdType } from '../../../pages/ProfilePage';
 
 type PropsType = { isProfileChanging: boolean }
 export const ProfileImage: React.FC<PropsType> = ({ isProfileChanging }) => {
@@ -36,8 +41,8 @@ export const ProfileImage: React.FC<PropsType> = ({ isProfileChanging }) => {
             else if (info.file.status === 'error') {
                 message.error(`Upload failed: ${info.file.response?.messages[0]}`);
             }
-        },
-    };
+        }
+    }
 
     return (
         <div>
