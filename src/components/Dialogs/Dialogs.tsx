@@ -29,7 +29,7 @@ const Dialogs: React.FC<OwnPropsType> = (props) => {
 
     return <div>
         <Row>
-            <Col style={{ maxWidth: '400px' }} md={24} sm={24} xs={24}>
+            <Col style={{ maxWidth: '500px' }} md={24} sm={24} xs={24}>
                 {true
                     ? <Result
                         status="404"

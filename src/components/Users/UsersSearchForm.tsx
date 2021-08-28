@@ -1,68 +1,50 @@
-import { Form, Input } from 'antd';
-import { FilterType } from "../../redux/users-reducer";
+import Text from 'antd/lib/typography/Text';
+import { Form, Input, Switch } from 'antd';
+import { getUsersFilter } from '../../redux/users-selector';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 const { Search } = Input;
-export type FormPropsType = {
-    queryParams: string
-    // querySelector: string
-}
 type PropsType = {
-    onFilterChanged: (filter: FilterType) => void
+    setFilter: React.Dispatch<React.SetStateAction<{
+        term: string;
+        friend: boolean | null;
+    }>>
 }
-const UsersSearchForm: React.FC<PropsType> = (props) => {
-
-    const initialValues: FormPropsType = { queryParams: '' }
-    // querySelector: 'All'
-
-    // const querySelector = [
-    //     { label: 'All', value: 'All' },
-    //     { label: 'Followed', value: 'Followed' },
-    //     { label: 'Unfollowed', value: 'Unfollowed' },
-    // ]
-    const handleSubmit = (queryParams: string) => {
-        let friendFilter = null
-        // switch (querySelector) {
-        //     case 'Followed':
-        //         friendFilter = true
-        //         break
-        //     case 'Unfollowed':
-        //         friendFilter = false
-        //         break
-        // }
-        let filter = {
-            term: queryParams,
-            friend: friendFilter
-        }
-        props.onFilterChanged(filter)
-    };
+export const UsersSearchForm: React.FC<PropsType> = ({ setFilter }) => {
+    const filterState = useSelector(getUsersFilter)
+    const [searchText, setSearchText] = useState(filterState.term)
+    const [isOnlyFriends, setIsOnlyFriends] = useState<boolean | null>(filterState.friend)
+    const friendsSelectParams = (e: boolean) => {
+        if (e === false) { setIsOnlyFriends(null) }
+        if (e === true) { setIsOnlyFriends(true) }
+    }
+    useEffect(() => {
+        setFilter({ term: searchText, friend: isOnlyFriends })
+    }, [searchText, isOnlyFriends, setFilter]);
     return (
         <Form
-            initialValues={initialValues}
+            initialValues={filterState}
             layout='horizontal'
             className="form-container"
         >
-            <Form.Item
-                name="queryParams"
-            >
+            <Form.Item name="term">
                 <Search
                     placeholder="input search text"
                     allowClear
                     enterButton="Search"
-                    onSearch={handleSubmit}
+                    onSearch={(value) => setSearchText(value)}
                 />
             </Form.Item>
-            {/* <Form.Item name="querySelector" >
-                <Select
-                    style={{ minWidth: '120px' }}
-                    defaultValue="All"
-                    options={querySelector}
-                    // onChange={handleChange}
-                     />
-            </Form.Item> */}
+            <div className='form-item-switch'>
+                {filterState.friend
+                    ? <Switch defaultChecked={false}
+                        checked={filterState.friend} onChange={friendsSelectParams} />
+                    : <Switch defaultChecked={false}
+                        onChange={friendsSelectParams} />}
+                <Text type="secondary"> Only Friends</Text>
+            </div>
         </Form>
     )
 }
-
-export default UsersSearchForm;
-
 

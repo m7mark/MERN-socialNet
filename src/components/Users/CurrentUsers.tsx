@@ -1,17 +1,18 @@
+import React from 'react';
 import userIcon from './../../assets/userIcon.png';
-import { Button, Card } from 'antd';
+import { Button, Card, Empty } from 'antd';
 import { follow, unfollow } from '../../redux/users-reducer';
 import { getFollowingInProgress, getIsFetching, getUsersFromState } from '../../redux/users-selector';
 import { NavLink } from 'react-router-dom';
+import { selectIsAuth } from '../../redux/auth-selector';
 import { useDispatch, useSelector } from 'react-redux';
-import { AntPreloader } from '../UI/AntPreloader';
 
 const { Meta } = Card;
-
-export const CurrentUsers = (): JSX.Element => {
+export const CurrentUsers = React.memo((): JSX.Element => {
     const users = useSelector(getUsersFromState)
     const followingInProgress = useSelector(getFollowingInProgress)
     const isFetching = useSelector(getIsFetching)
+    const isAuth = useSelector(selectIsAuth)
     const dispatch = useDispatch()
     const unfollowThunk = (id: number) => {
         dispatch(unfollow(id))
@@ -19,7 +20,7 @@ export const CurrentUsers = (): JSX.Element => {
     const followThunk = (id: number) => {
         dispatch(follow(id))
     }
-    if (users.length === 0) { return <AntPreloader /> }
+    if (users.length === 0) { return <Empty style={{maxWidth: '500px'}}/> }
 
     return <div className='users-mapping-items'>
         {users.map(user =>
@@ -40,13 +41,13 @@ export const CurrentUsers = (): JSX.Element => {
                             className='card-action-button-followed'
                             key="following"
                             disabled={followingInProgress
-                                .some(id => id === user.id)}
+                                .some(id => id === user.id) || !isAuth}
                             onClick={() => { unfollowThunk(user.id) }}>
                             UnFollow
                         </Button>
                         : <Button className='card-action-button' key="following"
                             disabled={followingInProgress
-                                .some(id => id === user.id)}
+                                .some(id => id === user.id) || !isAuth}
                             onClick={() => { followThunk(user.id) }}>
                             Follow
                         </Button>}
@@ -60,4 +61,4 @@ export const CurrentUsers = (): JSX.Element => {
             </Card>
         )}
     </div>
-}
+})

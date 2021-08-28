@@ -54,6 +54,9 @@ export const AppMainPage: React.FC = () => {
     const location = useLocation();
     useEffect(() => {
         if (location.pathname.includes('/profile')) { setSelectedKey('0'); setContentIndex(null) }
+        if (location.pathname.includes('/messages')) { setSelectedKey('1'); setContentIndex(null) }
+        if (location.pathname.includes('/users')) { setSelectedKey('2'); setContentIndex(null) }
+        if (location.pathname.includes('/chat')) { setSelectedKey('3'); setContentIndex(null) }
     }, [location.pathname]);
 
     useEffect(() => {
