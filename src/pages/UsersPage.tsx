@@ -29,6 +29,7 @@ export const UsersPage: React.FC<PropsType> = (props) => {
     const currentPageState = useSelector(getCurrentPage)
     const pageSizeState = useSelector(getPageSize)
     const filterState = useSelector(getUsersFilter)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [query, setQuery] = useQueryParams({
         term: StringParam,
         friend: BooleanParam,
@@ -51,12 +52,12 @@ export const UsersPage: React.FC<PropsType> = (props) => {
 
     }, [pageSize, page, filter]);
     useEffect(() => {
-        setQuery({ page: page }, 'pushIn')
-        setQuery({ count: pageSize }, 'pushIn')
-        if (filter.term.length === 0) setQuery({ term: undefined }, 'pushIn')
-        else { setQuery({ term: filter.term }, 'pushIn') }
-        if (!filter.friend) setQuery({ friend: undefined }, 'pushIn')
-        else { setQuery({ friend: filter.friend }, 'pushIn') }
+        setQuery({ page: page }, 'replaceIn')
+        setQuery({ count: pageSize }, 'replaceIn')
+        if (filter.term.length === 0) setQuery({ term: undefined }, 'replaceIn')
+        else { setQuery({ term: filter.term }, 'replaceIn') }
+        if (!filter.friend) setQuery({ friend: undefined }, 'replaceIn')
+        else { setQuery({ friend: filter.friend }, 'replaceIn') }
     }, [pageSize, page, filter]);
 
     return <div>

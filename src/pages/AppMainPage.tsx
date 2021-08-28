@@ -70,7 +70,7 @@ export const AppMainPage: React.FC = () => {
     }, [contentIndex]);
     return (
         <div className='site-layout'>
-            <NavBar menu={Menu} />
+            <NavBar selectedKey={selectedKey} menu={Menu} />
             <Layout>
                 <SideBar menu={Menu} />
                 <Layout.Content className={"site-layout-background site-main-content"}>

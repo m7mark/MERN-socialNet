@@ -1,11 +1,11 @@
 import { actions, saveProfileInfo } from '../../../redux/profile-reducer';
-import { AntPreloader } from '../../UI/AntPreloader';
 import {
     Dispatch,
     SetStateAction,
     useEffect,
     useState
     } from 'react';
+import { MainPreloader } from '../../UI/MainPreloader/MainPreloader';
 import { ProfileType } from '../../../types/types';
 import { selectIsLoaded, selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
 import { UploadOutlined } from '@ant-design/icons';
@@ -75,7 +75,7 @@ export const ProfileEditForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
             setisFetchingState(false)
         }
     }
-    if (!profile) { return <AntPreloader /> }
+    if (!profile) { return <MainPreloader /> }
     return (
         <Form
             {...formItemLayout}

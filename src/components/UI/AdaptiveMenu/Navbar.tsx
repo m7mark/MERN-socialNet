@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Drawer, Button } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 // import logo from "../../../assets/userIcon.png";
 import { AppHeader } from "../Header/AppHeader";
 
-export const NavBar: React.FC<{ menu: JSX.Element }> = ({ menu }) => {
+export const NavBar: React.FC<{ menu: JSX.Element, selectedKey: string }> = ({ menu, selectedKey }) => {
     const [visible, setVisible] = useState(false);
+    useEffect(() => {
+        setVisible(false)
+    }, [selectedKey]);
     return (
         <nav className="menu-navbar">
             <Button
@@ -15,11 +18,11 @@ export const NavBar: React.FC<{ menu: JSX.Element }> = ({ menu }) => {
                 onClick={() => setVisible(true)}
             />
             <Drawer
+
                 drawerStyle={{ backgroundColor: '#001529' }}
                 maskClosable
                 title="Menu"
                 placement="left"
-                // onClick={() => setVisible(false)}
                 onClose={() => setVisible(false)}
                 visible={visible}
             >

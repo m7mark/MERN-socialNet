@@ -3,7 +3,6 @@ import Message from './Message/Message';
 import DialogItem from './DialogItem/DialogItem';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import MyTextInput from '../common/FormsControl/MyForms';
 import { InitialStateDialogs } from '../../redux/dialog-reducer';
 import { Col, Result, Row } from 'antd';
 
@@ -70,11 +69,6 @@ const AddMessageForm: React.FC<AddMessageFormProps> = (props) => {
             onSubmit={submit}
         >
             <Form>
-                <MyTextInput
-                    id="newMessageBodyText"
-                    name="newMessageBodyText"
-                    placeholder="Enter your message"
-                />
                 <br />
                 <button type="submit">Send</button>
             </Form>

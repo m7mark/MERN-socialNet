@@ -15,6 +15,7 @@ import { sendMessage, startMessagesListening, stopMessagesListening } from '../r
 import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { withAuthRedirect } from '../hoc/withAuthRedirect';
+import { NavLink } from 'react-router-dom';
 
 const { TextArea } = Input
 
@@ -76,7 +77,8 @@ const Messages: React.FC = () => {
                         renderItem={item => (
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Avatar shape='square' src={item.photo} />}
+                                    avatar={<NavLink to={'/profile/' + item.userId} replace>
+                                        <Avatar shape='square' src={item.photo} /></NavLink>}
                                     title={item.userName}
                                     description={item.message}
                                 />
