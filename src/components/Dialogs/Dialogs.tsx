@@ -31,7 +31,7 @@ const Dialogs: React.FC<OwnPropsType> = (props) => {
             <Col style={{ maxWidth: '500px' }} md={24} sm={24} xs={24}>
                 {true
                     ? <Result
-                        status="404"
+                        status="403"
                         title="Maintained"
                         subTitle="Sorry, the page you visited is under development."
                     // extra={<Button type="primary">Back Home</Button>}
