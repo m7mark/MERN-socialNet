@@ -1,24 +1,22 @@
-import { ProfileType } from "../types/types";
-import { CommonResponseType, instance } from "./api";
-
+import { ProfileType } from '../types/types';
+import {
+  CommonDataEmptyResponseType,
+  CommonDataResponseType,
+  instance,
+} from './api';
 
 export const profileAPI = {
-    async getUserProfile(id: number | undefined) {
-        const response = await instance.get
-            <ProfileType>(`profile/${id}`);
-        return response.data;
+    getUserProfile(id: number | undefined): Promise<CommonDataEmptyResponseType<ProfileType>> {
+        return instance.get(`profile/${id}`)
     },
-    getStatus(id: number) {
-        return instance.get
-            <string>(`profile/status/${id}`)
+    getStatus(id: number): Promise<CommonDataEmptyResponseType<string>> {
+        return instance.get(`profile/status/${id}`)
     },
-    updateStatus(status: string | undefined) {
-        return instance.put
-            <CommonResponseType>(`profile/status`, { status })
+    updateStatus(status: string | undefined): Promise<CommonDataResponseType> {
+        return instance.put(`profile/status`, { status })
     },
-    saveProfileInfo(profile: ProfileType) {
-        return instance.put
-            <CommonResponseType>(`profile`, profile)
+    saveProfileInfo(profile: ProfileType): Promise<CommonDataResponseType> {
+        return instance.put(`profile`, profile)
     },
     //     savePhoto(photoFile: any) {
     //         const formData = new FormData()

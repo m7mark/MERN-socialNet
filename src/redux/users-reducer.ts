@@ -1,9 +1,13 @@
-import { Dispatch } from "redux";
-import { CommonResponseType } from "../api/api";
-import { userAPI } from "../api/users-api";
-import { updateObjectInArray } from "../utils/object-helpers";
-import { UserType } from "../types/types";
-import { BaseThunkType, InferActionsType } from "./store";
+import { Dispatch } from 'redux';
+
+import { CommonDataResponseType } from '../api/api';
+import { userAPI } from '../api/users-api';
+import { UserType } from '../types/types';
+import { updateObjectInArray } from '../utils/object-helpers';
+import {
+  BaseThunkType,
+  InferActionsType,
+} from './store';
 
 let initialState = {
     users: [] as Array<UserType>,
@@ -92,11 +96,11 @@ type ThunkType = BaseThunkType<ActionsTypes>
 const _followUnfollowFlow = async (
     dispatch: Dispatch<ActionsTypes>,
     id: number,
-    apiMethod: (id: number) => Promise<CommonResponseType>,
+    apiMethod: (id: number) => Promise<CommonDataResponseType>,
     actionCreator: (id: number) => ActionsTypes) => {
     dispatch(actions.toggleFollowingProgress(true, id));
-    let data = await apiMethod(id)
-    if (data.resultCode === 0) { dispatch(actionCreator(id)) }
+    let res = await apiMethod(id)
+    if (res.data.resultCode === 0) { dispatch(actionCreator(id)) }
     dispatch(actions.toggleFollowingProgress(false, id));
 }
 export const getUsers = (currentPage: number, pageSize: number, filter: FilterType): ThunkType =>
@@ -105,11 +109,11 @@ export const getUsers = (currentPage: number, pageSize: number, filter: FilterTy
         dispatch(actions.setCurrentPage(currentPage));
         dispatch(actions.setPageSize(pageSize));
         dispatch(actions.setFilter(filter));
-        const data = await userAPI.getUsers(
+        const res = await userAPI.getUsers(
             currentPage, pageSize, filter.term, filter.friend);
         dispatch(actions.toggleIsFetching(false));
-        dispatch(actions.setUsers(data.items));
-        dispatch(actions.setTotalUsersCount(data.totalCount));
+        dispatch(actions.setUsers(res.data.items));
+        dispatch(actions.setTotalUsersCount(res.data.totalCount));
     }
 export const follow = (id: number): ThunkType => {
     return async (dispatch) => {

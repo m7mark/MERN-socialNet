@@ -1,9 +1,9 @@
 import {
-    CommonResponseType,
-    instance,
-    ResultCodeEnum,
-    ResultCodeForCaptchaEnum
-} from "./api";
+  CommonDataResponseType,
+  instance,
+  ResultCodeEnum,
+  ResultCodeForCaptchaEnum,
+} from './api';
 
 type MeResponseDataType = {
     id: number
@@ -14,23 +14,16 @@ type LoginResponseDataType = {
     userId: number | undefined
 }
 export const authAPI = {
-    async me() {
-        const response = await instance.get
-            <CommonResponseType<MeResponseDataType>>
-            (`auth/me`);
-        return response.data;
+    me(): Promise<CommonDataResponseType<MeResponseDataType>> {
+        return instance.get(`auth/me`);
     },
     login(email: string,
         password: string,
         rememberMe = false,
-        captcha: string | null = null) {
-        return instance.post
-            <CommonResponseType<LoginResponseDataType,
-                ResultCodeEnum | ResultCodeForCaptchaEnum>>
-            (`auth/login`, { email, password, rememberMe, captcha })
+        captcha: string | null = null): Promise<CommonDataResponseType<LoginResponseDataType, ResultCodeEnum | ResultCodeForCaptchaEnum>> {
+        return instance.post(`auth/login`, { email, password, rememberMe, captcha })
     },
-    logout() {
-        return instance.delete
-            <CommonResponseType>(`auth/login`)
+    logout(): Promise<CommonDataResponseType> {
+        return instance.delete(`auth/login`)
     }
 }

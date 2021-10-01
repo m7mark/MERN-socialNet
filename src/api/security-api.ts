@@ -1,12 +1,13 @@
-import { instance } from "./api";
+import {
+  CommonDataEmptyResponseType,
+  instance,
+} from './api';
 
 type GetCaptchaUrlResponseType = {
     url: string
 }
 export const securityAPI = {
-    async getCaptchaUrl() {
-        const response = await instance.get
-            <GetCaptchaUrlResponseType>(`security/get-captcha-url`);
-        return response;
+    getCaptchaUrl(): Promise<CommonDataEmptyResponseType<GetCaptchaUrlResponseType>> {
+        return instance.get(`security/get-captcha-url`);
     }
 }

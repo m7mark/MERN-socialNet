@@ -1,5 +1,6 @@
-import axios from "axios"
-import { UserType } from "../types/types";
+import axios from 'axios';
+
+import { UserType } from '../types/types';
 
 export const apiKey = 'f1044d61-6ff5-426d-9719-a80a9bdbb47b'
 export const instance = axios.create({
@@ -14,10 +15,15 @@ export type GetItemsType = {
     totalCount: number
     error: string | null
 }
-export type CommonResponseType<D = {}, RC = ResultCodeEnum> = {
+export type CommonDataResponseType<D = {}, RC = ResultCodeEnum> = {
+    data: {
+        data: D
+        messages: Array<string>
+        resultCode: RC
+    }
+}
+export type CommonDataEmptyResponseType<D> = {
     data: D
-    messages: Array<string>
-    resultCode: RC
 }
 export enum ResultCodeEnum {
     Success = 0,

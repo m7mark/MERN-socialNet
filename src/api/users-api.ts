@@ -1,23 +1,23 @@
-import { CommonResponseType, GetItemsType, instance } from "./api";
+import {
+  CommonDataEmptyResponseType,
+  CommonDataResponseType,
+  GetItemsType,
+  instance,
+} from './api';
 
 export const userAPI = {
-    async getUsers(
+    getUsers(
         currentPage = 1,
         pageSize = 10,
         term: string = '',
-        friend: null | boolean = null) {
-        const res = await instance.get
-            <GetItemsType>(`users?page=${currentPage}&count=${pageSize}&term=${term}` + (friend === null? '':`&friend=${friend}`));
-        return res.data;
+        friend: null | boolean = null): Promise<CommonDataEmptyResponseType<GetItemsType>> {
+        return instance.get
+            <GetItemsType>(`users?page=${currentPage}&count=${pageSize}&term=${term}` + (friend === null ? '' : `&friend=${friend}`));
     },
-    async unfollow(id: number) {
-        const res = await instance.delete
-            <CommonResponseType>(`follow/${id}`);
-        return res.data;
+    unfollow(id: number): Promise<CommonDataResponseType> {
+        return instance.delete(`follow/${id}`);
     },
-    async follow(id: number) {
-        const res = await instance.post
-            <CommonResponseType>(`follow/${id}`);
-        return res.data;
+    follow(id: number): Promise<CommonDataResponseType> {
+        return instance.post(`follow/${id}`);
     }
 }

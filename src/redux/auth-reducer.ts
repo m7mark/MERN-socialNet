@@ -1,7 +1,13 @@
-import { ResultCodeEnum, ResultCodeForCaptchaEnum } from "../api/api";
-import { authAPI } from "../api/auth-api";
-import { securityAPI } from "../api/security-api";
-import { BaseThunkType, InferActionsType } from "./store";
+import {
+  ResultCodeEnum,
+  ResultCodeForCaptchaEnum,
+} from '../api/api';
+import { authAPI } from '../api/auth-api';
+import { securityAPI } from '../api/security-api';
+import {
+  BaseThunkType,
+  InferActionsType,
+} from './store';
 
 let initialState = {
     id: undefined as number | undefined,
@@ -51,41 +57,41 @@ export const actions = {
 type ThunkType = BaseThunkType<ActionsTypes>
 export const authUserData = ():
     ThunkType => async (dispatch) => {
-        const data = await authAPI.me();
-        if (data.resultCode === ResultCodeEnum.Success) {
-            let { id, email, login } = data.data;
+        const res = await authAPI.me();
+        if (res.data.resultCode === ResultCodeEnum.Success) {
+            let { id, email, login } = res.data.data;
             dispatch(actions.setAuthUserData(id, email, login, true));
         }
     }
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string | null):
     ThunkType => async (dispatch) => {
-        const response = await authAPI.login(email, password, rememberMe, captcha)
-        if (response.data.resultCode === ResultCodeEnum.Success) {
+        const res = await authAPI.login(email, password, rememberMe, captcha)
+        if (res.data.resultCode === ResultCodeEnum.Success) {
             dispatch(authUserData())
             // Delete captcha after success
             dispatch(actions.getCaptchaUrlSuccess(null))
         }
         else {
-            if (response.data.resultCode === ResultCodeForCaptchaEnum.CaptchaIsRequired) {
+            if (res.data.resultCode === ResultCodeForCaptchaEnum.CaptchaIsRequired) {
                 dispatch(getCaptchaUrl());
             }
-            let errorLoginMessage = response.data.messages.length > 0
-                ? response.data.messages[0]
+            let errorLoginMessage = res.data.messages.length > 0
+                ? res.data.messages[0]
                 : "Some error";
             dispatch(actions.errorLogin(errorLoginMessage))
         }
     }
 export const logout = ():
     ThunkType => async (dispatch) => {
-        const response = await authAPI.logout()
-        if (response.data.resultCode === 0) {
+        const res = await authAPI.logout()
+        if (res.data.resultCode === 0) {
             dispatch(actions.setAuthUserData(undefined, null, null, false))
         }
     }
 export const getCaptchaUrl = ():
     ThunkType => async (dispatch) => {
-        const response = await securityAPI.getCaptchaUrl()
-        const captchaUrl = response.data.url;
+        const res = await securityAPI.getCaptchaUrl()
+        const captchaUrl = res.data.url;
         dispatch(actions.getCaptchaUrlSuccess(captchaUrl))
     }
 

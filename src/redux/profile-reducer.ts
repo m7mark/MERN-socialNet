@@ -1,7 +1,14 @@
-import { ResultCodeEnum } from "../api/api";
-import { profileAPI } from "../api/profile-api";
-import { PhotosType, PostData, ProfileType } from "../types/types";
-import { BaseThunkType, InferActionsType } from "./store";
+import { ResultCodeEnum } from '../api/api';
+import { profileAPI } from '../api/profile-api';
+import {
+  PhotosType,
+  PostData,
+  ProfileType,
+} from '../types/types';
+import {
+  BaseThunkType,
+  InferActionsType,
+} from './store';
 
 let initialState = {
     postData: [
@@ -85,28 +92,29 @@ type ThunkType = BaseThunkType<ActionsTypes>
 export const getUserProfile = (id: number | undefined): ThunkType =>
     async (dispatch) => {
         dispatch(actions.profileIsFetching(true));
-        const data = await profileAPI.getUserProfile(id)
-        if (!data.contacts.mainLink) { data.contacts.mainLink = '' }
-        dispatch(actions.setUserProfile(data));
+        const res = await profileAPI.getUserProfile(id)
+        // if (!res.data.contacts.mainLink) { res.data.contacts.mainLink = '' }
+        console.log(res);
+        dispatch(actions.setUserProfile(res.data));
         dispatch(actions.profileIsFetching(false));
         dispatch(actions.profileIsLoaded(true));
     }
 
 export const getStatus = (id: number): ThunkType =>
     async (dispatch) => {
-        const response = await profileAPI.getStatus(id)
-        dispatch(actions.setStatus(response.data));
+        const res = await profileAPI.getStatus(id)
+        dispatch(actions.setStatus(res.data));
     }
 
 export const updateStatus = (status: string | undefined): ThunkType =>
     async (dispatch) => {
-        const response = await profileAPI.updateStatus(status)
-        if (response.data.resultCode === ResultCodeEnum.Success) {
+        const res = await profileAPI.updateStatus(status)
+        if (res.data.resultCode === ResultCodeEnum.Success) {
             dispatch(actions.setStatus(status));
         }
-        else if (response.data.resultCode === ResultCodeEnum.Error) {
-            let errorStatusMessage = response.data.messages.length > 0
-                ? response.data.messages[0]
+        else if (res.data.resultCode === ResultCodeEnum.Error) {
+            let errorStatusMessage = res.data.messages.length > 0
+                ? res.data.messages[0]
                 : "Some error";
             return Promise.reject(errorStatusMessage);
         }
@@ -114,14 +122,13 @@ export const updateStatus = (status: string | undefined): ThunkType =>
 export const saveProfileInfo = (profile: ProfileType): ThunkType =>
     async (dispatch, getState) => {
         const userId = getState().auth.id;
-        const response = await profileAPI.saveProfileInfo(profile)
-        if (response.data.resultCode === ResultCodeEnum.Success) {
+        const res = await profileAPI.saveProfileInfo(profile)
+        if (res.data.resultCode === ResultCodeEnum.Success) {
             dispatch(getUserProfile(userId));
-
         }
         else {
-            let errorLoginMessage = response.data.messages.length > 0
-                ? response.data.messages[0]
+            let errorLoginMessage = res.data.messages.length > 0
+                ? res.data.messages[0]
                 : "Some error";
             dispatch(actions.profileSaveErrorMessage(errorLoginMessage))
         }
