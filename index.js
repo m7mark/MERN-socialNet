@@ -12,6 +12,15 @@ app.use(express.json())
 app.use('/api/user', userRouter)
 app.use('/api/auth', authRouter)
 
+app.use((error, req, res, next) => {
+  res.status(error.status || 500)
+  // Error response
+  res.json({
+    resultCode: 1,
+    message: error.message,
+  })
+})
+
 async function startApp() {
   try {
     await mongoose.connect(process.env.DB_URL)
