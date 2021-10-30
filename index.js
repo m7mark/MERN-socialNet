@@ -17,7 +17,7 @@ app.use((error, req, res, next) => {
   // Error response
   res.json({
     resultCode: 1,
-    message: error.message,
+    messages: [error.message]
   })
 })
 
