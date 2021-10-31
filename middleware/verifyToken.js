@@ -8,14 +8,14 @@ export const verifyToken = (req, res, next) => {
   }
   try {
     const authHeader = req.headers.apikey
+    if (!authHeader) { return next(createError(500, "Empty Token")) }
     const token = authHeader.split(' ')[1]
-    if (!token) { return next(createError(500, "Empty Token")) }
 
     const decodeData = jwt.verify(token, process.env.JWT_SEC)
     req.user = decodeData
     next()
   } catch {
-    return next(createError(500, "Invalid Token"))
+    return next(createError(500, "Wrong Token"))
   }
 }
 

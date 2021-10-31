@@ -1,7 +1,7 @@
 import Router from 'express';
 import asyncHandler from 'express-async-handler';
 import { check } from 'express-validator';
-import AuthController from '../controllers/AuthController.js';
+import UserController from '../controllers/UserController.js';
 import { verifyToken, verifyTokenAndAdmin } from '../middleware/verifyToken.js';
 
 const router = new Router()
@@ -12,10 +12,10 @@ router.post('/register',
     check('login', 'Username cannot be empty').notEmpty(),
     check('password', 'Password must be at least 4 symbols').isLength({ min: 4 }),
   ],
-  asyncHandler(AuthController.register))
-router.post('/login', asyncHandler(AuthController.login))
-router.delete('/login', asyncHandler(AuthController.logout))
-router.get('/me', verifyToken, asyncHandler(AuthController.me))
-router.get('/', verifyTokenAndAdmin, asyncHandler(AuthController.getUsers))
+  asyncHandler(UserController.register))
+router.post('/login', asyncHandler(UserController.login))
+router.delete('/login', asyncHandler(UserController.logout))
+router.get('/me', verifyToken, asyncHandler(UserController.me))
+router.get('/', verifyTokenAndAdmin, asyncHandler(UserController.getUsers))
 
 export default router
