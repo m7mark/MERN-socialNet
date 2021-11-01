@@ -100,42 +100,42 @@ class UserController {
   //GET LIST OF USERS
   async getListOfUsers(req, res) {
     //query params
-    const limit = req.query.count
-    const page = req.query.page
-    const term = req.query.term
-    const friend = req.query.friend
+    const { count, page, term, friend } = req.query
     const currentUser = req.user?.id
-
     //paginate options
     const options = {
       page: page || 1,
-      limit: limit || 10,
+      limit: count || 10,
       select: 'name status photos followed',
     };
     try {
-      // {name: /da/i}
-      // const totalCount = await User.find().estimatedDocumentCount();
-      // const users = await User.find({}, 'name status photos followed')
+      let newUsers = []
+      let responseData;
+      const re = new RegExp(term, "i")
       const currentUserData = await User.findById(currentUser)
-      const response = await User.paginate({}, options)
-      const users = response.docs
+      //only friends
+      if (friend === 'true' && currentUserData) {
+        responseData = await User.paginate({
+          $and: [
+            { name: re },
+            { _id: { $in: currentUserData.followedIds } }
+          ]
+        }, options)
+      } else {
+        responseData = await User.paginate({ name: re }, options)
+      }
+      const users = responseData.docs
       //if user authorized
       if (currentUser) {
-        // const { followedIds } = await User.findById(currentUser)
-        // const friendly = await User.find().in('_id', followedIds);
-        let newUsers = []
         users.map((u) => {
           if (currentUserData?.followedIds.includes(u._id)) { u.followed = true }
           newUsers.push(u)
         })
-        res.json({ items: newUsers, totalCount: response.totalDocs, error: null, })
+      } else {
+        newUsers = users;
       }
-      //if user not authorized
-      else {
-        res.json({ items: users, totalCount: response.totalDocs, error: null, })
-      }
+      res.json({ items: newUsers, totalCount: responseData.totalDocs, error: null, })
     } catch (e) {
-      console.log(e);
       throw createError(500, 'Get users error')
     }
   }

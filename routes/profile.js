@@ -16,5 +16,8 @@ router.put('/profile/status/', verifyToken, asyncHandler(ProfileController.updat
 router.post('/follow/:userId', verifyToken, asyncHandler(ProfileController.followUser))
 router.delete('/follow/:userId', verifyToken, asyncHandler(ProfileController.unfollowUser))
 router.get('/follow/:userId', verifyToken, asyncHandler(ProfileController.isFollowed))
+//post photo
+router.put('//profile/photo', verifyToken, asyncHandler(ProfileController.putUserPhoto))
+
 
 export default router

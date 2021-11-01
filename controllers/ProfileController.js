@@ -109,6 +109,13 @@ class ProfileController {
       throw createError(500, 'Check user error')
     }
   }
+  //IS CURRENT USER FOLLOWED
+  async putUserPhoto(req, res, next) {
+    try {
+    } catch (e) {
+      throw createError(500, 'Put photo error')
+    }
+  }
 
 }
 
