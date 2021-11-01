@@ -9,7 +9,14 @@ class ProfileController {
   async getProfile(req, res, next) {
     try {
       const userId = req.params.userId
-      const profile = await Profile.findOne({ userId })
+      const { photos } = await User.findById(userId)
+      const profile = await Profile.findOneAndUpdate(
+        { userId },
+        {
+          $set: { photos: { small: photos.small, large: photos.large } }
+        },
+        { new: true }
+      )
       if (!profile) { return next(createError(500, 'User Id incorrect')) }
       res.json(profile);
     } catch (e) {
@@ -95,7 +102,7 @@ class ProfileController {
       if (currentUser === userId) { return next(createError(500, 'You can not follow yourself')) }
       await User.findById(userId)
       const { followedIds } = await User.findById(currentUser)
-      if (followedIds.includes(userId)) { return res.json(true)}
+      if (followedIds.includes(userId)) { return res.json(true) }
       res.json(false)
     } catch (e) {
       // console.log(e);

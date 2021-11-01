@@ -1,7 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import authRouter from './routes/auth.js';
+import authRouter from './routes/user.js';
 import profileRouter from './routes/profile.js';
 
 dotenv.config()
@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000
 
 const app = express()
 app.use(express.json())
-app.use('/api/auth', authRouter)
+app.use('/api', authRouter)
 app.use('/api', profileRouter)
 
 app.use((error, req, res, next) => {
