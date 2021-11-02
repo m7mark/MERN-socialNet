@@ -3,6 +3,10 @@ import asyncHandler from 'express-async-handler';
 // import { check } from 'express-validator';
 import ProfileController from '../controllers/ProfileController.js';
 import { verifyToken, verifyTokenAndAdmin } from '../middleware/verifyToken.js';
+import multer from 'multer';
+
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 
 const router = new Router()
 
@@ -17,7 +21,7 @@ router.post('/follow/:userId', verifyToken, asyncHandler(ProfileController.follo
 router.delete('/follow/:userId', verifyToken, asyncHandler(ProfileController.unfollowUser))
 router.get('/follow/:userId', verifyToken, asyncHandler(ProfileController.isFollowed))
 //post photo
-router.put('//profile/photo', verifyToken, asyncHandler(ProfileController.putUserPhoto))
+router.put('/profile/photo',upload.single('image'), verifyToken, asyncHandler(ProfileController.putUserPhoto))
 
 
 export default router

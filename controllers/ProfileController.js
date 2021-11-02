@@ -1,6 +1,8 @@
 import Profile from "../models/Profile.js";
 import createError from 'http-errors';
 import User from "../models/User.js";
+import sharp from "sharp";
+import fs from 'fs';
 
 
 class ProfileController {
@@ -111,8 +113,21 @@ class ProfileController {
   }
   //IS CURRENT USER FOLLOWED
   async putUserPhoto(req, res, next) {
+    let data = await this.sharp(req.file.buffer).metadata()
+    console.log(data);
+    sharp(req.file)
+      .resize(200, 200)
+      .toFile('uploads/' + 'thumbnail-' + req.file.originalname, function (err, sharp) {
+        if (err) return next(err)
+        // fs.writeFile("1.jpg", buf, async (err) => {
+        //   console.log("Successfully Written to File.")
+        // })
+        res.json('okok')
+      })
     try {
+
     } catch (e) {
+      console.log(e);
       throw createError(500, 'Put photo error')
     }
   }
