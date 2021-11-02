@@ -12,7 +12,6 @@ const generateAccessToken = (id, roles) => {
 }
 
 class UserController {
-
   //REGISTER
   async register(req, res, next) {
     try {
@@ -140,4 +139,4 @@ class UserController {
   }
 }
 
-module.exports = new UserController()
+module.exports = UserController

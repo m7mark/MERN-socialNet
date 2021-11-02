@@ -1,8 +1,11 @@
 const router = require("express").Router()
 const asyncHandler = require("express-async-handler");
 const { check } = require("express-validator");
-const UserController = require("../controllers/UserController")
+const userController = require("../controllers/UserController")
 const { allAndVerifyToken, verifyToken, verifyTokenAndAdmin } = require("../middleware/verifyToken")
+
+const UserController = new userController()
+
 
 //api
 //auth

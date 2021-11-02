@@ -1,11 +1,12 @@
 const router = require("express").Router()
 const asyncHandler = require("express-async-handler");
-const ProfileController = require("../controllers/ProfileController")
+const profileController = require("../controllers/ProfileController")
 const { verifyToken } = require("../middleware/verifyToken")
 const multer = require("multer");
-
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
+
+const ProfileController = new profileController()
 
 //api
 //profile

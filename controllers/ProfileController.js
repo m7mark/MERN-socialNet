@@ -4,10 +4,7 @@ const createError = require('http-errors');
 const sharp = require('sharp');
 const path = require('path');
 
-
-
 class ProfileController {
-
   //GET PROFILE
   async getProfile(req, res, next) {
     try {
@@ -135,4 +132,4 @@ class ProfileController {
   }
 }
 
-module.exports = new ProfileController()
+module.exports = ProfileController
