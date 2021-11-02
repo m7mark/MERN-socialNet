@@ -11,7 +11,7 @@ const generateAccessToken = (id, roles) => {
   return jwt.sign(payload, process.env.JWT_SEC, { expiresIn: '3d' })
 }
 
-class UserController {
+class UsersController {
   //REGISTER
   async register(req, res, next) {
     try {
@@ -139,4 +139,4 @@ class UserController {
   }
 }
 
-module.exports = UserController
+module.exports = UsersController

@@ -3,9 +3,9 @@ import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useState } from 'react';
 import axios from 'axios';
 
-const apiUrl = 'https://son-api.herokuapp.com/'
+const BASE_URL = process.env.REACT_APP_SERVER_API
 const instanceReq = axios.create({
-  baseURL: apiUrl
+  baseURL: BASE_URL
 })
 
 const LoginForm = () => {
