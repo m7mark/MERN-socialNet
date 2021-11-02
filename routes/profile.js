@@ -1,24 +1,24 @@
 const router = require("express").Router()
 const asyncHandler = require("express-async-handler");
-const profileController = require("../controllers/ProfileController")
+const ProfileController = require("../controllers/ProfileController")
 const { verifyToken } = require("../middleware/verifyToken")
 const multer = require("multer");
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
-const ProfileController = new profileController()
+const profileController = new ProfileController()
 
 //api
 //profile
-router.get('/profile/:userId', asyncHandler(ProfileController.getProfile))
-router.put('/profile/', verifyToken, asyncHandler(ProfileController.updateProfile))
-router.get('/profile/status/:userId', asyncHandler(ProfileController.getStatus))
-router.put('/profile/status/', verifyToken, asyncHandler(ProfileController.updateStatus))
+router.get('/profile/:userId', asyncHandler(profileController.getProfile))
+router.put('/profile/', verifyToken, asyncHandler(profileController.updateProfile))
+router.get('/profile/status/:userId', asyncHandler(profileController.getStatus))
+router.put('/profile/status/', verifyToken, asyncHandler(profileController.updateStatus))
 //follow
-router.post('/follow/:userId', verifyToken, asyncHandler(ProfileController.followUser))
-router.delete('/follow/:userId', verifyToken, asyncHandler(ProfileController.unfollowUser))
-router.get('/follow/:userId', verifyToken, asyncHandler(ProfileController.isFollowed))
+router.post('/follow/:userId', verifyToken, asyncHandler(profileController.followUser))
+router.delete('/follow/:userId', verifyToken, asyncHandler(profileController.unfollowUser))
+router.get('/follow/:userId', verifyToken, asyncHandler(profileController.isFollowed))
 //post photo
-router.put('/profile/photo',upload.single('image'), verifyToken, asyncHandler(ProfileController.putUserPhoto))
+router.put('/profile/photo',upload.single('image'), verifyToken, asyncHandler(profileController.putUserPhoto))
 
 module.exports = router
