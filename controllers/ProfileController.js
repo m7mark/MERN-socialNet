@@ -111,7 +111,7 @@ class ProfileController {
       throw createError(500, 'Check user error')
     }
   }
-  //IS CURRENT USER FOLLOWED
+  //UPLOAD USER PHOTO
   async putUserPhoto(req, res, next) {
     try {
       const currentUser = req.user.id
@@ -126,12 +126,12 @@ class ProfileController {
           }
           res.json({ resultCode: 0, messages: [], data: {} })
         })
+      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': filePath, 'photos.large': filePath } })
     } catch (e) {
       // console.log(e);
       throw createError(500, 'Upload photo error')
     }
   }
-
 }
 
 export default new ProfileController()
