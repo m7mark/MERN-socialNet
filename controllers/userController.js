@@ -1,16 +1,15 @@
-import createError from 'http-errors';
-import User from "../models/User.js";
-import CryptoJS from 'crypto-js';
-import Role from '../models/Role.js';
-import jwt from 'jsonwebtoken';
-import { validationResult } from 'express-validator';
-import Profile from '../models/Profile.js';
+const User = require('../models/User');
+const Role = require('../models/Role');
+const Profile = require('../models/Profile');
+const jwt = require('jsonwebtoken');
+const CryptoJS = require('crypto-js');
+const createError = require('http-errors');
+const { validationResult } = require('express-validator'); 
 
 const generateAccessToken = (id, roles) => {
   const payload = { id, roles }
   return jwt.sign(payload, process.env.JWT_SEC, { expiresIn: '3d' })
 }
-
 
 class UserController {
 
@@ -141,5 +140,4 @@ class UserController {
   }
 }
 
-
-export default new UserController()
+module.exports = new UserController()

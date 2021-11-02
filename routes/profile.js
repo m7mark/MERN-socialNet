@@ -1,14 +1,11 @@
-import Router from 'express';
-import asyncHandler from 'express-async-handler';
-// import { check } from 'express-validator';
-import ProfileController from '../controllers/ProfileController.js';
-import { verifyToken, verifyTokenAndAdmin } from '../middleware/verifyToken.js';
-import multer from 'multer';
+const router = require("express").Router()
+const asyncHandler = require("express-async-handler");
+const ProfileController = require("../controllers/ProfileController")
+const { verifyToken } = require("../middleware/verifyToken")
+const multer = require("multer");
 
 const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
-
-const router = new Router()
 
 //api
 //profile
@@ -23,5 +20,4 @@ router.get('/follow/:userId', verifyToken, asyncHandler(ProfileController.isFoll
 //post photo
 router.put('/profile/photo',upload.single('image'), verifyToken, asyncHandler(ProfileController.putUserPhoto))
 
-
-export default router
+module.exports = router

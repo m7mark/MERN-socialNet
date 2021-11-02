@@ -1,8 +1,9 @@
-import Profile from "../models/Profile.js";
-import createError from 'http-errors';
-import User from "../models/User.js";
-import sharp from "sharp";
-import path from 'path';
+const User = require('../models/User');
+const Profile = require('../models/Profile');
+const createError = require('http-errors');
+const sharp = require('sharp');
+const path = require('path');
+
 
 
 class ProfileController {
@@ -134,4 +135,4 @@ class ProfileController {
   }
 }
 
-export default new ProfileController()
+module.exports = new ProfileController()

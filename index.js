@@ -1,13 +1,11 @@
-import express from 'express';
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-import authRouter from './routes/user.js';
-import profileRouter from './routes/profile.js';
-import path from 'path';
-import expose from './expose.cjs';
-import cors from 'cors';
+const express = require("express");
+const mongoose = require("mongoose")
+const dotenv = require("dotenv")
+const authRouter = require("./routes/user")
+const profileRouter = require("./routes/profile")
+const cors = require("cors")
+const path = require('path');
 
-const {__dirname} = expose;
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
@@ -38,5 +36,4 @@ async function startApp() {
     app.listen(PORT, () => console.log('Server started at port: ' + PORT +' '+ __dirname))
   } catch (e) { console.log(e); }
 }
-
 startApp()

@@ -1,12 +1,9 @@
-import createError from 'http-errors';
-import jwt from 'jsonwebtoken';
+const jwt = require("jsonwebtoken")
+const createError = require("http-errors")
 
 //token includes {id, roles}
-export const allAndVerifyToken = (req, res, next) => {
-
-  if (req.method === 'OPTIONS') {
-    next()
-  }
+const allAndVerifyToken = (req, res, next) => {
+  if (req.method === 'OPTIONS') { next() }
   try {
     const authHeader = req.headers.apikey
     if (!authHeader) { next() }
@@ -21,10 +18,8 @@ export const allAndVerifyToken = (req, res, next) => {
     return next(createError(500, "Wrong Token"))
   }
 }
-export const verifyToken = (req, res, next) => {
-  if (req.method === 'OPTIONS') {
-    next()
-  }
+const verifyToken = (req, res, next) => {
+  if (req.method === 'OPTIONS') { next() }
   try {
     const authHeader = req.headers.apikey
     if (!authHeader) { return next(createError(500, "Empty Token")) }
@@ -38,9 +33,11 @@ export const verifyToken = (req, res, next) => {
   }
 }
 
-export const verifyTokenAndAdmin = (req, res, next) =>
+const verifyTokenAndAdmin = (req, res, next) =>
   verifyToken(req, res, () => {
     if (req.user.roles.includes('ADMIN')) {
       next()
     } else { return next(createError(500, "No permittion")) }
   })
+
+module.exports = { verifyToken, allAndVerifyToken, verifyTokenAndAdmin }
