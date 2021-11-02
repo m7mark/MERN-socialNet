@@ -2,7 +2,7 @@ import Profile from "../models/Profile.js";
 import createError from 'http-errors';
 import User from "../models/User.js";
 import sharp from "sharp";
-import fs from 'fs';
+import path from 'path';
 
 
 class ProfileController {
@@ -113,22 +113,22 @@ class ProfileController {
   }
   //IS CURRENT USER FOLLOWED
   async putUserPhoto(req, res, next) {
-    let data = await this.sharp(req.file.buffer).metadata()
-    console.log(data);
-    sharp(req.file)
-      .resize(200, 200)
-      .toFile('uploads/' + 'thumbnail-' + req.file.originalname, function (err, sharp) {
-        if (err) return next(err)
-        // fs.writeFile("1.jpg", buf, async (err) => {
-        //   console.log("Successfully Written to File.")
-        // })
-        res.json('okok')
-      })
     try {
-
+      const currentUser = req.user.id
+      const fileName = 'img-' + currentUser + '.jpg'
+      const filePath = path.resolve('uploads', fileName)
+      sharp(req.file.buffer)
+        .rotate()
+        .resize(300, 300)
+        .toFile(filePath, function (err, sharp) {
+          if (err) {
+            return next(createError(500, 'File format error'))
+          }
+          res.json({ resultCode: 0, messages: [], data: {} })
+        })
     } catch (e) {
-      console.log(e);
-      throw createError(500, 'Put photo error')
+      // console.log(e);
+      throw createError(500, 'Upload photo error')
     }
   }
 

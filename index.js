@@ -3,12 +3,16 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import authRouter from './routes/user.js';
 import profileRouter from './routes/profile.js';
+import path from 'path';
+import expose from './expose.cjs';
+const {__dirname} = expose;
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
 
 const app = express()
 app.use(express.json())
+app.use(express.static(path.join(__dirname, "/uploads")))
 app.use('/api', authRouter)
 app.use('/api', profileRouter)
 
@@ -24,7 +28,7 @@ app.use((error, req, res, next) => {
 async function startApp() {
   try {
     await mongoose.connect(process.env.DB_URL)
-    app.listen(PORT, () => console.log('Server started at port: ' + PORT))
+    app.listen(PORT, () => console.log('Server started at port: ' + PORT +' '+ __dirname))
   } catch (e) { console.log(e); }
 }
 
