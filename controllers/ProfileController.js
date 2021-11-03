@@ -3,6 +3,7 @@ const Profile = require('../models/Profile');
 const createError = require('http-errors');
 const sharp = require('sharp');
 const path = require('path');
+const fs = require('fs')
 
 class ProfileController {
   //GET PROFILE
@@ -116,18 +117,19 @@ class ProfileController {
       const fileName = 'img-' + currentUser + '.jpg'
       const filePath = path.resolve('uploads', fileName)
       const fileLink = process.env.REACT_APP_SERVER_API+fileName
-      sharp(req.file.buffer)
+      sharp(req.file.path)
         .rotate()
         .resize(300, 300)
         .toFile(filePath, function (err, sharp) {
           if (err) {
-            return next(createError(500, 'File format error'))
+            fs.unlinkSync(req.file.path)
+            return next(createError(500, 'File format error'));
           }
-          res.json({ resultCode: 0, messages: [], data: {} })
+          fs.unlinkSync(req.file.path)
+          res.json({ resultCode: 0, messages: [], data: {} });
         })
       await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': fileLink, 'photos.large': fileLink } })
     } catch (e) {
-      // console.log(e);
       throw createError(500, 'Upload photo error')
     }
   }

@@ -1,9 +1,11 @@
 @import '~antd/dist/antd.css';
 
 .App {
-  text-align: center;
-  height    : 100vh;
-  background: linear-gradient(90deg, #aea4e3, #d3ffe8);
+  height: 100vh;
+  text-align             : center;
+  background             : linear-gradient(90deg, #aea4e3, #d3ffe8);
+  background-size        : cover
+
 }
 
 .header {
@@ -20,8 +22,9 @@
   margin-top: 20px;
   width     : 300px;
 }
+
 .login-form-button {
-  width: 100%;
+  width     : 100%;
   margin-top: 5px;
 }
 
@@ -35,7 +38,7 @@
   height            : max-content;
   padding           : 45px;
   background-color  : white;
-  border-radius: 10px;
+  border-radius     : 10px;
   -webkit-box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   -moz-box-shadow   : 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
   box-shadow        : 0px 5px 10px 2px rgba(34, 60, 80, 0.2);
@@ -45,16 +48,19 @@
   display        : flex;
   justify-content: center;
   align-items    : center;
+  padding-bottom : 50px;
 }
 
 @media screen and (max-width: 480px) {
   .App {
     background: white;
   }
+
   .signupContainer {
-    padding           : 5px;
-    box-shadow        : none;
+    padding   : 5px;
+    box-shadow: none;
   }
+
   .header {
     height: 40px;
   }
