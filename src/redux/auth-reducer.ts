@@ -1,16 +1,16 @@
 import {
-  ResultCodeEnum,
-  ResultCodeForCaptchaEnum,
+    ResultCodeEnum,
+    ResultCodeForCaptchaEnum,
 } from '../api/api';
 import { authAPI } from '../api/auth-api';
 import { securityAPI } from '../api/security-api';
 import {
-  BaseThunkType,
-  InferActionsType,
+    BaseThunkType,
+    InferActionsType,
 } from './store';
 
 let initialState = {
-    id: undefined as number | undefined,
+    id: undefined as string | undefined,
     email: null as string | null,
     login: null as string | null,
     isAuth: false,
@@ -46,7 +46,7 @@ const authReducer = (state = initialState, action: ActionsTypes):
 
 type ActionsTypes = InferActionsType<typeof actions>
 export const actions = {
-    setAuthUserData: (id: number | undefined, email: string | null, login: string | null, isAuth: boolean) =>
+    setAuthUserData: (id: string | undefined, email: string | null, login: string | null, isAuth: boolean) =>
         ({ type: 'SN/AUTH/SET_USER_DATA', data: { id, email, login, isAuth } } as const),
     getCaptchaUrlSuccess: (captchaUrl: string | null) =>
         ({ type: 'SN/AUTH/GET_CAPTCHA_URL', captchaUrl } as const),
@@ -67,6 +67,8 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
     ThunkType => async (dispatch) => {
         const res = await authAPI.login(email, password, rememberMe, captcha)
         if (res.data.resultCode === ResultCodeEnum.Success) {
+            const token = res.data.data.token
+            token && localStorage.setItem('token', token)
             dispatch(authUserData())
             // Delete captcha after success
             dispatch(actions.getCaptchaUrlSuccess(null))

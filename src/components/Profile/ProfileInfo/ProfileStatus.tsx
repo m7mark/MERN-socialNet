@@ -27,7 +27,7 @@ export const ProfileStatus: React.FC<PropsType> = ({ isProfileChanging }) => {
                 ? <Skeleton active title={false} paragraph={{ rows: 2 }} />
                 : <div>
                     <Text type="secondary">Status: </Text>
-                    {!userId || +userId === authorizedUserId
+                    {!userId || userId === authorizedUserId
                         ? <Paragraph
                             editable={{
                                 icon: <HighlightOutlined />,

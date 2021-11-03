@@ -23,22 +23,22 @@ const ProfilePage: React.FC = () => {
   const authorizedUserId = useSelector(selectAuthId)
   let { userId } = useParams<ParamsUserIdType>()
   const [isProfileChanging, setIsProfileChanging] = useState(false);
-  const [currentProfileId, setCurrentProfileId] = useState<number | undefined>(profile?.userId)
+  const [currentProfileId, setCurrentProfileId] = useState<string | undefined>(profile?.userId)
 
   const refreshProfile = () => {
     if (!userId) { userId = String(authorizedUserId) }
     if (!userId) { history.push("/login") }
     else {
-      dispatch(getUserProfile(+userId));
-      dispatch(getStatus(+userId))
+      dispatch(getUserProfile(userId));
+      dispatch(getStatus(userId))
     }
   }
   useEffect(() => { window.scrollTo(0, 0) }, [])
   useEffect(() => { refreshProfile() }, [userId])
   useEffect(() => {
-    if (currentProfileId !== +userId) {
+    if (currentProfileId !== userId) {
         setIsProfileChanging(true)
-        setCurrentProfileId(+userId)
+        setCurrentProfileId(userId)
     }
     else {
         setIsProfileChanging(false)
@@ -53,7 +53,7 @@ const ProfilePage: React.FC = () => {
             <ProfileImage isProfileChanging={isProfileChanging}/>
             <ProfileUserData isProfileChanging={isProfileChanging}/>
           </div>
-        {(!userId || +userId === authorizedUserId) &&
+        {(!userId || userId === authorizedUserId) &&
           <div style={{ marginTop: '30px' }}>
             <Row>
               <Col style={{ maxWidth: '800px' }} md={24} sm={24} xs={24} >

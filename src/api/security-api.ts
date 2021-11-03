@@ -4,10 +4,10 @@ import {
 } from './api';
 
 type GetCaptchaUrlResponseType = {
-    url: string
+  url: string
 }
 export const securityAPI = {
-    getCaptchaUrl(): Promise<CommonDataEmptyResponseType<GetCaptchaUrlResponseType>> {
-        return instance.get(`security/get-captcha-url`);
-    }
+  getCaptchaUrl(): Promise<CommonDataEmptyResponseType<GetCaptchaUrlResponseType>> {
+    return instance.get(`security/get-captcha-url`);
+  }
 }

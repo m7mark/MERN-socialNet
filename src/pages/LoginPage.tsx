@@ -95,7 +95,7 @@ const LoginForm: React.FC = () => {
                 >
                     Log in
                 </Button>
-                Or <a href="https://social-network.samuraijs.com/signUp"
+                Or <a href="https://snoapi.herokuapp.com"
                     rel="noreferrer" target="_blank">register now!</a>
             </Form.Item>
         </Form>

@@ -1,13 +1,13 @@
 import { ResultCodeEnum } from '../api/api';
 import { profileAPI } from '../api/profile-api';
 import {
-  PhotosType,
-  PostData,
-  ProfileType,
+    PhotosType,
+    PostData,
+    ProfileType,
 } from '../types/types';
 import {
-  BaseThunkType,
-  InferActionsType,
+    BaseThunkType,
+    InferActionsType,
 } from './store';
 
 let initialState = {
@@ -89,18 +89,16 @@ export const actions = {
 }
 
 type ThunkType = BaseThunkType<ActionsTypes>
-export const getUserProfile = (id: number | undefined): ThunkType =>
+export const getUserProfile = (id: string | undefined): ThunkType =>
     async (dispatch) => {
         dispatch(actions.profileIsFetching(true));
         const res = await profileAPI.getUserProfile(id)
-        // if (!res.data.contacts.mainLink) { res.data.contacts.mainLink = '' }
-        console.log(res);
         dispatch(actions.setUserProfile(res.data));
         dispatch(actions.profileIsFetching(false));
         dispatch(actions.profileIsLoaded(true));
     }
 
-export const getStatus = (id: number): ThunkType =>
+export const getStatus = (id: string): ThunkType =>
     async (dispatch) => {
         const res = await profileAPI.getStatus(id)
         dispatch(actions.setStatus(res.data));

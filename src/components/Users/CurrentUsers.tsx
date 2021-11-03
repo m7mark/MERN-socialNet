@@ -14,10 +14,10 @@ export const CurrentUsers = React.memo((): JSX.Element => {
     const isFetching = useSelector(getIsFetching)
     const isAuth = useSelector(selectIsAuth)
     const dispatch = useDispatch()
-    const unfollowThunk = (id: number) => {
+    const unfollowThunk = (id: string) => {
         dispatch(unfollow(id))
     }
-    const followThunk = (id: number) => {
+    const followThunk = (id: string) => {
         dispatch(follow(id))
     }
     if (users.length === 0) { return <Empty style={{maxWidth: '500px'}}/> }

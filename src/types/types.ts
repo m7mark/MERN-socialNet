@@ -22,13 +22,13 @@ export type ProfileType = {
     fullName: string | undefined
     lookingForAJob: boolean | undefined
     lookingForAJobDescription: string | undefined
-    userId: number | undefined
+    userId: string | undefined
     contacts: ContactsType
     photos: PhotosType
 }
 export type UserType = {
     followed: boolean
-    id: number
+    id: string
     name: string
     status: string | null
     photos: PhotosType

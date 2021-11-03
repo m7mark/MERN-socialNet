@@ -68,7 +68,7 @@ export const ProfileUserData: React.FC<PropsType> = ({isProfileChanging}) => {
           </Descriptions>}
       </Col>
     </Row>
-    <div>{(!userId || +userId === authorizedUserId) &&
+    <div>{(!userId || userId === authorizedUserId) &&
       <Button
         className='profile-image-button' ghost type='primary'
         style={{ marginTop: '10px' }}
