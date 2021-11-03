@@ -3,6 +3,7 @@ import { UserType } from '../types/types';
 
 const BASE_URL = 'https://snoapi.herokuapp.com/api/'
 const token = localStorage.getItem('token')
+console.log(token);
 export const apiKey = 'f1044d61-6ff5-426d-9719-a80a9bdbb47b'
 export const instance = axios.create({
   // baseURL: 'https://social-network.samuraijs.com/api/1.0/',
