@@ -116,7 +116,7 @@ class ProfileController {
       const currentUser = req.user.id
       const fileName = 'img-' + currentUser + '.jpg'
       const filePath = path.resolve('uploads', fileName)
-      const fileLink = process.env.REACT_APP_SERVER_API+fileName
+      const fileLink = process.env.REACT_APP_SERVER_API + fileName
       sharp(req.file.path)
         .rotate()
         .resize(300, 300)
@@ -126,7 +126,13 @@ class ProfileController {
             return next(createError(500, 'File format error'));
           }
           fs.unlinkSync(req.file.path)
-          res.json({ resultCode: 0, messages: [], data: {} });
+          const data = {
+            photos: {
+              small: fileLink,
+              large: fileLink
+            }
+          }
+          res.json({ resultCode: 0, messages: [], data: data });
         })
       await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': fileLink, 'photos.large': fileLink } })
     } catch (e) {
