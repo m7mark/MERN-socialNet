@@ -104,7 +104,7 @@ class UsersController {
     const options = {
       page: page || 1,
       limit: count || 10,
-      select: 'name status photos followed',
+      select: 'id name status photos followed',
     };
     try {
       let newUsers = []

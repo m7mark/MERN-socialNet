@@ -16,5 +16,13 @@ const UserSchema = new mongoose.Schema({
 }, { timestamps: true })
 
 UserSchema.plugin(mongoosePaginate);
+// Duplicate the ID field.
+UserSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+});
+// Ensure virtual fields are serialised.
+UserSchema.set('toJSON', {
+  virtuals: true
+});
 
 module.exports = mongoose.model('User', UserSchema)
