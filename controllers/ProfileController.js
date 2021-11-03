@@ -115,6 +115,7 @@ class ProfileController {
       const currentUser = req.user.id
       const fileName = 'img-' + currentUser + '.jpg'
       const filePath = path.resolve('uploads', fileName)
+      const fileLink = process.env.REACT_APP_SERVER_API+fileName
       sharp(req.file.buffer)
         .rotate()
         .resize(300, 300)
@@ -124,7 +125,7 @@ class ProfileController {
           }
           res.json({ resultCode: 0, messages: [], data: {} })
         })
-      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': filePath, 'photos.large': filePath } })
+      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': fileLink, 'photos.large': fileLink } })
     } catch (e) {
       // console.log(e);
       throw createError(500, 'Upload photo error')
