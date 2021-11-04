@@ -61,7 +61,7 @@ class UsersController {
       }
       res
         // .append('Access-Control-Allow-Credentials', 'true')
-        .cookie('token', `${accessToken}`, { path: '/api', httpOnly: true })
+        .cookie('token', `${accessToken}`, { path: '/api', httpOnly: true, SameSite: None })
         // .header('Access-Control-Allow-Credentials', 'true')
         // .append('Set-Cookie', `token=${accessToken}; HttpOnly`)
         .json({ resultCode: 0, messages: [], data: data })

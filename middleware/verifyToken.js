@@ -9,7 +9,6 @@ const allAndVerifyToken = (req, res, next) => {
     if (!token) { next() }
     else {
       const decodeData = jwt.verify(token, process.env.JWT_SEC)
-      //include user data from token in to request
       req.user = decodeData
       next()
     }
@@ -30,6 +29,13 @@ const verifyToken = (req, res, next) => {
     return next(createError(500, "Wrong Token"))
   }
 }
+const verifyTokenAndAdmin = (req, res, next) =>
+  verifyToken(req, res, () => {
+    if (req.user?.roles.includes('ADMIN')) {
+      next()
+    } else { return next(createError(500, "No permittion")) }
+  })
+
 // const verifyToken = (req, res, next) => {
 //   if (req.method === 'OPTIONS') { next() }
 //   try {
@@ -44,12 +50,5 @@ const verifyToken = (req, res, next) => {
 //     return next(createError(500, "Wrong Token"))
 //   }
 // }
-
-const verifyTokenAndAdmin = (req, res, next) =>
-  verifyToken(req, res, () => {
-    if (req.user.roles.includes('ADMIN')) {
-      next()
-    } else { return next(createError(500, "No permittion")) }
-  })
 
 module.exports = { verifyToken, allAndVerifyToken, verifyTokenAndAdmin }

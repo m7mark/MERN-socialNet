@@ -2,11 +2,11 @@ const router = require("express").Router()
 const asyncHandler = require("express-async-handler");
 const { check } = require("express-validator");
 const OriginController = require("../controllers/OriginController")
-const { verifyTokenAndAdmin } = require("../middleware/verifyToken")
+const { verifyTokenAndAdmin, verifyToken } = require("../middleware/verifyToken")
 
 const originController = new OriginController()
 //api
-router.put('/origins',
+router.put('/origins', verifyToken,
   [
     check('origin', 'Origin must be URL').notEmpty().isURL(),
   ],
