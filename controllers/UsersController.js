@@ -4,7 +4,7 @@ const Profile = require('../models/Profile');
 const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const createError = require('http-errors');
-const { validationResult } = require('express-validator'); 
+const { validationResult } = require('express-validator');
 
 const generateAccessToken = (id, roles) => {
   const payload = { id, roles }
@@ -48,7 +48,7 @@ class UsersController {
       const { email, password } = req.body
       //check email
       const user = await User.findOne({ email })
-      if (!user) { throw createError(500, 'Wrong credentials') }
+      if (!user) { throw createError(500, 'Wrong E-mail') }
       //check password
       const decryptPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SEC)
         .toString(CryptoJS.enc.Utf8);
@@ -57,17 +57,23 @@ class UsersController {
       const accessToken = generateAccessToken(user._id, user.roles)
       const data = {
         userId: user._id,
-        token: accessToken
+        // token: accessToken
       }
-      res.json({ resultCode: 0, messages: [], data: data })
-    } catch {
+      res
+        .append('Access-Control-Allow-Credentials', 'true')
+        .cookie('token', `${accessToken}`, { path: '/api', httpOnly: true })
+        // .append('Set-Cookie', `token=${accessToken}; HttpOnly`)
+        .json({ resultCode: 0, messages: [], data: data })
+    } catch (e) {
       throw createError(500, 'Wrong credentials')
     }
   }
   //LOGOUT
   async logout(req, res) {
     try {
-      res.json({ resultCode: 0, messages: [], data: {} })
+      res
+        .clearCookie('token', { path: '/api' })
+        .json({ resultCode: 0, messages: [], data: {} })
     } catch {
       throw createError(500, 'Something wrong')
     }

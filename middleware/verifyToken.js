@@ -5,10 +5,9 @@ const createError = require("http-errors")
 const allAndVerifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
-    const authHeader = req.headers.apikey
-    if (!authHeader) { next() }
+    const token = req.cookies.token
+    if (!token) { next() }
     else {
-      const token = authHeader.split(' ')[1]
       const decodeData = jwt.verify(token, process.env.JWT_SEC)
       //include user data from token in to request
       req.user = decodeData
@@ -21,9 +20,8 @@ const allAndVerifyToken = (req, res, next) => {
 const verifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
-    const authHeader = req.headers.apikey
-    if (!authHeader) { return next(createError(500, "Empty Token")) }
-    const token = authHeader.split(' ')[1]
+    const token = req.cookies.token
+    if (!token) { return next(createError(500, "Empty Token")) }
     const decodeData = jwt.verify(token, process.env.JWT_SEC)
     //include user data from token in to request
     req.user = decodeData
@@ -32,6 +30,20 @@ const verifyToken = (req, res, next) => {
     return next(createError(500, "Wrong Token"))
   }
 }
+// const verifyToken = (req, res, next) => {
+//   if (req.method === 'OPTIONS') { next() }
+//   try {
+//     const authHeader = req.headers.apikey
+//     if (!authHeader) { return next(createError(500, "Empty Token")) }
+//     const token = authHeader.split(' ')[1]
+//     const decodeData = jwt.verify(token, process.env.JWT_SEC)
+//     //include user data from token in to request
+//     req.user = decodeData
+//     next()
+//   } catch {
+//     return next(createError(500, "Wrong Token"))
+//   }
+// }
 
 const verifyTokenAndAdmin = (req, res, next) =>
   verifyToken(req, res, () => {

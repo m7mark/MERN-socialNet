@@ -5,10 +5,12 @@ const authRouter = require("./routes/user")
 const profileRouter = require("./routes/profile")
 const cors = require("cors")
 const path = require('path');
+const cookieParser = require("cookie-parser");
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
 const app = express()
+app.use(cookieParser());
 app.use(cors())
 app.use(express.json())
 app.use(express.static(path.join(__dirname, "/uploads")))
