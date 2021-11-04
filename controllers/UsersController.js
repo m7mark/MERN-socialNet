@@ -60,10 +60,12 @@ class UsersController {
         // token: accessToken
       }
       res
-        .append('Access-Control-Allow-Credentials', 'true')
+        // .append('Access-Control-Allow-Credentials', 'true')
         .cookie('token', `${accessToken}`, { path: '/api', httpOnly: true })
+        // .header('Access-Control-Allow-Credentials', 'true')
         // .append('Set-Cookie', `token=${accessToken}; HttpOnly`)
         .json({ resultCode: 0, messages: [], data: data })
+      // .send()
     } catch (e) {
       throw createError(500, 'Wrong credentials')
     }
@@ -96,7 +98,8 @@ class UsersController {
         email: user.email,
         login: user.name
       }
-      res.json({ resultCode: 0, messages: [], data: data })
+      res
+        .json({ resultCode: 0, messages: [], data: data })
     } catch {
       throw createError(500, 'You are not autorizated')
     }
