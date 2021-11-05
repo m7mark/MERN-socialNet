@@ -12,5 +12,6 @@ router.put('/origins', verifyToken,
   ],
   asyncHandler(originController.addOrigin))
 router.get('/origins', verifyTokenAndAdmin, asyncHandler(originController.getOriginsList))
+router.delete('/origins', verifyTokenAndAdmin, asyncHandler(originController.delLastOrigin))
 
 module.exports = router

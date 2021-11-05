@@ -29,6 +29,18 @@ class OriginController {
       throw createError(500, 'Update origin error')
     }
   }
+  //DELETE LAST ELEMENT
+  async delLastOrigin(req, res, next) {
+    try {
+      const { origins } = await Origin.findById('618451383cb0c829dad4fa54')
+      const lastElem = origins.pop()
+      console.log(lastElem);
+      await Origin.findByIdAndUpdate('618451383cb0c829dad4fa54', { $pull: { 'origins': { $in: lastElem } } })
+      res.json({ resultCode: 0, messages: [], data: {} })
+    } catch (e) {
+      throw createError(500, 'Delete origin error')
+    }
+  }
 }
 
 module.exports = OriginController
