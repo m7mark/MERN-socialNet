@@ -24,7 +24,7 @@ app.use(cors({
     }
     return callback(null, true);
   },
-  allowedHeaders: 'Accept,Content-Type,X-Requested-With,x-api-key',
+  allowedHeaders: 'Accept,Origin,Content-Type,X-LS-CORS-Template,X-LS-Auth-Token,X-LS-Auth-User-Token,Content-Type,X-LS-Sync-Result,X-LS-Sequence,token',
   credentials: true,
   optionsSuccessStatus: 200
 }));
