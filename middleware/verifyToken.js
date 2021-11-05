@@ -5,7 +5,7 @@ const createError = require("http-errors")
 const allAndVerifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
-    const authHeader = req.headers.apikey
+    const authHeader = req.headers.authorization
     if (!authHeader) { next() }
     else {
       const token = authHeader.split(' ')[1]
@@ -21,7 +21,7 @@ const allAndVerifyToken = (req, res, next) => {
 const verifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
-    const authHeader = req.headers.apikey
+    const authHeader = req.headers.authorization
     if (!authHeader) { return next(createError(500, "Empty Token")) }
     const token = authHeader.split(' ')[1]
     const decodeData = jwt.verify(token, process.env.JWT_SEC)
