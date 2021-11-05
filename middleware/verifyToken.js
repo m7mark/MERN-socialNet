@@ -5,10 +5,12 @@ const createError = require("http-errors")
 const allAndVerifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
-    const token = req.cookies.token
-    if (!token) { next() }
+    const authHeader = req.headers.apikey
+    if (!authHeader) { next() }
     else {
+      const token = authHeader.split(' ')[1]
       const decodeData = jwt.verify(token, process.env.JWT_SEC)
+      //include user data from token in to request
       req.user = decodeData
       next()
     }
@@ -19,8 +21,9 @@ const allAndVerifyToken = (req, res, next) => {
 const verifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
-    const token = req.cookies.token
-    if (!token) { return next(createError(500, "Empty Token")) }
+    const authHeader = req.headers.apikey
+    if (!authHeader) { return next(createError(500, "Empty Token")) }
+    const token = authHeader.split(' ')[1]
     const decodeData = jwt.verify(token, process.env.JWT_SEC)
     //include user data from token in to request
     req.user = decodeData
@@ -29,26 +32,12 @@ const verifyToken = (req, res, next) => {
     return next(createError(500, "Wrong Token"))
   }
 }
+
 const verifyTokenAndAdmin = (req, res, next) =>
   verifyToken(req, res, () => {
-    if (req.user?.roles.includes('ADMIN')) {
+    if (req.user.roles.includes('ADMIN')) {
       next()
     } else { return next(createError(500, "No permittion")) }
   })
-
-// const verifyToken = (req, res, next) => {
-//   if (req.method === 'OPTIONS') { next() }
-//   try {
-//     const authHeader = req.headers.apikey
-//     if (!authHeader) { return next(createError(500, "Empty Token")) }
-//     const token = authHeader.split(' ')[1]
-//     const decodeData = jwt.verify(token, process.env.JWT_SEC)
-//     //include user data from token in to request
-//     req.user = decodeData
-//     next()
-//   } catch {
-//     return next(createError(500, "Wrong Token"))
-//   }
-// }
 
 module.exports = { verifyToken, allAndVerifyToken, verifyTokenAndAdmin }

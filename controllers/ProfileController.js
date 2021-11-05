@@ -127,10 +127,8 @@ class ProfileController {
           }
           fs.unlinkSync(req.file.path)
           const data = {
-            photos: {
-              small: fileLink,
-              large: fileLink
-            }
+            small: fileLink,
+            large: fileLink
           }
           res.json({ resultCode: 0, messages: [], data: data });
         })
