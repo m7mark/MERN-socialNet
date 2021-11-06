@@ -57,18 +57,22 @@ export const actions = {
 type ThunkType = BaseThunkType<ActionsTypes>
 export const authUserData = ():
     ThunkType => async (dispatch) => {
-        const res = await authAPI.me();
-        if (res.data.resultCode === ResultCodeEnum.Success) {
-            let { id, email, login } = res.data.data;
-            dispatch(actions.setAuthUserData(id, email, login, true));
+        try {
+            const res = await authAPI.me();
+            if (res.data.resultCode === ResultCodeEnum.Success) {
+                let { id, email, login } = res.data.data;
+                dispatch(actions.setAuthUserData(id, email, login, true));
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 export const login = (email: string, password: string, rememberMe: boolean, captcha: string | null):
     ThunkType => async (dispatch) => {
         const res = await authAPI.login(email, password, rememberMe, captcha)
         if (res.data.resultCode === ResultCodeEnum.Success) {
-            dispatch(authUserData())
             if (res.data.data.token) { localStorage.setItem('token', res.data.data.token) }
+            dispatch(authUserData())
             // Delete captcha after success
             dispatch(actions.getCaptchaUrlSuccess(null))
         }
@@ -86,7 +90,7 @@ export const logout = ():
     ThunkType => async (dispatch) => {
         const res = await authAPI.logout()
         if (res.data.resultCode === 0) {
-            localStorage.removeItem('token')
+            localStorage.clear()
             dispatch(actions.setAuthUserData(undefined, null, null, false))
         }
     }

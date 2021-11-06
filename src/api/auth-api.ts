@@ -5,6 +5,13 @@ import {
   ResultCodeForCaptchaEnum,
 } from './api';
 
+
+// let config = {
+//   headers: {
+//     Authorization: `Bearer ${localStorage.getItem('token')}`,
+//   }
+// }
+
 type MeResponseDataType = {
   id: string
   email: string

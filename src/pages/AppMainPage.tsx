@@ -79,7 +79,7 @@ export const AppMainPage: React.FC = () => {
                         <Route path='/profile/:userId?' render={() => <SuspenseProfile />} />
                         <Route path='/messages' render={() => <SuspenseDialogs />} />
                         <Route path='/chat' render={() => <SuspenseChatPage />} />
-                        <Route path='/users' render={() => <UsersPage pageTitle={"Самураи"} />} />
+                        <Route path='/users' render={() => <UsersPage pageTitle={"Samurai"} />} />
                         <Route path='/login' render={() => <Login />} />
                     </Content>
                 </Layout.Content>

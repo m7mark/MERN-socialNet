@@ -24,6 +24,7 @@ export const UsersSearchForm: React.FC<PropsType> = ({ setFilter }) => {
     }, [searchText, isOnlyFriends, setFilter]);
     return (
         <Form
+            size='large'
             initialValues={filterState}
             layout='horizontal'
             className="form-container"

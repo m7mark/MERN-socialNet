@@ -10,16 +10,18 @@ export const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-  if (!config) {
-    config = {};
-  }
   if (!config.headers) {
-    config.headers = {};
+    config.headers = {}
   }
-  config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-  return config;
+  const token = localStorage.getItem('token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+    return config;
+  }
+  else {
+    return config
+  }
 })
-
 
 export type GetItemsType = {
   items: Array<UserType>

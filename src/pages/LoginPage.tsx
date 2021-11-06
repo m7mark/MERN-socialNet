@@ -30,6 +30,7 @@ const LoginForm: React.FC = () => {
 
     return (
         <Form
+            size='large'
             name="loginForm"
             className="login-form"
             style={{ maxWidth: 'max-content' }}
