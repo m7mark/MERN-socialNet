@@ -1,14 +1,26 @@
 import axios from 'axios';
 import { UserType } from '../types/types';
 
-const BASE_URL = 'https://snoapi.herokuapp.com/api/'
-// const BASE_URL = 'http://localhost:5000/api/'
+// const BASE_URL = 'https://snoapi.herokuapp.com/api/'
+const BASE_URL = 'http://localhost:5000/api/'
 // export const apiKey = 'f1044d61-6ff5-426d-9719-a80a9bdbb47b'
 // baseURL: 'https://social-network.samuraijs.com/api/1.0/',
 export const instance = axios.create({
   baseURL: BASE_URL,
-  withCredentials: true,
 });
+
+instance.interceptors.request.use((config) => {
+  if (!config) {
+    config = {};
+  }
+  if (!config.headers) {
+    config.headers = {};
+  }
+  config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+  return config;
+})
+
+
 export type GetItemsType = {
   items: Array<UserType>
   totalCount: number

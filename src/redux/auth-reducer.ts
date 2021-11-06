@@ -68,6 +68,7 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
         const res = await authAPI.login(email, password, rememberMe, captcha)
         if (res.data.resultCode === ResultCodeEnum.Success) {
             dispatch(authUserData())
+            if (res.data.data.token) { localStorage.setItem('token', res.data.data.token) }
             // Delete captcha after success
             dispatch(actions.getCaptchaUrlSuccess(null))
         }
@@ -85,6 +86,7 @@ export const logout = ():
     ThunkType => async (dispatch) => {
         const res = await authAPI.logout()
         if (res.data.resultCode === 0) {
+            localStorage.removeItem('token')
             dispatch(actions.setAuthUserData(undefined, null, null, false))
         }
     }
