@@ -1,6 +1,6 @@
 const router = require("express").Router()
 const asyncHandler = require("express-async-handler");
-const { check } = require("express-validator");
+const { body } = require("express-validator");
 const UsersController = require("../controllers/UsersController")
 const { allAndVerifyToken, verifyToken, verifyTokenAndAdmin } = require("../middleware/verifyToken")
 
@@ -11,11 +11,17 @@ const userController = new UsersController()
 //auth
 router.post('/auth/register',
   [
-    check('login', 'Username cannot be empty').notEmpty(),
-    check('password', 'Password must be at least 4 symbols').isLength({ min: 4 }),
+    body('login', 'Username cannot be empty').notEmpty(),
+    body('email', 'Incorrect e-mail').isEmail(),
+    body('password', 'Password must be at least 4 symbols').isLength({ min: 4 }),
   ],
   asyncHandler(userController.register))
-router.post('/auth/login', asyncHandler(userController.login))
+router.post('/auth/login',
+  [
+    body('email', 'Incorrect e-mail').isEmail(),
+    body('password', 'Password must be at least 4 symbols').isLength({ min: 4 }),
+  ],
+  asyncHandler(userController.login))
 router.delete('/auth/login', asyncHandler(userController.logout))
 router.get('/auth/me', verifyToken, asyncHandler(userController.me))
 router.get('/auth', verifyTokenAndAdmin, asyncHandler(userController.getUsers))

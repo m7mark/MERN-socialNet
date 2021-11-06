@@ -4,6 +4,7 @@ const ProfileController = require("../controllers/ProfileController")
 const { verifyToken } = require("../middleware/verifyToken")
 const multer = require("multer");
 const path = require('path')
+const { body } = require("express-validator");
 // const storage = multer.memoryStorage()
 
 const storage = multer.diskStorage({
@@ -18,9 +19,22 @@ const profileController = new ProfileController()
 //api
 //profile
 router.get('/profile/:userId', asyncHandler(profileController.getProfile))
-router.put('/profile/', verifyToken, asyncHandler(profileController.updateProfile))
+router.put('/profile/',
+  //todo validate variable req.body
+  // [
+  //   body('aboutMe', 'Max length is 150').isLength({ max: 150 }),
+  //   body('fullName', 'Max length is 100').isLength({ max: 100 }),
+  //   body('lookingForAJobDescription', 'Max length is 150').isLength({ max: 150 }),
+  //   // body('lookingForAJob', 'Must be boolean').isBoolean(),
+  //   body('contacts.*', 'Incorrect url').isURL(),
+  // ],
+  verifyToken, asyncHandler(profileController.updateProfile))
 router.get('/profile/status/:userId', asyncHandler(profileController.getStatus))
-router.put('/profile/status/', verifyToken, asyncHandler(profileController.updateStatus))
+router.put('/profile/status/',
+  [
+    body('status', 'Max length is 150').isLength({ max: 150 })
+  ],
+  verifyToken, asyncHandler(profileController.updateStatus))
 //follow
 router.post('/follow/:userId', verifyToken, asyncHandler(profileController.followUser))
 router.delete('/follow/:userId', verifyToken, asyncHandler(profileController.unfollowUser))

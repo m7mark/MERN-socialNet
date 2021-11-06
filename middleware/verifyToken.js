@@ -35,7 +35,7 @@ const verifyToken = (req, res, next) => {
 
 const verifyTokenAndAdmin = (req, res, next) =>
   verifyToken(req, res, () => {
-    if (req.user.roles.includes('ADMIN')) {
+    if (req.user?.roles.includes('ADMIN')) {
       next()
     } else { return next(createError(500, "No permittion")) }
   })

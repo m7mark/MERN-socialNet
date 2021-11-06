@@ -4,7 +4,7 @@ const Profile = require('../models/Profile');
 const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const createError = require('http-errors');
-const { validationResult } = require('express-validator'); 
+const { validationResult } = require('express-validator');
 
 const generateAccessToken = (id, roles) => {
   const payload = { id, roles }
@@ -15,10 +15,10 @@ class UsersController {
   //REGISTER
   async register(req, res, next) {
     try {
-      const { email, login, password } = req.body
       //validating errors
       const err = validationResult(req)
       if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
+      const { email, login, password } = req.body
       //is email unique
       const candidate = await User.findOne({ email })
       if (candidate) { return next(createError(500, 'Email must be unique')) }
@@ -39,16 +39,19 @@ class UsersController {
     }
     catch (e) {
       // console.log(e)
-      throw createError(500, 'Registration error')
+      return next(createError(500, 'Registration error'))
     }
   }
   //LOGIN
-  async login(req, res) {
+  async login(req, res, next) {
     try {
+      //validating errors
+      const err = validationResult(req)
+      if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
       const { email, password } = req.body
       //check email
       const user = await User.findOne({ email })
-      if (!user) { throw createError(500, 'Wrong credentials') }
+      if (!user) { return next(createError(500, 'Wrong credentials')) }
       //check password
       const decryptPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SEC)
         .toString(CryptoJS.enc.Utf8);
@@ -61,7 +64,7 @@ class UsersController {
       }
       res.json({ resultCode: 0, messages: [], data: data })
     } catch {
-      throw createError(500, 'Wrong credentials')
+      return next(createError(500, 'Wrong credentials'))
     }
   }
   //LOGOUT
@@ -69,7 +72,7 @@ class UsersController {
     try {
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch {
-      throw createError(500, 'Something wrong')
+      return next(createError(500, 'Something wrong'))
     }
   }
   //GET ALL USERS (ADMIN ACCESS)
@@ -78,7 +81,7 @@ class UsersController {
       const users = await User.find()
       res.json({ resultCode: 0, messages: [], data: users })
     } catch {
-      throw createError(500, 'You are not autorizated')
+      return next(createError(500, 'You are not autorizated'))
     }
   }
   //GET ONE USER
@@ -92,7 +95,7 @@ class UsersController {
       }
       res.json({ resultCode: 0, messages: [], data: data })
     } catch {
-      throw createError(500, 'You are not autorizated')
+      return next(createError(500, 'You are not autorizated'))
     }
   }
   //GET LIST OF USERS
@@ -134,7 +137,7 @@ class UsersController {
       }
       res.json({ items: newUsers, totalCount: responseData.totalDocs, error: null, })
     } catch (e) {
-      throw createError(500, 'Get users error')
+      return next(createError(500, 'Get users error'))
     }
   }
 }

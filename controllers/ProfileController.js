@@ -4,6 +4,8 @@ const createError = require('http-errors');
 const sharp = require('sharp');
 const path = require('path');
 const fs = require('fs')
+const { validationResult } = require('express-validator');
+
 
 class ProfileController {
   //GET PROFILE
@@ -21,12 +23,14 @@ class ProfileController {
       if (!profile) { return next(createError(500, 'User Id incorrect')) }
       res.json(profile);
     } catch (e) {
-      throw createError(500, 'Get profile error')
+      return next(createError(500, 'Get profile error'))
     }
   }
   //UPDATE PROFILE
   async updateProfile(req, res, next) {
     try {
+      // const err = validationResult(req)
+      // if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
       const userId = req.user.id
       if (!userId) { return next(createError(500, 'You are not autorizated')) }
       const profile = await Profile.findOneAndUpdate({ userId }, {
@@ -35,7 +39,7 @@ class ProfileController {
       if (!profile) { return next(createError(500, 'User Id incorrect')) }
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
-      throw createError(500, 'Update profile error')
+      return next(createError(500, 'Update profile error'))
     }
   }
   //GET STATUS
@@ -46,12 +50,14 @@ class ProfileController {
       // if (!profile) { return next(createError(500, 'User Id incorrect')) }
       res.json(status);
     } catch (e) {
-      throw createError(500, 'Get status error')
+      return next(createError(500, 'Get status error'))
     }
   }
   //UPDATE STATUS
   async updateStatus(req, res, next) {
     try {
+      const err = validationResult(req)
+      if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
       const id = req.user.id
       if (!id) { return next(createError(500, 'You are not autorizated')) }
       await User.findByIdAndUpdate(id, { status: req.body.status })
@@ -59,7 +65,7 @@ class ProfileController {
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
       // console.log(e);
-      throw createError(500, 'Update status error')
+      return next(createError(500, 'Update status error'))
     }
   }
   //FOLLOW USER
@@ -75,7 +81,7 @@ class ProfileController {
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
       // console.log(e);
-      throw createError(500, 'Follow user error')
+      return next(createError(500, 'Follow user error'))
     }
   }
   //UNFOLLOW USER
@@ -91,7 +97,7 @@ class ProfileController {
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
       // console.log(e);
-      throw createError(500, 'Unfollow user error')
+      return next(createError(500, 'Unfollow user error'))
     }
   }
   //IS CURRENT USER FOLLOWED
@@ -107,7 +113,7 @@ class ProfileController {
       res.json(false)
     } catch (e) {
       // console.log(e);
-      throw createError(500, 'Check user error')
+      return next(createError(500, 'Check user error'))
     }
   }
   //UPLOAD USER PHOTO
@@ -134,7 +140,7 @@ class ProfileController {
         })
       await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': fileLink, 'photos.large': fileLink } })
     } catch (e) {
-      throw createError(500, 'Upload photo error')
+      return next(createError(500, 'Upload photo error'))
     }
   }
 }
