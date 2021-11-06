@@ -54,6 +54,7 @@ export const ProfileImage: React.FC<PropsType> = ({ isProfileChanging }) => {
               customRequest={uploadImage}
             >
               <Button
+                size='large'
                 className='profile-image-button'
                 block
                 ghost

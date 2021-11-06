@@ -8,7 +8,7 @@ import {
   Row,
   Skeleton,
   Typography
-  } from 'antd';
+} from 'antd';
 import { ParamsUserIdType } from '../../../pages/ProfilePage';
 import { ProfileEditForm } from './ProfileEditForm';
 import { selectAuthId } from '../../../redux/auth-selector';
@@ -18,7 +18,7 @@ import { useParams } from 'react-router-dom';
 
 const { Text } = Typography;
 type PropsType = { isProfileChanging: boolean }
-export const ProfileUserData: React.FC<PropsType> = ({isProfileChanging}) => {
+export const ProfileUserData: React.FC<PropsType> = ({ isProfileChanging }) => {
 
   const profile = useSelector(selectProfile)
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -70,7 +70,10 @@ export const ProfileUserData: React.FC<PropsType> = ({isProfileChanging}) => {
     </Row>
     <div>{(!userId || userId === authorizedUserId) &&
       <Button
-        className='profile-image-button' ghost type='primary'
+        // type='primary'
+        size='large'
+        className='profile-image-button' 
+        ghost type='primary'
         style={{ marginTop: '10px' }}
         onClick={showModal}>Edit Profile
       </Button>}</div>

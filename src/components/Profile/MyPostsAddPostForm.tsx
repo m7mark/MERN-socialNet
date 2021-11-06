@@ -15,6 +15,7 @@ export const MyPostsAddPostForm: React.FC = () => {
 
     return (
         <Form
+            size='large'
             form={form}
             name="addNewPost"
             onFinish={onFinish}

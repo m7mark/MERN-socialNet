@@ -4,7 +4,7 @@ import {
     SetStateAction,
     useEffect,
     useState
-    } from 'react';
+} from 'react';
 import { MainPreloader } from '../../UI/MainPreloader/MainPreloader';
 import { ProfileType } from '../../../types/types';
 import { selectIsLoaded, selectProfile, selectProfileErrorMessage } from '../../../redux/profile-selector';
@@ -79,6 +79,7 @@ export const ProfileEditForm: React.FC<PropsType> = ({ setIsModalVisible }) => {
     return (
         <Form
             {...formItemLayout}
+            size='large'
             form={form}
             name="profileInfo"
             onFinish={onFinish}
