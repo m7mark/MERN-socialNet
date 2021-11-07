@@ -1,3 +1,5 @@
+import axios from "axios"
+
 type MessagesRecievedSubscriberType = (messages: ChatMessageApiType[]) => void
 type StatusChangedSubscriberType = (status: StatusType) => void
 
@@ -36,7 +38,34 @@ const cleanUp = () => {
   ws?.removeEventListener('error', errorHandler)
 }
 
+const BASE_URL = 'https://social-network.samuraijs.com/api/1.0/auth/login'
+const opt = {
+  withCredentials: true,
+  headers: {
+    'API-KEY': 'f1044d61-6ff5-426d-9719-a80a9bdbb47b'
+  }
+}
+async function login() {
+  try {
+    await axios.post(BASE_URL, {
+      email: 'm7mark@yandex.ru',
+      password: 'poilka'
+    }, opt)
+  } catch (e) {
+    console.log(e);
+  }
+}
+export async function logoutChat() {
+  try {
+    await axios.delete(BASE_URL, opt)
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+
 function createChannel() {
+  login()
   cleanUp()
   ws?.close()
   ws = new WebSocket('wss://social-network.samuraijs.com/handlers/ChatHandler.ashx')

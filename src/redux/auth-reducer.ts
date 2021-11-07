@@ -3,6 +3,7 @@ import {
     ResultCodeForCaptchaEnum,
 } from '../api/api';
 import { authAPI } from '../api/auth-api';
+import { logoutChat } from '../api/chat-api';
 import { securityAPI } from '../api/security-api';
 import {
     BaseThunkType,
@@ -89,6 +90,7 @@ export const login = (email: string, password: string, rememberMe: boolean, capt
 export const logout = ():
     ThunkType => async (dispatch) => {
         const res = await authAPI.logout()
+        logoutChat()
         if (res.data.resultCode === 0) {
             localStorage.clear()
             dispatch(actions.setAuthUserData(undefined, null, null, false))
