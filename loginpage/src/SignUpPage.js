@@ -8,7 +8,7 @@ const instanceReq = axios.create({
   baseURL: BASE_URL
 })
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const [tooglePage, setTooglePage] = useState(true);
   const curYear = new Date().getFullYear()
   const [errorLoginMessage, setErrorLoginMessage] = useState('');
@@ -61,7 +61,6 @@ const LoginForm = () => {
                 <Form.Item
                   name="email"
                   rules={[
-                    { type: 'email', message: 'The input is not valid E-mail!' },
                     { required: true, message: 'Please input your E-mail!' },
                   ]}
                 >
@@ -108,12 +107,12 @@ const LoginForm = () => {
   );
 };
 
-export const LoginPage = () => {
+export const SignUpPage = () => {
   return <>
     <div className="header"></div>
     <div className="signupWrapper">
       <div className="signupContainer">
-        <LoginForm />
+        <SignUpForm />
       </div>
     </div>
   </>
