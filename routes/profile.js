@@ -5,7 +5,6 @@ const { verifyToken } = require("../middleware/verifyToken")
 const multer = require("multer");
 const path = require('path')
 const { body } = require("express-validator");
-// const storage = multer.memoryStorage()
 
 const storage = multer.diskStorage({
   destination: path.resolve("uploads"),
@@ -20,15 +19,15 @@ const profileController = new ProfileController()
 //profile
 router.get('/profile/:userId', asyncHandler(profileController.getProfile))
 router.put('/profile/',
-  //todo validate variable req.body
-  // [
-  //   body('aboutMe', 'Max length is 150').isLength({ max: 150 }),
-  //   body('fullName', 'Max length is 100').isLength({ max: 100 }),
-  //   body('lookingForAJobDescription', 'Max length is 150').isLength({ max: 150 }),
-  //   // body('lookingForAJob', 'Must be boolean').isBoolean(),
-  //   body('contacts.*', 'Incorrect url').isURL(),
-  // ],
+  [
+    body('aboutMe', 'Max length is 150').optional().isLength({ max: 150 }),
+    body('fullName', 'Max length is 100').optional().isLength({ max: 100 }),
+    body('lookingForAJobDescription', 'Max length is 150').optional().isLength({ max: 150 }),
+    body('lookingForAJob', 'Must be boolean').optional().isBoolean(),
+    body('contacts.*', 'Incorrect url').optional().isURL(),
+  ],
   verifyToken, asyncHandler(profileController.updateProfile))
+//status
 router.get('/profile/status/:userId', asyncHandler(profileController.getStatus))
 router.put('/profile/status/',
   [

@@ -29,8 +29,8 @@ class ProfileController {
   //UPDATE PROFILE
   async updateProfile(req, res, next) {
     try {
-      // const err = validationResult(req)
-      // if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
+      const err = validationResult(req)
+      if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
       const userId = req.user.id
       if (!userId) { return next(createError(500, 'You are not autorizated')) }
       const profile = await Profile.findOneAndUpdate({ userId }, {
