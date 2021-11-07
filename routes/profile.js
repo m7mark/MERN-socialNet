@@ -24,7 +24,7 @@ router.put('/profile/',
     body('fullName', 'Max length is 100').optional().isLength({ max: 100 }),
     body('lookingForAJobDescription', 'Max length is 150').optional().isLength({ max: 150 }),
     body('lookingForAJob', 'Must be boolean').optional().isBoolean(),
-    body('contacts.*', 'Incorrect url').optional().isURL(),
+    body('contacts.*', 'Incorrect url').optional({nullable:true}).isURL(),
   ],
   verifyToken, asyncHandler(profileController.updateProfile))
 //status
