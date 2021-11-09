@@ -9,7 +9,6 @@ import {
   Skeleton,
   Typography
 } from 'antd';
-import { ParamsUserIdType } from '../../../pages/ProfilePage';
 import { ProfileEditForm } from './ProfileEditForm';
 import { selectAuthId } from '../../../redux/auth-selector';
 import { selectIsFetching, selectProfile } from '../../../redux/profile-selector';
@@ -17,8 +16,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const { Text } = Typography;
-type PropsType = { isProfileChanging: boolean }
-export const ProfileUserData: React.FC<PropsType> = ({ isProfileChanging }) => {
+
+export const ProfileUserData: React.FC = () => {
 
   const profile = useSelector(selectProfile)
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -28,7 +27,7 @@ export const ProfileUserData: React.FC<PropsType> = ({ isProfileChanging }) => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-  const { userId } = useParams<ParamsUserIdType>();
+  const { userId } = useParams();
   const showModal = () => {
     setIsModalVisible(true);
     dispatch(actions.profileIsLoaded(false))
@@ -37,7 +36,7 @@ export const ProfileUserData: React.FC<PropsType> = ({ isProfileChanging }) => {
   return <div style={{ marginTop: '30px' }}>
     <Row>
       <Col style={{ maxWidth: '800px' }} md={24} sm={24} xs={24}>
-        {isFetching && isProfileChanging
+        {isFetching
           ? <Skeleton active title={false} paragraph={{ rows: 4 }} />
           : <Descriptions
             // title="Description"
@@ -72,7 +71,7 @@ export const ProfileUserData: React.FC<PropsType> = ({ isProfileChanging }) => {
       <Button
         // type='primary'
         size='large'
-        className='profile-image-button' 
+        className='profile-image-button'
         ghost type='primary'
         style={{ marginTop: '10px' }}
         onClick={showModal}>Edit Profile

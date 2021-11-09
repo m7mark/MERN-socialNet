@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppStateType } from '../../redux/store';
+import { AppStateType } from '../../../redux/store';
 import { Avatar, List, Space } from 'antd';
 import { LikeOutlined, StarOutlined } from '@ant-design/icons';
 import { useSelector } from 'react-redux';

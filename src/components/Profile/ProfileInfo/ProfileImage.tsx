@@ -8,7 +8,6 @@ import {
   Skeleton,
   Upload
 } from 'antd';
-import { ParamsUserIdType } from '../../../pages/ProfilePage';
 import { selectAuthId } from '../../../redux/auth-selector';
 import { selectIsFetching, selectProfile } from '../../../redux/profile-selector';
 import { UploadOutlined } from '@ant-design/icons';
@@ -16,9 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { profileAPI } from '../../../api/profile-api';
 
-type PropsType = { isProfileChanging: boolean }
-export const ProfileImage: React.FC<PropsType> = ({ isProfileChanging }) => {
-  const { userId } = useParams<ParamsUserIdType>();
+export const ProfileImage: React.FC = () => {
+  const { userId } = useParams();
   const dispatch = useDispatch()
   const profile = useSelector(selectProfile)
   const isFetching = useSelector(selectIsFetching)
@@ -44,24 +42,33 @@ export const ProfileImage: React.FC<PropsType> = ({ isProfileChanging }) => {
   return (
     <div>
       <div className='profile-image-container' >
-        {isFetching && isProfileChanging
-          ? <Skeleton.Image style={{ minWidth: '200px', minHeight: '200px' }} />
-          : <img src={profile?.photos.large || userIcon} alt="" ></img>}
-        <div>
-          {(!userId || userId === authorizedUserId) &&
-            <Upload
-              accept="image/*"
-              customRequest={uploadImage}
-            >
-              <Button
-                size='large'
-                className='profile-image-button'
-                block
-                ghost
-                type='primary'
-                icon={<UploadOutlined />}>Click to Upload</Button>
-            </Upload>}
-        </div>
+        {isFetching
+          ? <>
+            <div>
+              <Skeleton.Image style={{ minWidth: '200px', minHeight: '200px' }} />
+            </div>
+            <div>
+              <Skeleton.Button size='large' style={{ minWidth: '200px', marginTop: '10px' }} />
+            </div>
+          </>
+          : <div>
+            <img src={profile?.photos.large || userIcon} alt="" ></img>
+            <div>
+              {(!userId || userId === authorizedUserId) &&
+                <Upload
+                  accept="image/*"
+                  customRequest={uploadImage}
+                >
+                  <Button
+                    size='large'
+                    className='profile-image-button'
+                    block
+                    ghost
+                    type='primary'
+                    icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>}
+            </div>
+          </div>}
       </div>
     </div>
   )

@@ -1,72 +1,71 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { BackTop } from 'antd';
 import { CurrentUsers } from '../components/Users/CurrentUsers';
 import { useDispatch, useSelector } from 'react-redux';
 import { UserPaginator } from '../components/Users/UserPaginate';
 import { UsersSearchForm } from '../components/Users/UsersSearchForm';
+import { useSearchParams } from 'react-router-dom';
 import {
-    FilterType,
-    getUsers,
+  FilterType,
+  getUsers,
 } from '../redux/users-reducer';
 import {
-    getCurrentPage,
-    getPageSize,
-    getUsersFilter,
+  getCurrentPage,
+  getPageSize,
+  getUsersFilter,
 } from '../redux/users-selector';
-import {
-    useQueryParams,
-    StringParam,
-    NumberParam,
-    BooleanParam,
-} from 'use-query-params';
 
 
 type PropsType = {
-    pageTitle: string
+  pageTitle: string
 }
 export const UsersPage: React.FC<PropsType> = (props) => {
-    const currentPageState = useSelector(getCurrentPage)
-    const pageSizeState = useSelector(getPageSize)
-    const filterState = useSelector(getUsersFilter)
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [query, setQuery] = useQueryParams({
-        term: StringParam,
-        friend: BooleanParam,
-        page: NumberParam,
-        count: NumberParam
-    });
-    const [filter, setFilter] = useState<FilterType>(filterState)
-    const [page, setPage] = useState<number>(currentPageState)
-    const [pageSize, setPageSize] = useState<number>(pageSizeState)
+  const currentPageState = useSelector(getCurrentPage)
+  const pageSizeState = useSelector(getPageSize)
+  const filterState = useSelector(getUsersFilter)
 
-    const dispatch = useDispatch()
-    useEffect(() => {
-        if (JSON.stringify(filter) === JSON.stringify(filterState)) {
-            pageSize && dispatch(getUsers(page, pageSize, filter))
-        }
-        else {
-            pageSize && dispatch(getUsers(1, pageSize, filter))
-            setPage(1)
-        }
+  const [query, setQuery] = useSearchParams();
+  const [queryObj, setQueryObj] = useState({
+    // page: '1',
+    // count: '',
+    // term: '',
+    // friend: ''
+  });
 
-    }, [pageSize, page, filter]);
-    useEffect(() => {
-        setQuery({ page: page }, 'replaceIn')
-        setQuery({ count: pageSize }, 'replaceIn')
-        if (filter.term.length === 0) setQuery({ term: undefined }, 'replaceIn')
-        else { setQuery({ term: filter.term }, 'replaceIn') }
-        if (!filter.friend) setQuery({ friend: undefined }, 'replaceIn')
-        else { setQuery({ friend: filter.friend }, 'replaceIn') }
-    }, [pageSize, page, filter]);
+  const [filter, setFilter] = useState<FilterType>(filterState)
+  const [page, setPage] = useState<number>(currentPageState)
+  const [pageSize, setPageSize] = useState<number>(pageSizeState)
 
-    return <div>
-        <BackTop />
-        <h2>{props.pageTitle}</h2>
-        <UserPaginator setPage={setPage} setPageSize={setPageSize} />
-        <br />
-        <UsersSearchForm
-            setFilter={setFilter} />
-        <CurrentUsers />
-    </div>
+  const dispatch = useDispatch()
+  useEffect(() => {
+    if (JSON.stringify(filter) === JSON.stringify(filterState)) {
+      pageSize && dispatch(getUsers(page, pageSize, filter))
+    }
+    else {
+      pageSize && dispatch(getUsers(1, pageSize, filter))
+      setPage(1)
+    }
+  }, [pageSize, page, filter, dispatch, filterState]);
+
+  useEffect(() => {
+    setQueryObj(prev => ({ ...prev, page: `${page}` }))
+    setQueryObj(prev => ({ ...prev, count: `${pageSize}` }))
+    setQueryObj(prev => ({ ...prev, term: filter.term }))
+    if (!filter.friend) setQueryObj(prev => ({ ...prev, friend: '0' }))
+    else { setQueryObj(prev => ({ ...prev, friend: '1' })) }
+  }, [pageSize, page, filter]);
+  useEffect(() => {
+    setQuery(queryObj)
+  }, [queryObj, setQuery]);
+
+
+  return <div>
+    <BackTop />
+    <h2>{props.pageTitle}</h2>
+    <UserPaginator setPage={setPage} setPageSize={setPageSize} />
+    <br />
+    <UsersSearchForm
+      setFilter={setFilter} />
+    <CurrentUsers />
+  </div>
 }
