@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { initializeApp } from './redux/app-reducer';
 import { message } from 'antd';
 import { Provider } from 'react-redux';
-import './styles/App.scss';
+import './styles/App.css';
 import 'antd/dist/antd.css';
 import { MainPreloader } from './components/UI/MainPreloader/MainPreloader';
 import { useEffect } from 'react';

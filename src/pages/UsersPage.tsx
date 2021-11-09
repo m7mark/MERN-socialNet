@@ -56,7 +56,7 @@ export const UsersPage: React.FC<PropsType> = (props) => {
   }, [pageSize, page, filter]);
   useEffect(() => {
     setQuery(queryObj)
-  }, [queryObj, setQuery]);
+  }, [queryObj, setQuery, query]);
 
 
   return <div>
