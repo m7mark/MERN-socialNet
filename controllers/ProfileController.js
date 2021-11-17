@@ -1,13 +1,12 @@
-const User = require('../models/User');
-const Profile = require('../models/Profile');
-const createError = require('http-errors');
-const sharp = require('sharp');
-const path = require('path');
-const fs = require('fs')
-const { validationResult } = require('express-validator');
+import User from '../models/User.js'
+import Profile from '../models/Profile.js'
+import createError from 'http-errors'
+import sharp from 'sharp'
+import path from 'path'
+import fs from 'fs'
+import { validationResult } from 'express-validator'
 
-
-class ProfileController {
+export class ProfileController {
   //GET PROFILE
   async getProfile(req, res, next) {
     try {
@@ -144,5 +143,3 @@ class ProfileController {
     }
   }
 }
-
-module.exports = ProfileController

@@ -1,11 +1,12 @@
-const router = require("express").Router()
-const asyncHandler = require("express-async-handler");
-const ProfileController = require("../controllers/ProfileController")
-const { verifyToken } = require("../middleware/verifyToken")
-const multer = require("multer");
-const path = require('path')
-const { body } = require("express-validator");
+import express from "express"
+import asyncHandler from "express-async-handler"
+import { ProfileController } from "../controllers/ProfileController.js"
+import { verifyToken } from "../middleware/verifyToken.js"
+import multer from "multer"
+import path from 'path'
+import { body } from "express-validator"
 
+const router = express.Router()
 const storage = multer.diskStorage({
   destination: path.resolve("uploads"),
   filename: function (req, file, callback) {
@@ -41,4 +42,4 @@ router.get('/follow/:userId', verifyToken, asyncHandler(profileController.isFoll
 //post photo
 router.put('/profile/photo', upload.single('image'), verifyToken, asyncHandler(profileController.putUserPhoto))
 
-module.exports = router
+export default router

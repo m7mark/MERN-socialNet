@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
 
 const ProfileSchema = new mongoose.Schema({
   aboutMe: { type: String, default: null },
@@ -22,4 +22,4 @@ const ProfileSchema = new mongoose.Schema({
   },
 })
 
-module.exports = mongoose.model('Profile', ProfileSchema)
+export default mongoose.model('Profile', ProfileSchema)

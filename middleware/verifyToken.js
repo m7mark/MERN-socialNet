@@ -1,8 +1,8 @@
-const jwt = require("jsonwebtoken")
-const createError = require("http-errors")
+import jwt from "jsonwebtoken"
+import createError from "http-errors"
 
 //token includes {id, roles}
-const allAndVerifyToken = (req, res, next) => {
+export const allAndVerifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
     const authHeader = req.headers.authorization
@@ -17,7 +17,7 @@ const allAndVerifyToken = (req, res, next) => {
     return next(createError(500, "Wrong Token"))
   }
 }
-const verifyToken = (req, res, next) => {
+export const verifyToken = (req, res, next) => {
   if (req.method === 'OPTIONS') { next() }
   try {
     const authHeader = req.headers.authorization
@@ -33,10 +33,8 @@ const verifyToken = (req, res, next) => {
   }
 }
 
-const verifyTokenAndAdmin = (req, res, next) =>
+export const verifyTokenAndAdmin = (req, res, next) =>
   verifyToken(req, res, () => {
     if (req.user?.roles.includes('ADMIN')) { return next() }
     else { return next(createError(500, "No permittion")) }
   })
-
-module.exports = { verifyToken, allAndVerifyToken, verifyTokenAndAdmin }

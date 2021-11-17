@@ -1,11 +1,11 @@
-const router = require("express").Router()
-const asyncHandler = require("express-async-handler");
-const { body } = require("express-validator");
-const UsersController = require("../controllers/UsersController")
-const { allAndVerifyToken, verifyToken, verifyTokenAndAdmin } = require("../middleware/verifyToken")
+import express from "express"
+import asyncHandler from "express-async-handler"
+import { body } from "express-validator"
+import { UsersController } from "../controllers/UsersController.js"
+import { allAndVerifyToken, verifyToken, verifyTokenAndAdmin } from "../middleware/verifyToken.js"
 
+const router = express.Router()
 const userController = new UsersController()
-
 
 //api
 //auth
@@ -28,4 +28,4 @@ router.get('/auth', verifyTokenAndAdmin, asyncHandler(userController.getUsers))
 //get all users
 router.get('/users', allAndVerifyToken, asyncHandler(userController.getListOfUsers))
 
-module.exports = router
+export default router

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose")
-const mongoosePaginate = require("mongoose-paginate-v2")
+import mongoose from "mongoose"
+import mongoosePaginate from "mongoose-paginate-v2"
 
 const UserSchema = new mongoose.Schema({
   email: { type: String, unique: true, required: true },
@@ -25,4 +25,4 @@ UserSchema.set('toJSON', {
   virtuals: true
 });
 
-module.exports = mongoose.model('User', UserSchema)
+export default mongoose.model('User', UserSchema)

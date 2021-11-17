@@ -1,7 +1,7 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose"
 
 const RoleSchema = new mongoose.Schema({
   value: { type: String, unique: true, default: "USER" }
 })
 
-module.exports = mongoose.model('Role', RoleSchema)
+export default mongoose.model('Role', RoleSchema)
