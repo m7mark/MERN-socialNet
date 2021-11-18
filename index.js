@@ -5,25 +5,22 @@ import dotenv from "dotenv"
 import authRouter from "./routes/user.js"
 import profileRouter from "./routes/profile.js"
 import cors from "cors"
-import path from 'path';
+import path, { dirname } from 'path';
 
 // __dirname defenition
-function dirname(meta) {
-    return fileURLToPath(meta.url);
-}
-const __dirname = dirname(import.meta);
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
 const app = express()
 app.use(cors())
 app.use(express.json())
-app.use(express.static(path.join(__dirname,"/uploads")))
-app.use(express.static(path.join(__dirname,"/loginpage/build")));
+app.use(express.static(path.join(__dirname, "/uploads")))
+app.use(express.static(path.join(__dirname, "/loginpage/build")));
 app.use('/api', authRouter)
 app.use('/api', profileRouter)
 app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname,'/loginpage/build', 'index.html'));
+  res.sendFile(path.join(__dirname, '/loginpage/build', 'index.html'));
 });
 app.use((error, req, res, next) => {
   res.status(200)
