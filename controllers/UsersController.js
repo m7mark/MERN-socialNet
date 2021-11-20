@@ -105,6 +105,7 @@ export class UsersController {
     const currentUser = req.user?.id
     //paginate options
     const options = {
+      sort: '-createdAt',
       page: page || 1,
       limit: count || 10,
       select: 'id name status photos followed',
