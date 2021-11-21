@@ -1,6 +1,6 @@
 # React Social-Net App
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/57e1f85b-fe7b-488d-815b-7cf3a853c831/deploy-status)](https://app.netlify.com/sites/snoapp/deploys)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/57e1f85b-fe7b-488d-815b-7cf3a853c831/deploy-status)](https://app.netlify.com/sites/snoapp/deploys)\
 A training Front End  project for creating a multi-page social-net app. The application receives data from the api through rest api requests. The social network receives a list of users and information about users. Message exchange is implemented via a web socket. \
 This course is on the YouTube channel [IT-KAMASUTRA](https://www.youtube.com/channel/UCTW0FUhT0m-Bqg2trTbSs0g).
 
