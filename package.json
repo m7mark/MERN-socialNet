@@ -1,13 +1,11 @@
 {
   "name": "social",
   "version": "1.0.0",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "author": "Mark Rodovsky",
   "license": "MIT",
   "scripts": {
-    "start": "node build/index.js",
-    "build": "tsc",
-    "postinstall": "npm run build",
+    "start": "tsc && node dist/index.js",
     "heroku-postbuild": "cd loginpage && yarn install && yarn run build",
     "dev": "ts-node-dev index.ts"
   },
