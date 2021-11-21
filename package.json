@@ -6,6 +6,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsc && node dist/index.js",
+    "heroku-postbuild": "cd loginpage && yarn install && yarn run build",
     "dev": "ts-node-dev src/index.ts"
   },
   "dependencies": {
