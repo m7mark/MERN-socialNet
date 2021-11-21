@@ -1,23 +1,26 @@
-import User from '../models/User.js'
-import Role from '../models/Role.js'
-import Profile from '../models/Profile.js'
+import { IUser, User } from '../models/User'
+import Role from '../models/Role'
+import Profile from '../models/Profile'
 import jwt from 'jsonwebtoken'
 import CryptoJS from 'crypto-js'
 import createError from 'http-errors'
 import { validationResult } from 'express-validator'
+import { Response, NextFunction } from 'express'
+import { IRequest } from '../types/index'
 
-const generateAccessToken = (id, roles) => {
+
+const generateAccessToken = (id: string, roles: Array<string>) => {
   const payload = { id, roles }
-  return jwt.sign(payload, process.env.JWT_SEC, { expiresIn: '3d' })
+  return jwt.sign(payload, process.env.JWT_SEC || '', { expiresIn: '3d' })
 }
 
 export class UsersController {
   //REGISTER
-  async register(req, res, next) {
+  async register(req: IRequest, res: Response, next: NextFunction) {
     try {
       //validating errors
       const err = validationResult(req)
-      if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
+      if (!err.isEmpty()) { return next(createError(500, `${err.array()[0].msg}`)) }
       const { email, login, password } = req.body
       //is email unique
       const candidate = await User.findOne({ email })
@@ -28,8 +31,8 @@ export class UsersController {
         name: login,
         email: email,
         //add hash password
-        password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC).toString(),
-        roles: [userRole.value]
+        password: CryptoJS.AES.encrypt(password, process.env.PASS_SEC || '').toString(),
+        roles: [userRole?.value]
       })
       const savedNewUser = await newUser.save()
       //create new profile
@@ -43,17 +46,17 @@ export class UsersController {
     }
   }
   //LOGIN
-  async login(req, res, next) {
+  async login(req: IRequest, res: Response, next: any) {
     try {
       //validating errors
       const err = validationResult(req)
-      if (!err.isEmpty()) { return next(createError(500, `${err.errors[0].msg}`)) }
+      if (!err.isEmpty()) { return next(createError(500, `${err.array()[0].msg}`)) }
       const { email, password } = req.body
       //check email
       const user = await User.findOne({ email })
       if (!user) { return next(createError(500, 'Wrong credentials')) }
       //check password
-      const decryptPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SEC)
+      const decryptPassword = CryptoJS.AES.decrypt(user.password, process.env.PASS_SEC || '')
         .toString(CryptoJS.enc.Utf8);
       if (decryptPassword !== password) { throw createError(500, 'Wrong credentials') }
       //response
@@ -68,7 +71,7 @@ export class UsersController {
     }
   }
   //LOGOUT
-  async logout(req, res) {
+  async logout(req: IRequest, res: Response, next: any) {
     try {
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch {
@@ -76,7 +79,7 @@ export class UsersController {
     }
   }
   //GET ALL USERS (ADMIN ACCESS)
-  async getUsers(req, res) {
+  async getUsers(req: IRequest, res: Response, next: any) {
     try {
       const users = await User.find()
       res.json({ resultCode: 0, messages: [], data: users })
@@ -85,10 +88,10 @@ export class UsersController {
     }
   }
   //GET ONE USER
-  async me(req, res) {
+  async me(req: IRequest, res: Response, next: any) {
     try {
-      const user = await User.findById(req.user.id)
-      const data = {
+      const user = await User.findById(req.user?.id)
+      const data = user && {
         id: user._id,
         email: user.email,
         login: user.name
@@ -99,21 +102,22 @@ export class UsersController {
     }
   }
   //GET LIST OF USERS
-  async getListOfUsers(req, res) {
+  async getListOfUsers(req: IRequest, res: Response, next: any) {
     //query params
     const { count, page, term, friend } = req.query
     const currentUser = req.user?.id
     //paginate options
     const options = {
       sort: '-createdAt',
-      page: page || 1,
-      limit: count || 10,
+      page: page && +page || 1,
+      limit: count && +count || 10,
       select: 'id name status photos followed',
     };
     try {
-      let newUsers = []
+      let newUsers = [] as IUser[]
       let responseData;
-      const re = new RegExp(term, "i")
+      let newTerm = term as string
+      const re = new RegExp(newTerm, "i")
       const currentUserData = await User.findById(currentUser)
       //only friends
       if (friend === 'true' && currentUserData) {
@@ -129,8 +133,8 @@ export class UsersController {
       const users = responseData.docs
       //if user authorized
       if (currentUser) {
-        users.map((u) => {
-          if (currentUserData?.followedIds.includes(u._id)) { u.followed = true }
+        users.map((u: any) => {
+          if (currentUserData?.followedIds?.includes(u._id)) { u.followed = true }
           newUsers.push(u)
         })
       } else {

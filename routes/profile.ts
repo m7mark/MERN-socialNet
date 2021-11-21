@@ -1,7 +1,7 @@
 import express from "express"
 import asyncHandler from "express-async-handler"
-import { ProfileController } from "../controllers/ProfileController.js"
-import { verifyToken } from "../middleware/verifyToken.js"
+import { ProfileController } from "../controllers/ProfileController"
+import { verifyToken } from "../middleware/verifyToken"
 import multer from "multer"
 import path from 'path'
 import { body } from "express-validator"

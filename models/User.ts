@@ -1,7 +1,21 @@
-import mongoose from "mongoose"
+import { PaginateModel, Document, Schema, model } from 'mongoose';
 import mongoosePaginate from "mongoose-paginate-v2"
 
-const UserSchema = new mongoose.Schema({
+export interface IUser extends Document {
+  email: string
+  password: string
+  name: string
+  status?: string
+  followedIds?: Array<string>
+  followed?: boolean
+  photos: {
+    small?: string
+    large?: string
+  },
+  roles: Array<string>
+}
+
+const UserSchema = new Schema({
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
   name: { type: String, required: true },
@@ -17,7 +31,7 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(mongoosePaginate);
 // Duplicate the ID field.
-UserSchema.virtual('id').get(function(){
+UserSchema.virtual('id').get(function (this: { _id: any }) {
   return this._id.toHexString();
 });
 // Ensure virtual fields are serialised.
@@ -25,4 +39,7 @@ UserSchema.set('toJSON', {
   virtuals: true
 });
 
-export default mongoose.model('User', UserSchema)
+interface UserModel<T extends Document> extends PaginateModel<T> { }
+
+export const User: UserModel<IUser> = model<IUser>('User', UserSchema);
+

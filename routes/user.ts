@@ -1,8 +1,8 @@
 import express from "express"
 import asyncHandler from "express-async-handler"
 import { body } from "express-validator"
-import { UsersController } from "../controllers/UsersController.js"
-import { allAndVerifyToken, verifyToken, verifyTokenAndAdmin } from "../middleware/verifyToken.js"
+import { UsersController } from "../controllers/UsersController"
+import { allAndVerifyToken, verifyToken, verifyTokenAndAdmin } from "../middleware/verifyToken"
 
 const router = express.Router()
 const userController = new UsersController()
@@ -11,7 +11,7 @@ const userController = new UsersController()
 //auth
 router.post('/auth/register',
   [
-    body('login', 'Username cannot be empty').notEmpty(),
+    body('login', 'Username cannot be empty, max 50 symbols').notEmpty().isLength({ max: 50 }),
     body('email', 'Incorrect e-mail').isEmail(),
     body('password', 'Password must be at least 4 symbols').isLength({ min: 4 }),
   ],

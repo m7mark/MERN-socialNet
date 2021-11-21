@@ -2,13 +2,15 @@ import express from "express";
 import { fileURLToPath } from "url";
 import mongoose from "mongoose"
 import dotenv from "dotenv"
-import authRouter from "./routes/user.js"
-import profileRouter from "./routes/profile.js"
+import authRouter from "./routes/user"
+import profileRouter from "./routes/profile"
 import cors from "cors"
 import path, { dirname } from 'path';
+import { Request, Response, NextFunction, ErrorRequestHandler } from 'express'
+
 
 // __dirname defenition
-const __dirname = dirname(fileURLToPath(import.meta.url));
+// const __dirname = dirname(fileURLToPath(import.meta.url));
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
@@ -22,7 +24,7 @@ app.use('/api', profileRouter)
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '/loginpage/build', 'index.html'));
 });
-app.use((error, req, res, next) => {
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   res.status(200)
   // Error response
   res.json({
@@ -34,7 +36,7 @@ app.use((error, req, res, next) => {
 
 async function startApp() {
   try {
-    await mongoose.connect(process.env.DB_URL)
+    await mongoose.connect(process.env.DB_URL || '')
     app.listen(PORT, () => console.log('Server started at port: ' + PORT))
   } catch (e) { console.log(e); }
 }
