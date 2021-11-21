@@ -70,7 +70,7 @@ const LoginForm: React.FC = () => {
           />
         </Form.Item>
       </Form.Item>
-      <Form.Item>
+      <Form.Item hidden={true}>
         <Form.Item name="rememberMe" valuePropName="checked" noStyle>
           <Checkbox>Remember me</Checkbox>
         </Form.Item>
@@ -96,7 +96,7 @@ const LoginForm: React.FC = () => {
           type="primary"
           htmlType="submit"
           className="login-form-button"
-          style={{ width: '100%' }}
+          style={{ width: '100%', marginBottom: '10px' }}
         >
           Log in
         </Button>
@@ -114,8 +114,8 @@ export const Login: React.FC = () => {
     if (isAuth) { navigate("/profile") }
   }, [isAuth, navigate])
 
-  return <div>
+  return <>
     <h1>Login</h1>
     <LoginForm />
-  </div>
+  </>
 }

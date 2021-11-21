@@ -3,42 +3,42 @@
 }
 
 .site-main-content {
-  margin: 24px 16px;
-  padding: 36px;
+  margin    : 24px 16px;
+  padding   : 36px;
   min-height: 610px !important;
 }
 
 @media (max-width: 768px) {
   .site-main-content {
-    margin: 0;
-    padding: 18px;
+    margin    : 0;
+    padding   : 18px;
     min-height: 280px;
   }
 }
 
 .site-main-preloader {
-  margin: 20px 0;
+  margin       : 20px 0;
   margin-bottom: 20px;
-  padding: 30px 50px;
+  padding      : 30px 50px;
 }
 
 .form-container {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  max-width: 350px;
-  -webkit-box-orient: vertical;
+  display              : -webkit-box;
+  display              : -ms-flexbox;
+  display              : flex;
+  max-width            : 350px;
+  -webkit-box-orient   : vertical;
   -webkit-box-direction: normal;
-      -ms-flex-direction: column;
-          flex-direction: column;
-  -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-  margin-bottom: 10px;
+  -ms-flex-direction   : column;
+  flex-direction       : column;
+  -ms-flex-wrap        : wrap;
+  flex-wrap            : wrap;
+  margin-bottom        : 10px;
 }
 
 .form-container .form-item-switch {
   margin-bottom: 20px;
-  font-size: 14px;
+  font-size    : 14px;
 }
 
 .field-container {
@@ -46,35 +46,35 @@
 }
 
 .users-mapping-items {
-  max-width: 700px;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  max-width    : 700px;
+  display      : -webkit-box;
+  display      : -ms-flexbox;
+  display      : flex;
   -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
+  flex-wrap    : wrap;
 }
 
 @media (max-width: 768px) {
   .users-mapping-items {
     -webkit-box-pack: space-evenly;
-        -ms-flex-pack: space-evenly;
-            justify-content: space-evenly;
+    -ms-flex-pack   : space-evenly;
+    justify-content : space-evenly;
   }
 }
 
 .user-current-card {
-  margin-right: 20px;
+  margin-right : 20px;
   margin-bottom: 20px;
-  padding: 12px;
-  width: 33%;
-  border: 1px solid #d9d9d9;
-  min-width: 150px;
+  padding      : 12px;
+  width        : 33%;
+  border       : 1px solid #d9d9d9;
+  min-width    : 150px;
 }
 
 @media (max-width: 768px) {
   .user-current-card {
     margin-right: 2px;
-    padding: 10px;
+    padding     : 10px;
   }
 }
 
@@ -93,16 +93,16 @@
 }
 
 .menu-navbar {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
+  display         : -webkit-box;
+  display         : -ms-flexbox;
+  display         : flex;
   -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack   : justify;
+  justify-content : space-between;
   background-color: #ffffff;
-  padding-left: 1rem;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
+  padding-left    : 1rem;
+  padding-top     : 1rem;
+  padding-bottom  : 1rem;
 }
 
 .menu-navbar .menu {
@@ -116,40 +116,40 @@
 }
 
 .menu-navbar-logo {
-  height: 32px;
+  height     : 32px;
   margin-left: 1rem;
 }
 
 .chat-container {
-  padding: 8px 24px;
-  overflow: auto;
-  border: 1px solid #e8e8e8;
+  padding      : 8px 24px;
+  overflow     : auto;
+  border       : 1px solid #e8e8e8;
   border-radius: 4px;
 }
 
 .card-container {
-  width: 260px;
+  width        : 260px;
   margin-bottom: 30px !important;
-  margin-right: 20px !important;
+  margin-right : 20px !important;
 }
 
 .card-container img {
-  height: 100px;
-  width: 100px;
-  margin-top: 10px;
+  height     : 100px;
+  width      : 100px;
+  margin-top : 10px;
   margin-left: 24px;
 }
 
 .card-action-button {
-  width: 88%;
+  width            : 88%;
   -webkit-box-align: center;
-      -ms-flex-align: center;
-          align-items: center;
+  -ms-flex-align   : center;
+  align-items      : center;
 }
 
 .card-action-button-followed {
   background-color: #fff8f8 !important;
-  width: 88%;
+  width           : 88%;
 }
 
 .profile-image-container {
@@ -157,11 +157,17 @@
 }
 
 .profile-image-container img {
-  max-width: 200px;
+  max-width    : 200px;
   margin-bottom: 10px;
 }
 
 .profile-image-button {
   width: 200px !important;
 }
+
+input:-webkit-autofill {
+  -webkit-background-clip: text;
+  background-clip        : text;
+}
+
 /*# sourceMappingURL=App.css.map */
