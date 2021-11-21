@@ -5,7 +5,9 @@
   "author": "Mark Rodovsky",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "node build/index.js",
+    "build": "tsc",
+    "postinstall": "npm run build",
     "heroku-postbuild": "cd loginpage && yarn install && yarn run build",
     "dev": "ts-node-dev index.ts"
   },
