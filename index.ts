@@ -1,13 +1,11 @@
 import express from "express";
-import { fileURLToPath } from "url";
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import authRouter from "./routes/user"
 import profileRouter from "./routes/profile"
 import cors from "cors"
 import path, { dirname } from 'path';
-import { Request, Response, NextFunction, ErrorRequestHandler } from 'express'
-
+import { Request, Response, NextFunction } from 'express'
 
 // __dirname defenition
 // const __dirname = dirname(fileURLToPath(import.meta.url));
