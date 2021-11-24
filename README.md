@@ -67,7 +67,7 @@ Redux whith Redux middleware.
 
 ### Test deployment
 
-The `develop` branch deploys to https://m7mark.github.io/socialNet-React
+The `clientSN` branch deploys to https://snoapp.netlify.app/
 
 ---
 
