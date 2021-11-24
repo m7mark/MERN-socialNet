@@ -14,7 +14,7 @@ const generateAccessToken = (id: string, roles: Array<string>) => {
   return jwt.sign(payload, process.env.JWT_SEC || '', { expiresIn: '3d' })
 }
 
-export class UsersController {
+class UsersController {
   //REGISTER
   async register(req: IRequest, res: Response, next: NextFunction) {
     try {
@@ -146,3 +146,5 @@ export class UsersController {
     }
   }
 }
+
+export default new UsersController

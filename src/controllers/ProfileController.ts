@@ -8,7 +8,7 @@ import { validationResult } from 'express-validator'
 import { Response } from 'express'
 import { IRequest } from '../types/index'
 
-export class ProfileController {
+class ProfileController {
   //GET PROFILE
   async getProfile(req: IRequest, res: Response, next: any) {
     try {
@@ -145,3 +145,5 @@ export class ProfileController {
     }
   }
 }
+
+export default new ProfileController

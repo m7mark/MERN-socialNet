@@ -1,10 +1,10 @@
-import express from "express";
+import express, { Application } from "express";
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import authRouter from "./routes/user"
 import profileRouter from "./routes/profile"
 import cors from "cors"
-import path  from 'path';
+import path from 'path';
 import { Request, Response, NextFunction } from 'express'
 
 // __dirname defenition
@@ -13,7 +13,7 @@ const dirName = path.dirname(__dirname);
 
 dotenv.config()
 const PORT = process.env.PORT || 5000
-const app = express()
+export const app: Application = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static(path.join(dirName, "/uploads")))
