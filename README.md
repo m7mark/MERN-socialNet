@@ -29,8 +29,8 @@ yarn start
 ```
 3. For Login use this:
 
-Email: `free@samuraijs.com`
-Password: `free`
+Email: `free@free.com`
+Password: `12345`
 
 ## Testing
 
@@ -67,7 +67,7 @@ Redux whith Redux middleware.
 
 ### Test deployment
 
-The `develop` branch deploys to https://m7mark.github.io/socialNet-React
+The `clientSN` branch deploys to https://snoapp.netlify.app/
 
 ---
 
