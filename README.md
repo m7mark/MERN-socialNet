@@ -29,8 +29,8 @@ yarn start
 ```
 3. For Login use this:
 
-Email: `free@samuraijs.com`
-Password: `free`
+Email: `free@free.com`
+Password: `12345`
 
 ## Testing
 
