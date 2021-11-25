@@ -6,12 +6,19 @@ import profileRouter from "./routes/profile"
 import cors from "cors"
 import path from 'path';
 import { Request, Response, NextFunction } from 'express'
+import cloudinary from 'cloudinary'
 
 // __dirname defenition
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const dirName = path.dirname(__dirname);
 
 dotenv.config()
+cloudinary.v2.config({
+  cloud_name: 'm7mark',
+  api_key: process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET
+});
+
 const PORT = process.env.PORT || 5000
 export const app: Application = express()
 app.use(cors())
