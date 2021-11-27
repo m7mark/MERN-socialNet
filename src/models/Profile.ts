@@ -1,6 +1,27 @@
-import mongoose from "mongoose"
+import { Document, Schema, model } from 'mongoose';
+export interface IProfile extends Document {
+  aboutMe: string | null
+  fullName: string
+  lookingForAJob: boolean
+  lookingForAJobDescription: string
+  userId: string
+  contacts: {
+    facebook: string | null
+    github: string | null
+    instagram: string | null
+    mainLink: string | null
+    twitter: string | null
+    vk: string | null
+    website: string | null
+    youtube: string | null
+  }
+  photos: {
+    small?: string
+    large?: string
+  }
+}
 
-const ProfileSchema = new mongoose.Schema({
+const ProfileSchema = new Schema({
   aboutMe: { type: String, default: null },
   fullName: { type: String },
   lookingForAJob: { type: Boolean, default: false },
@@ -22,4 +43,4 @@ const ProfileSchema = new mongoose.Schema({
   },
 })
 
-export default mongoose.model('Profile', ProfileSchema)
+export default model<IProfile>('Profile', ProfileSchema)
