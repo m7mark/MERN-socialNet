@@ -113,9 +113,11 @@ class ProfileController {
       const currentUser = req.user?.id as string
       const filePathReq = req.file?.path
       await ProfileServices.uploadPhoto(currentUser, filePathReq, next)
-      emitter.on('upload', (response) =>
-        res.json({ resultCode: 0, messages: [], data: response })
-      );
+        .then(() => {
+          emitter.once('upload', (response) =>
+            res.json({ resultCode: 0, messages: [], data: response })
+          );
+        })
     } catch (e) {
       return next(createError(500, 'Upload photo error'))
     }

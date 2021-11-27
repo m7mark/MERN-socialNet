@@ -35,19 +35,18 @@ class ProfileServices {
       unique_filename: false,
       use_filename: true
     }
-    const updateUserPhotos = async (url: string | undefined) => {
-      // take new photos url and send it to profile controller
-      // throught emmitter
-      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': url, 'photos.large': url } }, { new: true })
-        .then(response => {
-          emitter.emit('upload', response?.photos);
-        })
-    }
 
     const handleResponse: UploadResponseCallback = async (error, result) => {
       filePath && fs.unlinkSync(filePath)
       if (error) return next(createError(500, 'Save photo error'));
-      updateUserPhotos(result?.secure_url)
+      // send new photo url throught emmiter
+      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': result?.secure_url, 'photos.large': result?.secure_url } }, { new: true })
+        .then(response => {
+          emitter.emit('upload', response?.photos);
+          console.log(response?.photos);
+        })
+      return next()
+      // updateUserPhotos(result?.secure_url)
     }
 
     const stream = v2.uploader.upload_stream(
@@ -56,7 +55,6 @@ class ProfileServices {
     );
 
     bufferToStream(buffimg).pipe(stream);
-    return updateUserPhotos
   }
 
   async getProfile(userId: string) {
