@@ -46,7 +46,7 @@ class UsersController {
     }
   }
   //LOGIN
-  async login(req: IRequest, res: Response, next: any) {
+  async login(req: IRequest, res: Response, next: NextFunction) {
     try {
       //validating errors
       const err = validationResult(req)
@@ -71,7 +71,7 @@ class UsersController {
     }
   }
   //LOGOUT
-  async logout(req: IRequest, res: Response, next: any) {
+  async logout(req: IRequest, res: Response, next: NextFunction) {
     try {
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch {
@@ -79,7 +79,7 @@ class UsersController {
     }
   }
   //GET ALL USERS (ADMIN ACCESS)
-  async getUsers(req: IRequest, res: Response, next: any) {
+  async getUsers(req: IRequest, res: Response, next: NextFunction) {
     try {
       const users = await User.find()
       res.json({ resultCode: 0, messages: [], data: users })
@@ -88,7 +88,7 @@ class UsersController {
     }
   }
   //GET ONE USER
-  async me(req: IRequest, res: Response, next: any) {
+  async me(req: IRequest, res: Response, next: NextFunction) {
     try {
       const user = await User.findById(req.user?.id)
       const data = user && {
@@ -102,7 +102,7 @@ class UsersController {
     }
   }
   //GET LIST OF USERS
-  async getListOfUsers(req: IRequest, res: Response, next: any) {
+  async getListOfUsers(req: IRequest, res: Response, next: NextFunction) {
     //query params
     const { count, page, term, friend } = req.query
     const currentUser = req.user?.id
