@@ -1,14 +1,9 @@
 import { User } from '../models/User'
 import Profile from '../models/Profile'
 import createError from 'http-errors'
-import sharp from 'sharp'
-import path from 'path'
-import fs from 'fs'
 import { validationResult } from 'express-validator'
 import { Response, NextFunction } from 'express'
 import { IRequest } from '../types/index'
-import { UploadApiErrorResponse, UploadApiResponse, v2 } from 'cloudinary'
-import { Readable } from 'stream'
 import ProfileServices from '../services/ProfileServices'
 import { emitter } from '../services/ProfileServices';
 class ProfileController {

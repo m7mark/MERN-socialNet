@@ -2,9 +2,7 @@ import { User } from '../models/User'
 import Profile from '../models/Profile'
 import createError from 'http-errors'
 import sharp from 'sharp'
-import path from 'path'
 import fs from 'fs'
-import { validationResult } from 'express-validator'
 import { UploadResponseCallback, v2 } from 'cloudinary'
 import { Readable } from 'stream'
 import { NextFunction } from 'express'
@@ -40,16 +38,16 @@ class ProfileServices {
     const updateUserPhotos = async (url: string | undefined) => {
       // take new photos url and send it to profile controller
       // throught emmitter
-      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': url, 'photos.large': url } }, { new: true }).then(response => {
-        emitter.emit('upload', response?.photos);
-      })
+      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': url, 'photos.large': url } }, { new: true })
+        .then(response => {
+          emitter.emit('upload', response?.photos);
+        })
     }
 
     const handleResponse: UploadResponseCallback = async (error, result) => {
       filePath && fs.unlinkSync(filePath)
       if (error) return next(createError(500, 'Save photo error'));
       updateUserPhotos(result?.secure_url)
-      console.log('set photos');
     }
 
     const stream = v2.uploader.upload_stream(
@@ -58,8 +56,6 @@ class ProfileServices {
     );
 
     bufferToStream(buffimg).pipe(stream);
-    console.log('lasttttttt');
-
     return updateUserPhotos
   }
 
