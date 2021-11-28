@@ -9,7 +9,6 @@ import { NextFunction } from 'express'
 import { EventEmitter } from 'events';
 
 export const emitter = new EventEmitter()
-
 class ProfileServices {
 
   async uploadPhoto(currentUser: string, filePath: string | undefined, next: NextFunction) {
@@ -43,17 +42,14 @@ class ProfileServices {
       await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': result?.secure_url, 'photos.large': result?.secure_url } }, { new: true })
         .then(response => {
           emitter.emit('upload', response?.photos);
-          console.log(response?.photos);
         })
       return next()
-      // updateUserPhotos(result?.secure_url)
     }
 
     const stream = v2.uploader.upload_stream(
       options,
       handleResponse
     );
-
     bufferToStream(buffimg).pipe(stream);
   }
 
@@ -67,6 +63,37 @@ class ProfileServices {
       { new: true }
     )
     return profile
+  }
+
+  async updateProfile(userId: string, body: any) {
+    await Profile.findOneAndUpdate({ userId }, {
+      $set: body
+    })
+  }
+
+  async getStatus(userId: string) {
+    const response = await User.findById(userId)
+    return response?.status
+  }
+
+  async updateStatus(id: string, status: string) {
+    await User.findByIdAndUpdate(id, { status: status })
+  }
+
+  async follow(userId: string, currentUser: string) {
+    await User.findById(userId)
+    await User.findByIdAndUpdate(currentUser, { $addToSet: { followedIds: userId } })
+  }
+
+  async unfollow(userId: string, currentUser: string) {
+    await User.findById(userId)
+    await User.findByIdAndUpdate(currentUser, { $pull: { followedIds: userId } })
+  }
+
+  async isFollowed(userId: string, currentUser: string) {
+    await User.findById(userId)
+    const response = await User.findById(currentUser)
+    return response?.followedIds?.includes(userId)
   }
 }
 

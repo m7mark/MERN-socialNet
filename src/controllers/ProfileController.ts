@@ -1,5 +1,3 @@
-import { User } from '../models/User'
-import Profile from '../models/Profile'
 import createError from 'http-errors'
 import { validationResult } from 'express-validator'
 import { Response, NextFunction } from 'express'
@@ -22,12 +20,9 @@ class ProfileController {
     try {
       const err = validationResult(req)
       if (!err.isEmpty()) { return next(createError(500, `${err.array()[0].msg}`)) }
-      const userId = req.user?.id
+      const userId = req.user?.id as string
       if (!userId) { return next(createError(500, 'You are not autorizated')) }
-      const profile = await Profile.findOneAndUpdate({ userId }, {
-        $set: req.body
-      })
-      if (!profile) { return next(createError(500, 'User Id incorrect')) }
+      await ProfileServices.updateProfile(userId, req.body)
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
       return next(createError(500, 'Update profile error'))
@@ -36,10 +31,8 @@ class ProfileController {
   //GET STATUS
   async getStatus(req: IRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.params.userId
-      const response = await User.findById(userId)
-      // if (!profile) { return next(createError(500, 'User Id incorrect')) }
-      res.json(response?.status);
+      const status = await ProfileServices.getStatus(req.params.userId)
+      res.json(status);
     } catch (e) {
       return next(createError(500, 'Get status error'))
     }
@@ -49,70 +42,51 @@ class ProfileController {
     try {
       const err = validationResult(req)
       if (!err.isEmpty()) { return next(createError(500, `${err.array()[0].msg}`)) }
-      const id = req.user?.id
+      const status = req.body.status as string
+      const id = req.user?.id as string
       if (!id) { return next(createError(500, 'You are not autorizated')) }
-      await User.findByIdAndUpdate(id, { status: req.body.status })
-      // if (!profile) { return next(createError(500, 'User Id incorrect')) }
+      await ProfileServices.updateStatus(id, status)
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
-      // console.log(e);
       return next(createError(500, 'Update status error'))
     }
   }
   //FOLLOW USER
   async followUser(req: IRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.params.userId
-      const currentUser = req.user?.id
-      // if (!currentUser) { return next(createError(500, 'You are not autorizated')) }
-      if (currentUser === userId) { return next(createError(500, 'You can not follow yourself')) }
-      await User.findById(userId)
-      await User.findByIdAndUpdate(currentUser, { $addToSet: { followedIds: userId } })
-      // if (!profile) { return next(createError(500, 'User Id incorrect')) }
+      if (req.params.userId === req.user?.id) { return next(createError(500, 'You can not follow yourself')) }
+      await ProfileServices.follow(req.params.userId, req.user?.id)
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
-      // console.log(e);
       return next(createError(500, 'Follow user error'))
     }
   }
   //UNFOLLOW USER
   async unfollowUser(req: IRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.params.userId
-      const currentUser = req.user?.id
-      // if (!currentUser) { return next(createError(500, 'You are not autorizated')) }
-      if (currentUser === userId) { return next(createError(500, 'You can not unfollow yourself')) }
-      await User.findById(userId)
-      await User.findByIdAndUpdate(currentUser, { $pull: { followedIds: userId } })
-      // if (!profile) { return next(createError(500, 'User Id incorrect')) }
+      if (req.params.userId === req.user?.id) { return next(createError(500, 'You can not follow yourself')) }
+      await ProfileServices.unfollow(req.params.userId, req.user?.id)
       res.json({ resultCode: 0, messages: [], data: {} })
     } catch (e) {
-      // console.log(e);
       return next(createError(500, 'Unfollow user error'))
     }
   }
   //IS CURRENT USER FOLLOWED
   async isFollowed(req: IRequest, res: Response, next: NextFunction) {
     try {
-      const userId = req.params.userId
-      const currentUser = req.user?.id
-      // if (!currentUser) { return next(createError(500, 'You are not autorizated')) }
-      if (currentUser === userId) { return next(createError(500, 'You can not follow yourself')) }
-      await User.findById(userId)
-      const response = await User.findById(currentUser)
+      if (req.params.userId === req.user?.id) { return next(createError(500, 'You can not check follow yourself')) }
+      const isFollow = await ProfileServices.isFollowed(req.params.userId, req.user?.id)
       // true or false
-      res.json(response?.followedIds?.includes(userId))
+      res.json(isFollow)
     } catch (e) {
-      // console.log(e);
       return next(createError(500, 'Check user error'))
     }
   }
   //UPLOAD USER PHOTO
   async putUserPhoto(req: IRequest, res: Response, next: NextFunction) {
     try {
-      const currentUser = req.user?.id as string
-      const filePathReq = req.file?.path
-      await ProfileServices.uploadPhoto(currentUser, filePathReq, next)
+      await ProfileServices.uploadPhoto(req.user?.id, req.file?.path
+        , next)
         .then(() => {
           emitter.once('upload', (response) =>
             res.json({ resultCode: 0, messages: [], data: response })
