@@ -1,17 +1,15 @@
 import { User } from '../models/User'
 import Profile from '../models/Profile'
-import createError from 'http-errors'
 import sharp from 'sharp'
 import fs from 'fs'
 import { UploadResponseCallback, v2 } from 'cloudinary'
 import { Readable } from 'stream'
-import { NextFunction } from 'express'
 import { EventEmitter } from 'events';
 
 export const emitter = new EventEmitter()
 class ProfileServices {
 
-  async uploadPhoto(currentUser: string, filePath: string | undefined, next: NextFunction) {
+  async uploadPhoto(currentUser: string, filePath: string | undefined) {
     const fileName = 'img-' + currentUser + '.jpg'
     const bufferToStream = (buffer: Buffer) => {
       const readable = new Readable({
@@ -37,13 +35,12 @@ class ProfileServices {
 
     const handleResponse: UploadResponseCallback = async (error, result) => {
       filePath && fs.unlinkSync(filePath)
-      if (error) return next(createError(500, 'Save photo error'));
+      if (error) throw new Error;
       // send new photo url throught emmiter
       await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': result?.secure_url, 'photos.large': result?.secure_url } }, { new: true })
         .then(response => {
           emitter.emit('upload', response?.photos);
         })
-      return next()
     }
 
     const stream = v2.uploader.upload_stream(

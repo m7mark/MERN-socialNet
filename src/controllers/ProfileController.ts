@@ -86,7 +86,7 @@ class ProfileController {
   async putUserPhoto(req: IRequest, res: Response, next: NextFunction) {
     try {
       await ProfileServices.uploadPhoto(req.user?.id, req.file?.path
-        , next)
+      )
         .then(() => {
           emitter.once('upload', (response) =>
             res.json({ resultCode: 0, messages: [], data: response })
