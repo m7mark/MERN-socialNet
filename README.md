@@ -85,5 +85,5 @@ JWT token in header
 
 ## Test deployment
 
-The `clientSN` branch deploys to https://snoapp.netlify.app
+The `clientSN` branch deploys to https://snoapp.netlify.app \
 The `serverSN` branch deploys to https://snoapi.herokuapp.com
