@@ -8,7 +8,6 @@ import path from 'path';
 import { Request, Response, NextFunction } from 'express'
 import { v2 } from 'cloudinary'
 
-// __dirname defenition
 // const __dirname = dirname(fileURLToPath(import.meta.url));
 const dirName = path.dirname(__dirname);
 
