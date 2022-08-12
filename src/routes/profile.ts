@@ -21,7 +21,9 @@ router.put(
       .optional()
       .isLength({ max: 150 }),
     body('lookingForAJob', 'Must be boolean').optional().isBoolean(),
-    body('contacts.*', 'Incorrect url').optional({ nullable: true }).isURL(),
+    body('contacts.*', 'Incorrect url')
+      .optional({ nullable: true, checkFalsy: true })
+      .isURL(),
   ],
   verifyToken,
   asyncHandler(ProfileController.updateProfile)
