@@ -1,71 +1,37 @@
 import { User } from '../models/User'
-import Profile from '../models/Profile'
+import Profile, { IProfile } from '../models/Profile'
+import { IUser } from '../models/User'
 import sharp from 'sharp'
 import fs from 'fs'
-import { UploadResponseCallback, v2 } from 'cloudinary'
-import { Readable } from 'stream'
-import { EventEmitter } from 'events';
+import { UploadApiResponse, v2 } from 'cloudinary'
+import { bufferToStream } from '../utils/bufferToStream'
+import { getCloudinaryOptions } from '../config/cloudinary.config'
 
-export const emitter = new EventEmitter()
 class ProfileServices {
-
-  async uploadPhoto(currentUser: string, filePath: string | undefined) {
-    const fileName = 'img-' + currentUser + '.jpg'
-    const bufferToStream = (buffer: Buffer) => {
-      const readable = new Readable({
-        read() {
-          this.push(buffer)
-          this.push(null)
-        },
-      });
-      return readable
-    };
-
-    const buffimg = await sharp(filePath)
-      .rotate()
-      .resize(300, 300)
-      .toBuffer();
-
-    const options = {
-      folder: 'SNOAPI',
-      filename_override: `${fileName}`,
-      unique_filename: false,
-      use_filename: true
-    }
-
-    const handleResponse: UploadResponseCallback = async (error, result) => {
-      filePath && fs.unlinkSync(filePath)
-      if (error) throw new Error;
-      // send new photo url throught emmiter
-      await User.findByIdAndUpdate(currentUser, { $set: { 'photos.small': result?.secure_url, 'photos.large': result?.secure_url } }, { new: true })
-        .then(response => {
-          emitter.emit('upload', response?.photos);
-        })
-    }
-
-    const stream = v2.uploader.upload_stream(
-      options,
-      handleResponse
-    );
-    bufferToStream(buffimg).pipe(stream);
-  }
-
-  async getProfile(userId: string) {
-    const response = await User.findById(userId)
+  async getProfile(userId: string): Promise<IProfile | null> {
+    const user = await User.findById(userId)
     const profile = await Profile.findOneAndUpdate(
       { userId },
       {
-        $set: { photos: { small: response?.photos.small, large: response?.photos.large } }
+        $set: {
+          photos: {
+            small: user?.photos.small,
+            large: user?.photos.large,
+          },
+        },
       },
       { new: true }
-    )
+    ).select(['-_id', '-__v'])
     return profile
   }
 
-  async updateProfile(userId: string, body: any) {
-    await Profile.findOneAndUpdate({ userId }, {
-      $set: body
-    })
+  async updateProfile(profile: IProfile, userId?: string) {
+    await Profile.findOneAndUpdate(
+      { userId },
+      {
+        $set: profile,
+      }
+    )
   }
 
   async getStatus(userId: string) {
@@ -73,25 +39,58 @@ class ProfileServices {
     return response?.status
   }
 
-  async updateStatus(id: string, status: string) {
+  async updateStatus(status: string, id?: string) {
     await User.findByIdAndUpdate(id, { status: status })
   }
 
-  async follow(userId: string, currentUser: string) {
+  async follow(userId: string, currentUser?: string) {
     await User.findById(userId)
-    await User.findByIdAndUpdate(currentUser, { $addToSet: { followedIds: userId } })
+    await User.findByIdAndUpdate(currentUser, {
+      $addToSet: { followedIds: userId },
+    })
   }
 
-  async unfollow(userId: string, currentUser: string) {
+  async unfollow(userId: string, currentUser?: string) {
     await User.findById(userId)
-    await User.findByIdAndUpdate(currentUser, { $pull: { followedIds: userId } })
+    await User.findByIdAndUpdate(currentUser, {
+      $pull: { followedIds: userId },
+    })
   }
 
-  async isFollowed(userId: string, currentUser: string) {
+  async isFollowed(userId: string, currentUser?: string) {
     await User.findById(userId)
     const response = await User.findById(currentUser)
     return response?.followedIds?.includes(userId)
   }
+
+  async uploadPhoto(
+    filePath?: string,
+    currentUser?: string
+  ): Promise<IUser['photos'] | undefined> {
+    const fileName = 'img-' + currentUser + '.jpg'
+    const bufferImg = await sharp(filePath).rotate().resize(300, 300).toBuffer()
+
+    return new Promise((resolve) => {
+      const streamUpload = v2.uploader.upload_stream(
+        getCloudinaryOptions(fileName),
+        async (_, result?: UploadApiResponse) => {
+          filePath && fs.unlinkSync(filePath)
+          const user = await User.findByIdAndUpdate(
+            currentUser,
+            {
+              $set: {
+                'photos.small': result?.secure_url,
+                'photos.large': result?.secure_url,
+              },
+            },
+            { new: true }
+          )
+          resolve(user?.photos)
+        }
+      )
+      bufferToStream(bufferImg).pipe(streamUpload)
+    })
+  }
 }
 
-export default new ProfileServices
+export default new ProfileServices()

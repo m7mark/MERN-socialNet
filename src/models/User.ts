@@ -1,5 +1,5 @@
-import { PaginateModel, Document, Schema, model } from 'mongoose';
-import mongoosePaginate from "mongoose-paginate-v2"
+import { PaginateModel, Document, Schema, model, Types } from 'mongoose'
+import mongoosePaginate from 'mongoose-paginate-v2'
 
 export interface IUser extends Document {
   email: string
@@ -11,35 +11,37 @@ export interface IUser extends Document {
   photos: {
     small?: string
     large?: string
-  },
+  }
   roles: Array<string>
 }
 
-const UserSchema = new Schema({
-  email: { type: String, unique: true, required: true },
-  password: { type: String, required: true },
-  name: { type: String, required: true },
-  status: { type: String, default: null },
-  followedIds: [String],
-  followed: { type: Boolean, default: false },
-  photos: {
-    small: { type: String, default: null },
-    large: { type: String, default: null }
+const UserSchema = new Schema(
+  {
+    email: { type: String, unique: true, required: true },
+    password: { type: String, required: true },
+    name: { type: String, required: true },
+    status: { type: String, default: null },
+    followedIds: [String],
+    followed: { type: Boolean, default: false },
+    photos: {
+      small: { type: String, default: null },
+      large: { type: String, default: null },
+    },
+    roles: [{ type: String, ref: 'Role' }],
   },
-  roles: [{ type: String, ref: 'Role' }]
-}, { timestamps: true })
+  { timestamps: true }
+)
 
-UserSchema.plugin(mongoosePaginate);
+UserSchema.plugin(mongoosePaginate)
+
 // Duplicate the ID field.
-UserSchema.virtual('id').get(function (this: { _id: any }) {
-  return this._id.toHexString();
-});
+UserSchema.virtual('id').get(function () {
+  return this._id.toHexString()
+})
+
 // Ensure virtual fields are serialised.
 UserSchema.set('toJSON', {
-  virtuals: true
-});
+  virtuals: true,
+})
 
-interface UserModel<T extends Document> extends PaginateModel<T> { }
-
-export const User: UserModel<IUser> = model<IUser>('User', UserSchema);
-
+export const User = model<IUser, PaginateModel<IUser>>('User', UserSchema)
