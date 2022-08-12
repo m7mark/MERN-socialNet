@@ -1,40 +1,39 @@
-import { Form, Input, Button, Result } from 'antd';
-import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons';
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from 'react'
+import { Form, Input, Button, Result } from 'antd'
+import { UserOutlined, LockOutlined, MailOutlined } from '@ant-design/icons'
+import { baseAxios } from '../api/user'
+import { IUserResponse } from '../api/user.interface'
 
-const BASE_URL = process.env.REACT_APP_SERVER_API
-const instanceReq = axios.create({
-  baseURL: BASE_URL
-})
-
-const SignUpForm = () => {
-  const [tooglePage, setTooglePage] = useState(true);
+export const SignUpForm = () => {
+  const [tooglePage, setTooglePage] = useState(true)
   const curYear = new Date().getFullYear()
-  const [errorLoginMessage, setErrorLoginMessage] = useState('');
+  const [errorLoginMessage, setErrorLoginMessage] = useState('')
+
   const initialValues = {
     username: '',
     email: '',
     password: '',
   }
-  const onFinish = async (values) => {
-    const res = await instanceReq.post('api/auth/register', values)
+  type FormValues = typeof initialValues
+
+  const onFinish = async (values: FormValues) => {
+    const res = await baseAxios.post<IUserResponse>('api/auth/register', values)
     if (res.data.resultCode === 0) {
       setTooglePage(false)
     } else {
       setErrorLoginMessage(res.data.messages[0])
     }
-  };
+  }
 
   return (
     <>
-      {tooglePage
-        ? <>
+      {tooglePage ? (
+        <>
           <h1 className="formLabel">Sign Up</h1>
           <span className="formLabelText">Create your profile for free</span>
           <div className="formContainer">
             <Form
-              size='large'
+              size="large"
               name="signUpForm"
               className="login-form"
               initialValues={initialValues}
@@ -42,10 +41,10 @@ const SignUpForm = () => {
               onValuesChange={() => setErrorLoginMessage('')}
             >
               <Form.Item
-                {...errorLoginMessage && {
+                {...(errorLoginMessage && {
                   help: errorLoginMessage,
                   validateStatus: 'error',
-                }}
+                })}
               >
                 <Form.Item
                   name="login"
@@ -53,10 +52,10 @@ const SignUpForm = () => {
                     { required: true, message: 'Please input your username!' },
                   ]}
                 >
-                  <Input prefix={<UserOutlined
-                    className="site-form-item-icon"
-                  />}
-                    placeholder="Username" />
+                  <Input
+                    prefix={<UserOutlined className="site-form-item-icon" />}
+                    placeholder="Username"
+                  />
                 </Form.Item>
                 <Form.Item
                   name="email"
@@ -64,13 +63,16 @@ const SignUpForm = () => {
                     { required: true, message: 'Please input your E-mail!' },
                   ]}
                 >
-                  <Input prefix={<MailOutlined
-                    className="site-form-item-icon" />}
-                    placeholder="E-mail" />
+                  <Input
+                    prefix={<MailOutlined className="site-form-item-icon" />}
+                    placeholder="E-mail"
+                  />
                 </Form.Item>
                 <Form.Item
                   name="password"
-                  rules={[{ required: true, message: 'Please input your Password!' }]}
+                  rules={[
+                    { required: true, message: 'Please input your Password!' },
+                  ]}
                 >
                   <Input
                     prefix={<LockOutlined className="site-form-item-icon" />}
@@ -92,31 +94,18 @@ const SignUpForm = () => {
           </div>
           <span>© mark.api {curYear}</span>
         </>
-        : <Result
+      ) : (
+        <Result
           status="success"
           title="Success! Have fun hacking"
           subTitle="New options coming soon ..."
           extra={[
-            <Button size='large' onClick={() => setTooglePage(true)}>
+            <Button size="large" onClick={() => setTooglePage(true)}>
               Go back
-            </Button>
+            </Button>,
           ]}
         />
-      }
+      )}
     </>
-  );
-};
-
-export const SignUpPage = () => {
-  return <>
-    <div className="header"></div>
-    <div className="signupWrapper">
-      <div className="signupContainer">
-        <SignUpForm />
-        <div>
-          <a href="https://documenter.getpostman.com/view/17550384/UV5f7Dvw" className="link">Open API documentation</a>
-        </div>
-      </div>
-    </div>
-  </>
+  )
 }
